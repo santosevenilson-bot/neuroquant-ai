@@ -5,18 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeuroQuant AI</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-
 body{
   margin:0;
-  font-family:'Orbitron', sans-serif;
-  background: linear-gradient(135deg,#0f172a,#020617);
+  font-family: Arial, sans-serif;
+  background:linear-gradient(135deg,#0f172a,#020617);
   color:white;
+  text-align:center;
 }
 
 header{
-  padding:80px 20px;
-  text-align:center;
+  padding:60px 20px;
 }
 
 h1{
@@ -57,7 +55,6 @@ section{
 .section-title{
   font-size:32px;
   margin-bottom:40px;
-  text-align:center;
 }
 
 .card{
@@ -122,11 +119,19 @@ input{
   margin:15px;
   border-radius:10px;
 }
+
+/* imagem */
+header img{
+  width:200px;
+  margin-bottom:20px;
+  border-radius:20px;
+}
 </style>
 </head>
 <body>
 
 <header>
+  <img src="https://images.unsplash.com/photo-1612832020931-b8b2e5c8339d?auto=format&fit=crop&w=500&q=80" alt="IA + Criptomoeda">
   <h1>NeuroQuant AI</h1>
   <p class="subtitle">
     Plataforma avançada de <span class="highlight">previsão de sinais</span> utilizando
@@ -164,12 +169,15 @@ input{
 
 <!-- DASHBOARD -->
 <div class="dashboard" id="dashboard" style="display:none;">
-  <h2>📈 Painel de Previsão Avançada BTC/USDT</h2>
-  <div class="signal-card">
-    <h3>Tendência Atual: Alta ⬆️</h3>
-    <p>Probabilidade: 78%</p>
-    <p>Zona de Liquidez: 63.000 - 64.000</p>
-    <p>Sinal: BUY</p>
+  <h2>📈 Painel de Previsão Avançada</h2>
+  <input type="text" id="parCrypto" placeholder="Digite o par da criptomoeda (ex: BTC/USDT)">
+  <button onclick="atualizarSinal()">Ver Análise</button>
+
+  <div class="signal-card" id="signalCard">
+    <h3 id="tendencia">Tendência Atual: --</h3>
+    <p id="probabilidade">Probabilidade: --</p>
+    <p id="liquidez">Zona de Liquidez: --</p>
+    <p id="sinal">Sinal: --</p>
     <p>Atualizado: <span id="hora"></span></p>
   </div>
 </div>
@@ -185,7 +193,6 @@ function showLogin(){
 }
 
 function login(){
-  // Aqui você integraria Pix + liberação automática
   let email = document.getElementById('email').value;
   if(email){
     alert("Login realizado com sucesso!");
@@ -197,9 +204,23 @@ function login(){
   }
 }
 
-function updateSignal(){
+// Função para atualizar sinal do par digitado (simulação)
+function atualizarSinal(){
+  const par = document.getElementById('parCrypto').value.toUpperCase() || "--";
+  const tendencias = ["Alta ⬆️", "Baixa ⬇️", "Lateral ↔️"];
+  const sinais = ["BUY", "SELL", "HOLD"];
+  
+  document.getElementById('tendencia').innerText = "Tendência Atual: " + tendencias[Math.floor(Math.random()*tendencias.length)];
+  document.getElementById('probabilidade').innerText = "Probabilidade: " + Math.floor(Math.random()*100) + "%";
+  document.getElementById('liquidez').innerText = "Zona de Liquidez: " + (Math.floor(Math.random()*10000)+50000) + " - " + (Math.floor(Math.random()*10000)+60000);
+  document.getElementById('sinal').innerText = "Sinal: " + sinais[Math.floor(Math.random()*sinais.length)];
   document.getElementById('hora').innerText = new Date().toLocaleTimeString();
-  setTimeout(updateSignal, 5000); // atualiza a cada 5s (simulação)
+}
+
+// Atualização automática a cada 5s
+function updateSignal(){
+  atualizarSinal();
+  setTimeout(updateSignal,5000);
 }
 </script>
 
