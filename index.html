@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NeuroQuant AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{
+      background:#0f172a;
+      color:white;
+      font-family:Arial;
+      text-align:center;
+      padding:30px;
+    }
+    .card{
+      background:#1e293b;
+      padding:20px;
+      border-radius:15px;
+      margin-top:20px;
+    }
+    button{
+      padding:10px 20px;
+      border:none;
+      border-radius:10px;
+      background:#22c55e;
+      color:white;
+      font-weight:bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>NeuroQuant AI</h1>
+<p>AI Crypto Probability System</p>
+
+<div class="card">
+  <h2>BTC/USDT</h2>
+  <p id="prob">Probability: --%</p>
+  <button onclick="generate()">Analyze</button>
+</div>
+
+<script>
+function generate(){
+  let prob = Math.floor(Math.random()*40)+60;
+  document.getElementById("prob").innerText = "Probability: " + prob + "% UP";
+}
+</script>
+
+</body>
+</html>
