@@ -1,49 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>NeuroQuant AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body{
-      background:#0f172a;
-      color:white;
-      font-family:Arial;
-      text-align:center;
-      padding:30px;
-    }
-    .card{
-      background:#1e293b;
-      padding:20px;
-      border-radius:15px;
-      margin-top:20px;
-    }
-    button{
-      padding:10px 20px;
-      border:none;
-      border-radius:10px;
-      background:#22c55e;
-      color:white;
-      font-weight:bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroQuant AI</title>
+<style>
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#0f172a,#020617);
+color:white;
+text-align:center;
+}
+
+header{
+padding:80px 20px;
+}
+
+h1{
+font-size:48px;
+margin-bottom:10px;
+}
+
+p{
+color:#94a3b8;
+font-size:18px;
+max-width:600px;
+margin:0 auto;
+}
+
+button{
+margin-top:30px;
+padding:15px 35px;
+font-size:18px;
+background:#22c55e;
+border:none;
+border-radius:8px;
+cursor:pointer;
+color:white;
+transition:0.3s;
+}
+
+button:hover{
+background:#16a34a;
+}
+
+section{
+padding:80px 20px;
+}
+
+.card{
+background:#111827;
+padding:30px;
+margin:20px auto;
+max-width:600px;
+border-radius:12px;
+}
+
+footer{
+padding:20px;
+background:#000;
+color:#64748b;
+}
+</style>
 </head>
+
 <body>
 
+<header>
 <h1>NeuroQuant AI</h1>
-<p>AI Crypto Probability System</p>
+<p>Inteligência Artificial aplicada ao mercado financeiro e análise quantitativa de criptomoedas.</p>
+<button>Explorar Plataforma</button>
+</header>
 
+<section>
 <div class="card">
-  <h2>BTC/USDT</h2>
-  <p id="prob">Probability: --%</p>
-  <button onclick="generate()">Analyze</button>
+<h2>Alta Precisão</h2>
+<p>Algoritmos avançados identificando oportunidades com base em dados e liquidez de mercado.</p>
 </div>
 
-<script>
-function generate(){
-  let prob = Math.floor(Math.random()*40)+60;
-  document.getElementById("prob").innerText = "Probability: " + prob + "% UP";
-}
-</script>
+<div class="card">
+<h2>Automação Inteligente</h2>
+<p>Monitoramento contínuo para detectar movimentos estratégicos em tempo real.</p>
+</div>
+</section>
+
+<footer>
+© 2026 NeuroQuant AI - Todos os direitos reservados
+</footer>
 
 </body>
 </html>
