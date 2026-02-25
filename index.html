@@ -5,127 +5,203 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeuroQuant AI</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
 body{
-margin:0;
-font-family:Arial, sans-serif;
-background:linear-gradient(135deg,#0f172a,#020617);
-color:white;
-text-align:center;
+  margin:0;
+  font-family:'Orbitron', sans-serif;
+  background: linear-gradient(135deg,#0f172a,#020617);
+  color:white;
 }
 
 header{
-padding:100px 20px;
+  padding:80px 20px;
+  text-align:center;
 }
 
 h1{
-font-size:52px;
-margin-bottom:15px;
+  font-size:50px;
+  margin-bottom:15px;
 }
 
 .subtitle{
-font-size:20px;
-color:#94a3b8;
-max-width:700px;
-margin:0 auto 30px;
+  font-size:20px;
+  color:#94a3b8;
+  max-width:750px;
+  margin:0 auto 30px;
+}
+
+.highlight{
+  color:#22c55e;
+  font-weight:bold;
 }
 
 button{
-padding:15px 35px;
-font-size:18px;
-background:#22c55e;
-border:none;
-border-radius:8px;
-cursor:pointer;
-color:white;
-transition:0.3s;
+  padding:15px 35px;
+  font-size:18px;
+  background:#22c55e;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  color:white;
+  transition:0.3s;
 }
-
 button:hover{
-background:#16a34a;
+  background:#16a34a;
 }
 
 section{
-padding:80px 20px;
+  padding:80px 20px;
 }
 
 .section-title{
-font-size:32px;
-margin-bottom:40px;
+  font-size:32px;
+  margin-bottom:40px;
+  text-align:center;
 }
 
 .card{
-background:#111827;
-padding:30px;
-margin:20px auto;
-max-width:800px;
-border-radius:12px;
+  background:#111827;
+  padding:30px;
+  margin:20px auto;
+  max-width:800px;
+  border-radius:12px;
+  transition:0.3s;
+}
+.card:hover{
+  transform:translateY(-5px);
 }
 
 .pricing{
-background:#0b1220;
-padding:40px;
-border-radius:12px;
-max-width:600px;
-margin:0 auto;
+  background:#0b1220;
+  padding:40px;
+  border-radius:12px;
+  max-width:600px;
+  margin:0 auto;
+  text-align:center;
 }
 
 footer{
-padding:30px;
-background:#000;
-color:#64748b;
-margin-top:40px;
+  padding:30px;
+  background:#000;
+  color:#64748b;
+  margin-top:40px;
+}
+
+/* LOGIN */
+.login-container{
+  max-width:400px;
+  margin:50px auto;
+  background:#111827;
+  padding:40px;
+  border-radius:12px;
+  text-align:center;
+}
+
+input{
+  width:90%;
+  padding:12px;
+  margin:12px 0;
+  border-radius:8px;
+  border:none;
+  font-size:16px;
+}
+
+.dashboard{
+  max-width:900px;
+  margin:50px auto;
+  background:#111827;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.signal-card{
+  background:#0b1220;
+  padding:20px;
+  margin:15px;
+  border-radius:10px;
 }
 </style>
 </head>
-
 <body>
 
 <header>
-<h1>NeuroQuant AI</h1>
-<p class="subtitle">
-Inteligência Artificial aplicada ao mercado de criptomoedas.
-Análise quantitativa, identificação de liquidez e leitura institucional.
-</p>
-<button onclick="window.location.href='https://wa.me/SEUNUMEROAQUI'">
-Entrar para o Grupo VIP
-</button>
+  <h1>NeuroQuant AI</h1>
+  <p class="subtitle">
+    Plataforma avançada de <span class="highlight">previsão de sinais</span> utilizando
+    Inteligência Artificial, análise quantitativa e leitura de liquidez institucional.
+  </p>
+  <button onclick="showLogin()">Entrar / Assinar R$ 9,90</button>
 </header>
 
 <section>
-<h2 class="section-title">Por que escolher o NeuroQuant?</h2>
-
-<div class="card">
-<h3>📊 Análise Quantitativa Avançada</h3>
-<p>Modelos matemáticos e leitura de fluxo para identificar zonas de alta probabilidade.</p>
-</div>
-
-<div class="card">
-<h3>⚡ Monitoramento em Tempo Real</h3>
-<p>Detecção de rompimentos, varredura de liquidez e manipulação institucional.</p>
-</div>
-
-<div class="card">
-<h3>🧠 Inteligência Artificial Proprietária</h3>
-<p>Algoritmos desenvolvidos para antecipar movimentos estratégicos do mercado.</p>
-</div>
+<h2 class="section-title">Como funciona a Previsão Avançada?</h2>
+<div class="card"><h3>📊 Modelagem Estatística</h3><p>Algoritmos analisam padrões históricos e volatilidade.</p></div>
+<div class="card"><h3>🧠 IA Adaptativa</h3><p>Sistema aprende com ciclos de mercado e ajusta parâmetros.</p></div>
+<div class="card"><h3>⚡ Identificação de Liquidez</h3><p>Detecta zonas de maior concentração de ordens e stops.</p></div>
+<div class="card"><h3>🎯 Sinal com Probabilidade</h3><p>Cada entrada tem análise técnica e nível estimado de probabilidade.</p></div>
 </section>
 
 <section>
-<h2 class="section-title">Plano VIP</h2>
-
+<h2 class="section-title">Plano NeuroQuant PRO</h2>
 <div class="pricing">
-<h3>Acesso Completo</h3>
-<p>Sinais exclusivos + Relatórios + Suporte direto</p>
-<h2>R$ 97/mês</h2>
-<button onclick="window.location.href='https://wa.me/5531987445311'">
-Quero Acessar
-</button>
+<h3>Acesso Completo à Previsão Avançada</h3>
+<p>Sinais + Relatórios Quantitativos + Atualizações em tempo real</p>
+<h2>R$ 9,90/mês</h2>
+<button onclick="showLogin()">Quero Acessar Agora</button>
 </div>
 </section>
 
+<!-- LOGIN -->
+<div class="login-container" id="login" style="display:none;">
+  <h2>Login / Cadastro</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="senha" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+  <p style="margin-top:15px;">Após pagamento via Pix, acesso será liberado automaticamente.</p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard" style="display:none;">
+  <h2>📈 Painel de Previsão Avançada BTC/USDT</h2>
+  <div class="signal-card">
+    <h3>Tendência Atual: Alta ⬆️</h3>
+    <p>Probabilidade: 78%</p>
+    <p>Zona de Liquidez: 63.000 - 64.000</p>
+    <p>Sinal: BUY</p>
+    <p>Atualizado: <span id="hora"></span></p>
+  </div>
+</div>
+
 <footer>
-© 2026 NeuroQuant AI — Todos os direitos reservados
+© 2026 NeuroQuant AI — Tecnologia em previsão quantitativa
 </footer>
+
+<script>
+function showLogin(){
+  document.getElementById('login').style.display='block';
+  window.scrollTo(0, document.getElementById('login').offsetTop);
+}
+
+function login(){
+  // Aqui você integraria Pix + liberação automática
+  let email = document.getElementById('email').value;
+  if(email){
+    alert("Login realizado com sucesso!");
+    document.getElementById('login').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    updateSignal();
+  }else{
+    alert("Preencha seu email.");
+  }
+}
+
+function updateSignal(){
+  document.getElementById('hora').innerText = new Date().toLocaleTimeString();
+  setTimeout(updateSignal, 5000); // atualiza a cada 5s (simulação)
+}
+</script>
 
 </body>
 </html>
