@@ -81,11 +81,11 @@ background:#1f3c88;
 .container{
 padding:80px 20px 30px 20px;
 text-align:center;
-animation:fadeIn 1s ease;
+animation:fadeIn 0.8s ease;
 }
 
 @keyframes fadeIn{
-from{opacity:0; transform:translateY(20px);}
+from{opacity:0; transform:translateY(15px);}
 to{opacity:1; transform:translateY(0);}
 }
 
@@ -98,12 +98,12 @@ margin-top:20px;
 box-shadow:0 8px 20px rgba(0,0,0,0.4);
 }
 
-input{
+select{
 width:100%;
 padding:12px;
 border-radius:10px;
-border:none;
 margin-top:15px;
+border:none;
 }
 
 button{
@@ -119,9 +119,7 @@ cursor:pointer;
 transition:0.3s;
 }
 
-button:hover{
-transform:scale(1.05);
-}
+button:hover{ transform:scale(1.05); }
 
 .premium{
 margin-top:25px;
@@ -143,33 +141,40 @@ padding:10px;
 
 <body>
 
-<!-- BOTÃO MENU -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<!-- MENU LATERAL -->
 <div class="sidebar" id="sidebar">
 <h2>🤖 IA Crypto</h2>
-
 <a href="#" onclick="openScreen('home')">🏠 Home</a>
-<a href="#" onclick="openScreen('sinais')">📡 Sinais IA</a>
-<a href="#" onclick="openScreen('fibo')">📊 Fibonacci</a>
-<a href="#" onclick="openScreen('premium')">💎 Premium</a>
-<a href="#" onclick="openScreen('sobre')">🧠 Sobre IA</a>
+<a href="#" onclick="scanMarket()">📡 Varredura</a>
+<a href="#" onclick="alert('Premium ativo após pagamento.')">💎 Premium</a>
+<a href="#" onclick="alert('Sistema de análise inteligente com indicadores técnicos.')">🧠 Sobre</a>
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-<div class="container" id="content">
+<div class="container">
 
 <h1>IA Crypto Pro</h1>
 <p>Análise Inteligente em Tempo Real</p>
 
 <div class="card">
-<input type="text" id="symbol" placeholder="Digite o par (Ex: BTCUSDT)">
+
+<select id="symbol">
+<option value="BTCUSDT">BTC/USDT</option>
+<option value="ETHUSDT">ETH/USDT</option>
+<option value="SOLUSDT">SOL/USDT</option>
+<option value="BNBUSDT">BNB/USDT</option>
+<option value="XRPUSDT">XRP/USDT</option>
+<option value="ADAUSDT">ADA/USDT</option>
+<option value="DOGEUSDT">DOGE/USDT</option>
+</select>
+
 <button onclick="loadData()">Buscar Análise</button>
 
 <h3 id="price"></h3>
 <h3 id="signal"></h3>
+<h4 id="fibo"></h4>
 
 <canvas id="chart"></canvas>
 </div>
@@ -193,51 +198,80 @@ document.getElementById("overlay").classList.toggle("active");
 
 function openScreen(screen){
 toggleMenu();
-if(screen==="home"){
-location.reload();
-}
-if(screen==="premium"){
-alert("Plano Premium R$29,90\nAcesso a sinais avançados e IA preditiva.");
-}
-if(screen==="sobre"){
-alert("Sistema com análise automatizada baseada em indicadores técnicos e inteligência artificial.");
-}
+if(screen==="home"){ location.reload(); }
 }
 
 async function loadData(){
-let symbol=document.getElementById("symbol").value.toUpperCase();
-if(!symbol) return alert("Digite um par válido");
+let symbol=document.getElementById("symbol").value;
 
-let url=`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1m&limit=50`;
+let url=`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1m&limit=100`;
 let response=await fetch(url);
 let data=await response.json();
 
 let prices=data.map(d=>parseFloat(d[4]));
 let lastPrice=prices[prices.length-1];
 
-document.getElementById("price").innerText="Preço Atual: "+lastPrice;
+document.getElementById("price").innerText="Preço Atual: "+lastPrice.toFixed(4);
 
-let sma=prices.reduce((a,b)=>a+b)/prices.length;
+// SINAL IA (SMA 50)
+let sma=prices.slice(-50).reduce((a,b)=>a+b)/50;
 let signal= lastPrice>sma ? "🟢 Sinal: Compra" : "🔴 Sinal: Venda";
-
 document.getElementById("signal").innerText=signal;
 
+// FIBONACCI
+let high=Math.max(...prices);
+let low=Math.min(...prices);
+let fib50=high-(high-low)*0.5;
+let fib618=high-(high-low)*0.618;
+
+document.getElementById("fibo").innerText=
+"Fibo 50%: "+fib50.toFixed(4)+" | Fibo 61.8%: "+fib618.toFixed(4);
+
+// GRÁFICO
 if(chart) chart.destroy();
 
 let ctx=document.getElementById("chart");
+
 chart=new Chart(ctx,{
 type:"line",
 data:{
 labels:prices.map((_,i)=>i),
-datasets:[{
+datasets:[
+{
 label:symbol,
 data:prices,
 borderColor:"#0072ff",
 fill:false
-}]
+}
+]
 }
 });
 }
+
+// VARREDURA
+async function scanMarket(){
+let pairs=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT","XRPUSDT","ADAUSDT","DOGEUSDT"];
+
+for(let pair of pairs){
+let url=`https://api.binance.com/api/v3/klines?symbol=${pair}&interval=1m&limit=50`;
+let response=await fetch(url);
+let data=await response.json();
+
+let prices=data.map(d=>parseFloat(d[4]));
+let last=prices[prices.length-1];
+let sma=prices.slice(-20).reduce((a,b)=>a+b)/20;
+
+if(last>sma){
+alert("🟢 Compra detectada em "+pair);
+}
+}
+}
+
+// Atualização automática a cada 10 segundos
+setInterval(()=>{
+loadData();
+},10000);
+
 </script>
 
 </body>
