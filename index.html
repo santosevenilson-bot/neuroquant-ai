@@ -98,7 +98,38 @@ color:#64748b;
 }
 </style>
 </head>
+<script>
+const canvas = document.getElementById("chartCanvas");
+const ctx = canvas.getContext("2d");
 
+let points = [
+{ x: 50, y: 200 },
+{ x: 150, y: 300 },
+{ x: 250, y: 150 },
+{ x: 350, y: 300 },
+{ x: 450, y: 120 },
+{ x: 550, y: 100 },
+{ x: 650, y: 80 }
+];
+
+let index = 0;
+
+function drawLine() {
+if (index >= points.length - 1) return;
+
+ctx.beginPath();
+ctx.moveTo(points[index].x, points[index].y);
+ctx.lineTo(points[index + 1].x, points[index + 1].y);
+ctx.strokeStyle = "#22c55e";
+ctx.lineWidth = 3;
+ctx.stroke();
+
+index++;
+setTimeout(drawLine, 500);
+}
+
+drawLine();
+</script>
 <body>
 
 <div class="menu-btn" onclick="openMenu()">☰</div>
@@ -122,6 +153,14 @@ Plataforma avançada de previsão de sinais utilizando Inteligência Artificial 
 Receber Sinais
 </button>
 </header>
+  <section>
+<h2 style="font-size:32px;">Simulação de Padrão de Alta</h2>
+
+<canvas id="chartCanvas" width="800" height="400" 
+style="background:#0b1220;border-radius:12px;margin-top:30px;">
+</canvas>
+
+  </section>
 
 <section>
 <h2>Previsão Avançada</h2>
