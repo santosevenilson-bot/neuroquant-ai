@@ -11,11 +11,10 @@ margin:0;
 font-family:Arial, sans-serif;
 background:linear-gradient(135deg,#0f172a,#020617);
 color:white;
-text-align:center;
-overflow-x:hidden;
+scroll-behavior:smooth;
 }
 
-/* MENU */
+/* MENU BUTTON */
 .menu-btn{
 position:fixed;
 top:20px;
@@ -25,6 +24,7 @@ cursor:pointer;
 z-index:1001;
 }
 
+/* SIDEBAR */
 .sidebar{
 position:fixed;
 top:0;
@@ -35,7 +35,6 @@ background:#0b1220;
 padding-top:80px;
 transition:0.3s;
 z-index:1000;
-text-align:left;
 }
 
 .sidebar a{
@@ -61,29 +60,40 @@ left:0;
 z-index:900;
 }
 
+/* SECTIONS */
 section{
 padding:100px 20px;
-display:none;
+text-align:center;
 }
 
-.active{
-display:block;
+h1{
+font-size:48px;
+margin-bottom:20px;
 }
 
-canvas{
-background:#0b1220;
+.subtitle{
+max-width:700px;
+margin:0 auto;
+color:#94a3b8;
+font-size:20px;
+}
+
+.card{
+background:#111827;
+padding:30px;
+margin:30px auto;
+max-width:800px;
 border-radius:12px;
-margin-top:40px;
-max-width:95%;
 }
 
 button{
 margin-top:20px;
-padding:12px 25px;
+padding:15px 30px;
 background:#22c55e;
 border:none;
 border-radius:8px;
 color:white;
+font-size:16px;
 cursor:pointer;
 }
 
@@ -91,7 +101,7 @@ footer{
 padding:30px;
 background:#000;
 color:#64748b;
-margin-top:40px;
+text-align:center;
 }
 </style>
 </head>
@@ -101,32 +111,72 @@ margin-top:40px;
 <div class="menu-btn" onclick="openMenu()">☰</div>
 
 <div id="sidebar" class="sidebar">
-<a href="#" onclick="showHome()">Home</a>
-<a href="#" onclick="showPatterns()">PADRÕES DE ALTA</a>
+<a href="#home" onclick="closeMenu()">Home</a>
+<a href="#previsao" onclick="closeMenu()">Previsão Avançada</a>
+<a href="#planos" onclick="closeMenu()">Planos</a>
+<a href="#resultados" onclick="closeMenu()">Resultados</a>
+<a href="#contato" onclick="closeMenu()">Contato</a>
 </div>
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
 <!-- HOME -->
-<section id="home" class="active">
+<section id="home">
 <h1>NeuroQuant AI</h1>
-<p>Plataforma avançada de previsão de sinais com Inteligência Artificial.</p>
+<p class="subtitle">
+Plataforma avançada de previsão de sinais utilizando Inteligência Artificial e análise quantitativa.
+</p>
 </section>
 
-<!-- PADRÕES -->
-<section id="patterns">
-<h2>Padrão de Alta — Fundo Duplo</h2>
-<canvas id="chartCanvas" width="900" height="450"></canvas>
-<button onclick="restartAnimation()">Gerar Novo Padrão</button>
+<!-- PREVISÃO -->
+<section id="previsao">
+<h2>Previsão Avançada</h2>
+<div class="card">
+<p>
+Modelos estatísticos e leitura de liquidez institucional para identificar zonas de alta probabilidade no mercado de criptomoedas.
+</p>
+</div>
+</section>
+
+<!-- PLANOS -->
+<section id="planos">
+<h2>Planos</h2>
+<div class="card">
+<h3>Plano PRO</h3>
+<p>Sinais exclusivos + Relatórios + Atualizações em tempo real</p>
+<h2>R$ 97/mês</h2>
+<button onclick="window.location.href='https://wa.me/SEUNUMEROAQUI'">
+Quero Acessar
+</button>
+</div>
+</section>
+
+<!-- RESULTADOS -->
+<section id="resultados">
+<h2>Resultados</h2>
+<div class="card">
+<p>
+Histórico de operações com análise detalhada de entradas e saídas baseadas em probabilidade estatística.
+</p>
+</div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+<h2>Contato</h2>
+<div class="card">
+<p>Entre em contato para mais informações.</p>
+<button onclick="window.location.href='https://wa.me/SEUNUMEROAQUI'">
+Falar no WhatsApp
+</button>
+</div>
 </section>
 
 <footer>
-© 2026 NeuroQuant AI
+© 2026 NeuroQuant AI — Todos os direitos reservados
 </footer>
 
 <script>
-
-/* MENU */
 function openMenu(){
 document.getElementById("sidebar").style.left="0";
 document.getElementById("overlay").style.display="block";
@@ -136,69 +186,6 @@ function closeMenu(){
 document.getElementById("sidebar").style.left="-260px";
 document.getElementById("overlay").style.display="none";
 }
-
-function showHome(){
-document.getElementById("home").classList.add("active");
-document.getElementById("patterns").classList.remove("active");
-closeMenu();
-}
-
-function showPatterns(){
-document.getElementById("patterns").classList.add("active");
-document.getElementById("home").classList.remove("active");
-closeMenu();
-}
-
-/* CANDLE ANIMATION */
-const canvas = document.getElementById("chartCanvas");
-const ctx = canvas.getContext("2d");
-
-let candles;
-let index;
-
-function generatePattern(){
-return [
-[200,220],[220,260],[260,180],[180,260],
-[260,180],[180,160],[160,140],[140,120]
-];
-}
-
-function drawCandle(x, open, close){
-let color = close > open ? "#22c55e" : "#ef4444";
-ctx.strokeStyle = color;
-ctx.fillStyle = color;
-
-let top = Math.min(open, close);
-let bottom = Math.max(open, close);
-
-ctx.fillRect(x, top, 10, bottom-top);
-ctx.beginPath();
-ctx.moveTo(x+5, top-15);
-ctx.lineTo(x+5, bottom+15);
-ctx.stroke();
-}
-
-function animate(){
-if(index >= candles.length) return;
-
-let x = 80 + index*60;
-let open = candles[index][0];
-let close = candles[index][1];
-
-drawCandle(x, open, close);
-index++;
-setTimeout(animate, 500);
-}
-
-function restartAnimation(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-candles = generatePattern();
-index = 0;
-animate();
-}
-
-restartAnimation();
-
 </script>
 
 </body>
