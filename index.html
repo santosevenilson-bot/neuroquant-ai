@@ -2,8 +2,7 @@
 
 async function buscarPrecoReal(par){
     try{
-        let simbolo = par.replace("/","").toUpperCase();
-
+        let simbolo = par.replace("/","").toUpperCase(); 
         let response = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${simbolo}`);
         let data = await response.json();
 
