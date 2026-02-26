@@ -53,6 +53,24 @@ body{
     left:0;
 }
 
+.overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    opacity:0;
+    pointer-events:none;
+    transition:0.3s;
+    z-index:900;
+}
+
+.overlay.active{
+    opacity:1;
+    pointer-events:auto;
+}
+
 /* HEADER */
 header{
     background:linear-gradient(90deg,#00f5ff,#0066ff);
@@ -76,6 +94,12 @@ header{
     border-radius:15px;
     box-shadow:0 0 20px rgba(0,255,255,0.2);
     margin-bottom:20px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 30px rgba(0,255,255,0.4);
 }
 
 select{
@@ -84,7 +108,6 @@ select{
     border-radius:8px;
     border:none;
     margin-bottom:15px;
-    font-size:14px;
 }
 
 button{
@@ -96,17 +119,30 @@ button{
     color:white;
     font-weight:bold;
     cursor:pointer;
-    transition:0.3s;
 }
 
-button:hover{
-    opacity:0.85;
+.loader{
+    border:4px solid #1f2937;
+    border-top:4px solid #00f5ff;
+    border-radius:50%;
+    width:30px;
+    height:30px;
+    animation:spin 1s linear infinite;
+    margin:auto;
 }
 
-.signal{
-    font-size:14px;
-    margin-top:15px;
-    line-height:1.6;
+@keyframes spin{
+    100%{transform:rotate(360deg);}
+}
+
+.signal span{
+    animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+    0%{opacity:1;}
+    50%{opacity:0.4;}
+    100%{opacity:1;}
 }
 
 .badge{
@@ -121,7 +157,6 @@ button:hover{
     text-align:center;
     font-size:12px;
     opacity:0.6;
-    margin-top:20px;
 }
 </style>
 </head>
@@ -135,9 +170,11 @@ button:hover{
 <a href="#">❓ Suporte</a>
 </div>
 
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
 <header>
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
-🚀 NeuroQuant PRO – Mercado em Tempo Real
+🚀 NeuroQuant PRO – IA Avançada
 </header>
 
 <div class="container">
@@ -166,126 +203,126 @@ NeuroQuant © 2026
 
 function toggleMenu(){
     document.getElementById("sidebar").classList.toggle("active");
+    document.getElementById("overlay").classList.toggle("active");
 }
 
 let intervaloAtualizacao;
-let pares = [];
+let pares=[];
 
 async function carregarPares(){
-    let response = await fetch("https://api.binance.com/api/v3/exchangeInfo");
-    let data = await response.json();
+    let response=await fetch("https://api.binance.com/api/v3/exchangeInfo");
+    let data=await response.json();
 
-    pares = data.symbols
-        .filter(s => s.quoteAsset === "USDT" && s.status === "TRADING")
-        .map(s => s.symbol);
+    pares=data.symbols
+        .filter(s=>s.quoteAsset==="USDT" && s.status==="TRADING")
+        .map(s=>s.symbol);
 
-    let select = document.getElementById("pairSelect");
+    let select=document.getElementById("pairSelect");
 
     pares.forEach(par=>{
-        let option = document.createElement("option");
-        option.value = par;
-        option.textContent = par;
+        let option=document.createElement("option");
+        option.value=par;
+        option.textContent=par;
         select.appendChild(option);
     });
 }
 
 async function buscarDados(par){
-    let priceReq = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${par}`);
-    let priceData = await priceReq.json();
+    let req=await fetch(`https://api.binance.com/api/v3/klines?symbol=${par}&interval=15m&limit=100`);
+    let data=await req.json();
 
-    let statsReq = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${par}`);
-    let statsData = await statsReq.json();
+    let closes=data.map(c=>parseFloat(c[4]));
+    let volumes=data.map(c=>parseFloat(c[5]));
 
-    return {
-        preco: parseFloat(priceData.price),
-        high: parseFloat(statsData.highPrice),
-        low: parseFloat(statsData.lowPrice)
+    return{
+        preco:closes[closes.length-1],
+        high:Math.max(...closes),
+        low:Math.min(...closes),
+        closes,
+        volumes
     };
+}
+
+function calcularEMA(periodo,valores){
+    let k=2/(periodo+1);
+    let ema=valores[0];
+    for(let i=1;i<valores.length;i++){
+        ema=valores[i]*k+ema*(1-k);
+    }
+    return ema;
+}
+
+function calcularRSI(periodo,valores){
+    let ganhos=0,perdas=0;
+    for(let i=valores.length-periodo;i<valores.length-1;i++){
+        let diff=valores[i+1]-valores[i];
+        if(diff>0) ganhos+=diff;
+        else perdas+=Math.abs(diff);
+    }
+    let rs=ganhos/perdas || 0;
+    return 100-(100/(1+rs));
 }
 
 async function gerarSinal(){
 
-    let par = document.getElementById("pairSelect").value;
-    let dados = await buscarDados(par);
+    document.getElementById("resultado").innerHTML="<div class='loader'></div>";
 
-    let preco = dados.preco;
-    let high = dados.high;
-    let low = dados.low;
+    let par=document.getElementById("pairSelect").value;
+    let dados=await buscarDados(par);
 
-    let fib236 = (high - (high - low) * 0.236).toFixed(2);
-    let fib382 = (high - (high - low) * 0.382).toFixed(2);
-    let fib50  = (high - (high - low) * 0.5).toFixed(2);
-    let fib618 = (high - (high - low) * 0.618).toFixed(2);
+    let {preco,high,low,closes,volumes}=dados;
 
-    let posicao = (preco - low) / (high - low);
+    let ema9=calcularEMA(9,closes);
+    let ema21=calcularEMA(21,closes);
+    let rsi=calcularRSI(14,closes);
 
-    let tipo, tendencia, prob, alvo, stop;
+    let volumeAtual=volumes[volumes.length-1];
+    let volumeMedio=volumes.slice(-20).reduce((a,b)=>a+b)/20;
 
-    if(posicao < 0.3){
-        tipo = "COMPRA 📈";
-        tendencia = "Preço próximo ao suporte";
-        prob = 82;
-        alvo = high.toFixed(2);
-        stop = fib618;
-    }
-    else if(posicao > 0.7){
-        tipo = "VENDA 📉";
-        tendencia = "Preço próximo à resistência";
-        prob = 82;
-        alvo = low.toFixed(2);
-        stop = fib382;
-    }
-    else{
-        tipo = "NEUTRO ⚖️";
-        tendencia = "Zona intermediária";
-        prob = 60;
-        alvo = fib50;
-        stop = fib50;
-    }
+    let fib50=high-(high-low)*0.5;
+    let fib618=high-(high-low)*0.618;
 
-    atualizarTela(par, preco, high, low, tipo, tendencia, prob, alvo, stop, fib236, fib382, fib50, fib618);
+    let score=0;
+
+    if(ema9>ema21) score++;
+    if(rsi<35) score++;
+    if(volumeAtual>volumeMedio) score++;
+
+    if(ema9<ema21) score--;
+    if(rsi>65) score--;
+    if(volumeAtual>volumeMedio && ema9<ema21) score--;
+
+    let tipo,prob;
+
+    if(score>=2){tipo="COMPRA 📈";prob=88;}
+    else if(score<=-2){tipo="VENDA 📉";prob=88;}
+    else{tipo="NEUTRO ⚖️";prob=65;}
+
+    atualizarTela(par,preco,high,low,tipo,prob,fib50,fib618,ema9,ema21,rsi);
 
     clearInterval(intervaloAtualizacao);
-
-    intervaloAtualizacao = setInterval(async ()=>{
-        let dadosAtualizados = await buscarDados(par);
-        atualizarTela(par,
-            dadosAtualizados.preco,
-            dadosAtualizados.high,
-            dadosAtualizados.low,
-            tipo,
-            tendencia,
-            prob,
-            alvo,
-            stop,
-            fib236,
-            fib382,
-            fib50,
-            fib618
-        );
-    },5000);
+    intervaloAtualizacao=setInterval(()=>gerarSinal(),10000);
 }
 
-function atualizarTela(par, preco, high, low, tipo, tendencia, prob, alvo, stop, fib236, fib382, fib50, fib618){
+function atualizarTela(par,preco,high,low,tipo,prob,fib50,fib618,ema9,ema21,rsi){
 
-    document.getElementById("resultado").innerHTML = `
+    document.getElementById("resultado").innerHTML=`
     Par: ${par}<br><br>
-    💰 Preço Atual: ${preco.toFixed(2)}<br>
-    📊 High 24h: ${high.toFixed(2)}<br>
-    📊 Low 24h: ${low.toFixed(2)}<br><br>
 
-    🔥 <b>Sinal:</b> ${tipo}<br>
-    🎯 <b>Probabilidade:</b> ${prob}%<br>
-    🧠 ${tendencia}<br><br>
+    💰 Preço Atual: <span style="color:#00f5ff">${preco.toFixed(2)}</span><br>
+    📊 High: ${high.toFixed(2)}<br>
+    📊 Low: ${low.toFixed(2)}<br><br>
 
-    🎯 <b>Alvo:</b> ${alvo}<br>
-    🛑 <b>Stop:</b> ${stop}<br><br>
+    🤖 <b>Sinal IA:</b> ${tipo}<br>
+    🎯 <b>Probabilidade:</b> ${prob}%<br><br>
+
+    📈 EMA 9: ${ema9.toFixed(2)}<br>
+    📉 EMA 21: ${ema21.toFixed(2)}<br>
+    📊 RSI 14: ${rsi.toFixed(2)}<br><br>
 
     📐 Fibonacci:<br>
-    0.236 → ${fib236}<br>
-    0.382 → ${fib382}<br>
-    0.5 → ${fib50}<br>
-    0.618 → ${fib618}<br><br>
+    0.5 → ${fib50.toFixed(2)}<br>
+    0.618 → ${fib618.toFixed(2)}<br><br>
 
     🔄 Atualizando automaticamente...
     `;
