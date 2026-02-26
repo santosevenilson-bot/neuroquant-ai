@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant Pro</title>
+<title>NeuroQuant PRO</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
 
@@ -24,7 +24,7 @@ header{
 }
 
 .container{
-    max-width:500px;
+    max-width:520px;
     margin:auto;
     padding:20px;
 }
@@ -37,7 +37,7 @@ header{
     margin-bottom:20px;
 }
 
-input{
+select{
     width:100%;
     padding:12px;
     border-radius:8px;
@@ -59,18 +59,13 @@ button{
 }
 
 button:hover{
-    opacity:0.8;
+    opacity:0.85;
 }
 
 .signal{
-    text-align:center;
-    font-size:16px;
-    margin-top:10px;
-}
-
-.premium-lock{
-    text-align:center;
-    opacity:0.6;
+    font-size:14px;
+    margin-top:15px;
+    line-height:1.6;
 }
 
 .badge{
@@ -92,30 +87,28 @@ button:hover{
 <body>
 
 <header>
-🚀 NeuroQuant PRO – Sinais Inteligentes
+🚀 NeuroQuant PRO – Mercado em Tempo Real
 </header>
 
 <div class="container">
 
 <div class="card">
-<h3>Análise de Criptomoeda</h3>
-<input type="text" id="pair" placeholder="Digite o par (Ex: BTC/USDT)">
-<button onclick="gerarSinal()">Gerar Sinal</button>
+<h3>Selecionar Criptomoeda</h3>
+
+<select id="pairSelect"></select>
+
+<button onclick="gerarSinal()">Analisar Mercado</button>
 
 <div class="signal" id="resultado"></div>
 </div>
 
 <div class="card">
 <h3>Área Premium <span class="badge">PRO</span></h3>
-<div class="premium-lock">
-🔒 Sinais com maior probabilidade<br>
-🔒 Cálculo técnico com Fibonacci<br>
-🔒 Alvos e Stops sugeridos<br><br>
 
 <a href="https://mpago.la/1DYvFBL" target="_blank">
 <button>Assinar Agora – R$ 29,90</button>
 </a>
-</div>
+
 </div>
 
 <div class="footer">
@@ -125,91 +118,136 @@ NeuroQuant © 2026
 </div>
 
 <script>
-function gerarSinal(){
-    let pair = document.getElementById("pair").value;
-    if(pair==""){
-        alert("Digite o par!");
-        return;
-    }
 
-    // Preço base simulado
-    let precoAtual = Math.floor(Math.random()*50000)+20000;
+let intervaloAtualizacao;
+let pares = [];
 
-    // Simulação de movimento recente
-    let movimento = Math.random();
+// Carregar todos os pares USDT automaticamente
+async function carregarPares(){
+    let response = await fetch("https://api.binance.com/api/v3/exchangeInfo");
+    let data = await response.json();
 
-    let tendencia;
-    let tipo;
-    let prob;
-    let topo;
-    let fundo;
+    pares = data.symbols
+        .filter(s => s.quoteAsset === "USDT" && s.status === "TRADING")
+        .map(s => s.symbol);
 
-    if(movimento > 0.6){
-        tendencia = "📈 Tendência de Alta";
-        tipo = "COMPRA";
-        prob = Math.floor(Math.random()*10)+78;
+    let select = document.getElementById("pairSelect");
 
-        fundo = precoAtual - Math.floor(Math.random()*1500);
-        topo = precoAtual + Math.floor(Math.random()*2500);
+    pares.forEach(par=>{
+        let option = document.createElement("option");
+        option.value = par;
+        option.textContent = par;
+        select.appendChild(option);
+    });
+}
 
-    } else if(movimento < 0.4){
-        tendencia = "📉 Tendência de Baixa";
-        tipo = "VENDA";
-        prob = Math.floor(Math.random()*10)+78;
+// Buscar dados reais
+async function buscarDados(par){
+    let priceReq = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${par}`);
+    let priceData = await priceReq.json();
 
-        topo = precoAtual + Math.floor(Math.random()*1500);
-        fundo = precoAtual - Math.floor(Math.random()*2500);
+    let statsReq = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${par}`);
+    let statsData = await statsReq.json();
 
-    } else {
-        tendencia = "⚖️ Consolidação";
-        tipo = "NEUTRO";
-        prob = Math.floor(Math.random()*10)+55;
+    return {
+        preco: parseFloat(priceData.price),
+        high: parseFloat(statsData.highPrice),
+        low: parseFloat(statsData.lowPrice)
+    };
+}
 
-        topo = precoAtual + Math.floor(Math.random()*1000);
-        fundo = precoAtual - Math.floor(Math.random()*1000);
-    }
+async function gerarSinal(){
 
-    // Fibonacci baseado no swing
-    let fib236 = (topo - (topo - fundo) * 0.236).toFixed(2);
-    let fib382 = (topo - (topo - fundo) * 0.382).toFixed(2);
-    let fib50  = (topo - (topo - fundo) * 0.5).toFixed(2);
-    let fib618 = (topo - (topo - fundo) * 0.618).toFixed(2);
+    let par = document.getElementById("pairSelect").value;
 
-    let alvo, stop;
+    let dados = await buscarDados(par);
 
-    if(tipo === "COMPRA"){
-        alvo = topo.toFixed(2);
+    let preco = dados.preco;
+    let high = dados.high;
+    let low = dados.low;
+
+    let fib236 = (high - (high - low) * 0.236).toFixed(2);
+    let fib382 = (high - (high - low) * 0.382).toFixed(2);
+    let fib50  = (high - (high - low) * 0.5).toFixed(2);
+    let fib618 = (high - (high - low) * 0.618).toFixed(2);
+
+    let posicao = (preco - low) / (high - low);
+
+    let tipo, tendencia, prob, alvo, stop;
+
+    if(posicao < 0.3){
+        tipo = "COMPRA 📈";
+        tendencia = "Preço próximo ao suporte";
+        prob = 82;
+        alvo = high.toFixed(2);
         stop = fib618;
     }
-    else if(tipo === "VENDA"){
-        alvo = fundo.toFixed(2);
+    else if(posicao > 0.7){
+        tipo = "VENDA 📉";
+        tendencia = "Preço próximo à resistência";
+        prob = 82;
+        alvo = low.toFixed(2);
         stop = fib382;
     }
     else{
+        tipo = "NEUTRO ⚖️";
+        tendencia = "Zona intermediária";
+        prob = 60;
         alvo = fib50;
         stop = fib50;
     }
 
-    document.getElementById("resultado").innerHTML=
-    `
-    Par: ${pair.toUpperCase()}<br><br>
+    atualizarTela(par, preco, high, low, tipo, tendencia, prob, alvo, stop, fib236, fib382, fib50, fib618);
 
-    Preço Atual: ${precoAtual}<br>
-    ${tendencia}<br><br>
+    clearInterval(intervaloAtualizacao);
+
+    intervaloAtualizacao = setInterval(async ()=>{
+        let dadosAtualizados = await buscarDados(par);
+        atualizarTela(par,
+            dadosAtualizados.preco,
+            dadosAtualizados.high,
+            dadosAtualizados.low,
+            tipo,
+            tendencia,
+            prob,
+            alvo,
+            stop,
+            fib236,
+            fib382,
+            fib50,
+            fib618
+        );
+    },5000);
+}
+
+function atualizarTela(par, preco, high, low, tipo, tendencia, prob, alvo, stop, fib236, fib382, fib50, fib618){
+
+    document.getElementById("resultado").innerHTML = `
+    Par: ${par}<br><br>
+
+    💰 Preço Atual: ${preco.toFixed(2)}<br>
+    📊 High 24h: ${high.toFixed(2)}<br>
+    📊 Low 24h: ${low.toFixed(2)}<br><br>
 
     🔥 <b>Sinal:</b> ${tipo}<br>
-    🎯 <b>Probabilidade:</b> ${prob}%<br><br>
+    🎯 <b>Probabilidade:</b> ${prob}%<br>
+    🧠 ${tendencia}<br><br>
 
-    🎯 <b>Alvo Técnico:</b> ${alvo}<br>
-    🛑 <b>Stop Técnico:</b> ${stop}<br><br>
+    🎯 <b>Alvo:</b> ${alvo}<br>
+    🛑 <b>Stop:</b> ${stop}<br><br>
 
-    📊 <b>Níveis Fibonacci:</b><br>
+    📐 <b>Fibonacci:</b><br>
     0.236 → ${fib236}<br>
     0.382 → ${fib382}<br>
     0.5 → ${fib50}<br>
-    0.618 → ${fib618}
+    0.618 → ${fib618}<br><br>
+
+    🔄 Atualizando automaticamente...
     `;
 }
+
+carregarPares();
+
 </script>
 
 </body>
