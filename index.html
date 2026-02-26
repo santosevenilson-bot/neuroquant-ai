@@ -14,17 +14,16 @@ color:white;
 text-align:center;
 }
 
-/* MENU BUTTON */
+/* MENU */
 .menu-btn{
 position:fixed;
 top:20px;
 left:20px;
-font-size:28px;
+font-size:30px;
 cursor:pointer;
 z-index:1001;
 }
 
-/* SIDEBAR */
 .sidebar{
 position:fixed;
 top:0;
@@ -50,7 +49,6 @@ font-size:18px;
 background:#1e293b;
 }
 
-/* OVERLAY */
 .overlay{
 position:fixed;
 display:none;
@@ -77,68 +75,32 @@ margin:20px auto;
 font-size:20px;
 }
 
-button{
-padding:15px 35px;
-font-size:18px;
-background:#22c55e;
-border:none;
-border-radius:8px;
-cursor:pointer;
-color:white;
-}
-
 section{
 padding:80px 20px;
+}
+
+canvas{
+background:#0b1220;
+border-radius:12px;
+max-width:90%;
 }
 
 footer{
 padding:30px;
 background:#000;
 color:#64748b;
+margin-top:40px;
 }
 </style>
 </head>
-<script>
-const canvas = document.getElementById("chartCanvas");
-const ctx = canvas.getContext("2d");
 
-let points = [
-{ x: 50, y: 200 },
-{ x: 150, y: 300 },
-{ x: 250, y: 150 },
-{ x: 350, y: 300 },
-{ x: 450, y: 120 },
-{ x: 550, y: 100 },
-{ x: 650, y: 80 }
-];
-
-let index = 0;
-
-function drawLine() {
-if (index >= points.length - 1) return;
-
-ctx.beginPath();
-ctx.moveTo(points[index].x, points[index].y);
-ctx.lineTo(points[index + 1].x, points[index + 1].y);
-ctx.strokeStyle = "#22c55e";
-ctx.lineWidth = 3;
-ctx.stroke();
-
-index++;
-setTimeout(drawLine, 500);
-}
-
-drawLine();
-</script>
 <body>
 
 <div class="menu-btn" onclick="openMenu()">☰</div>
 
 <div id="sidebar" class="sidebar">
 <a href="#">Home</a>
-<a href="#">Previsão Avançada</a>
-<a href="#">Planos</a>
-<a href="#">Resultados</a>
+<a href="#padroes">PADRÕES DE ALTA</a>
 <a href="#">Contato</a>
 </div>
 
@@ -147,24 +109,13 @@ drawLine();
 <header>
 <h1>NeuroQuant AI</h1>
 <p class="subtitle">
-Plataforma avançada de previsão de sinais utilizando Inteligência Artificial e análise quantitativa.
+Plataforma avançada de previsão de sinais com Inteligência Artificial e análise quantitativa.
 </p>
-<button onclick="window.location.href='https://wa.me/SEUNUMEROAQUI'">
-Receber Sinais
-</button>
 </header>
-  <section>
-<h2 style="font-size:32px;">Simulação de Padrão de Alta</h2>
 
-<canvas id="chartCanvas" width="800" height="400" 
-style="background:#0b1220;border-radius:12px;margin-top:30px;">
-</canvas>
-
-  </section>
-
-<section>
-<h2>Previsão Avançada</h2>
-<p>Modelos estatísticos, leitura de liquidez e probabilidade aplicada ao mercado de criptomoedas.</p>
+<section id="padroes">
+<h2>Simulação de Padrão de Alta (Fundo Duplo)</h2>
+<canvas id="chartCanvas" width="800" height="400"></canvas>
 </section>
 
 <footer>
@@ -172,6 +123,8 @@ style="background:#0b1220;border-radius:12px;margin-top:30px;">
 </footer>
 
 <script>
+
+/* MENU */
 function openMenu(){
 document.getElementById("sidebar").style.left="0";
 document.getElementById("overlay").style.display="block";
@@ -181,6 +134,43 @@ function closeMenu(){
 document.getElementById("sidebar").style.left="-250px";
 document.getElementById("overlay").style.display="none";
 }
+
+/* ANIMAÇÃO DO GRÁFICO */
+window.onload = function(){
+
+const canvas = document.getElementById("chartCanvas");
+const ctx = canvas.getContext("2d");
+
+let points = [
+{ x: 50, y: 200 },
+{ x: 150, y: 300 },
+{ x: 250, y: 150 },
+{ x: 350, y: 300 },
+{ x: 450, y: 150 },
+{ x: 550, y: 120 },
+{ x: 650, y: 80 }
+];
+
+let index = 0;
+
+function drawNext(){
+if(index >= points.length - 1) return;
+
+ctx.beginPath();
+ctx.moveTo(points[index].x, points[index].y);
+ctx.lineTo(points[index+1].x, points[index+1].y);
+ctx.strokeStyle = "#22c55e";
+ctx.lineWidth = 3;
+ctx.stroke();
+
+index++;
+setTimeout(drawNext, 600);
+}
+
+drawNext();
+
+};
+
 </script>
 
 </body>
