@@ -130,25 +130,98 @@ NeuroQuant © 2026
 </div>
 
 <script>
+<script>
 function gerarSinal(){
+
     let pair = document.getElementById("pair").value;
     if(pair==""){
         alert("Digite o par!");
         return;
     }
 
-    let prob = Math.floor(Math.random()*30)+60;
-    let tipo = Math.random()>0.5 ? "COMPRA 📈" : "VENDA 📉";
+    // Preço base simulado
+    let precoAtual = Math.floor(Math.random()*50000)+20000;
+
+    // Simulação de movimento recente
+    let movimento = Math.random();
+
+    let tendencia;
+    let tipo;
+    let prob;
+    let topo;
+    let fundo;
+
+    if(movimento > 0.6){
+        tendencia = "Tendência de Alta 📈";
+        tipo = "COMPRA";
+        prob = Math.floor(Math.random()*10)+78;
+
+        fundo = precoAtual - Math.floor(Math.random()*1500);
+        topo = precoAtual + Math.floor(Math.random()*2500);
+
+    } else if(movimento < 0.4){
+        tendencia = "Tendência de Baixa 📉";
+        tipo = "VENDA";
+        prob = Math.floor(Math.random()*10)+78;
+
+        topo = precoAtual + Math.floor(Math.random()*1500);
+        fundo = precoAtual - Math.floor(Math.random()*2500);
+
+    } else {
+        tendencia = "Consolidação ⚖️";
+        tipo = "NEUTRO";
+        prob = Math.floor(Math.random()*10)+55;
+
+        topo = precoAtual + Math.floor(Math.random()*1000);
+        fundo = precoAtual - Math.floor(Math.random()*1000);
+    }
+
+    // Fibonacci baseado no swing
+    let fib236 = (topo - (topo - fundo) * 0.236).toFixed(2);
+    let fib382 = (topo - (topo - fundo) * 0.382).toFixed(2);
+    let fib50  = (topo - (topo - fundo) * 0.5).toFixed(2);
+    let fib618 = (topo - (topo - fundo) * 0.618).toFixed(2);
+
+    let alvo, stop;
+
+    if(tipo === "COMPRA"){
+        alvo = topo.toFixed(2);
+        stop = fib618;
+    }
+    else if(tipo === "VENDA"){
+        alvo = fundo.toFixed(2);
+        stop = fib382;
+    }
+    else{
+        alvo = fib50;
+        stop = fib50;
+    }
 
     document.getElementById("resultado").innerHTML=
     `
-    Par: ${pair.toUpperCase()}<br>
-    Sinal: <b>${tipo}</b><br>
-    Probabilidade: ${prob}%<br>
-    Alvo: ${Math.floor(Math.random()*50000)+20000}<br>
-    Stop: ${Math.floor(Math.random()*50000)+20000}
+    Par: ${pair.toUpperCase()}<br><br>
+
+    Preço Atual: ${precoAtual}<br>
+    ${tendencia}<br><br>
+
+    🔥 Sinal: <b>${tipo}</b><br>
+    🎯 Probabilidade: ${prob}%<br><br>
+
+    🎯 Alvo Técnico: ${alvo}<br>
+    🛑 Stop Técnico: ${stop}<br><br>
+
+    📊 Níveis Fibonacci:<br>
+    0.236 → ${fib236}<br>
+    0.382 → ${fib382}<br>
+    0.5 → ${fib50}<br>
+    0.618 → ${fib618}
     `;
 }
+
+function pagar(){
+    window.location.href="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=SUA_PREFERENCE_ID";
+}
+</script>
 
 function pagar(){
     window.location.href="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=SUA_PREFERENCE_ID";
