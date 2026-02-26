@@ -8,13 +8,13 @@
 <style>
 body{
 margin:0;
-font-family:Arial, sans-serif;
-background:linear-gradient(135deg,#0f172a,#020617);
+font-family:'Segoe UI', sans-serif;
+background:#0f172a;
 color:white;
 scroll-behavior:smooth;
 }
 
-/* MENU BUTTON */
+/* MENU */
 .menu-btn{
 position:fixed;
 top:20px;
@@ -22,18 +22,22 @@ left:20px;
 font-size:30px;
 cursor:pointer;
 z-index:1001;
+transition:0.3s;
 }
 
-/* SIDEBAR */
+.menu-btn:hover{
+transform:scale(1.1);
+}
+
 .sidebar{
 position:fixed;
 top:0;
 left:-260px;
 width:260px;
 height:100%;
-background:#0b1220;
+background:#111827;
 padding-top:80px;
-transition:0.3s;
+transition:0.4s ease;
 z-index:1000;
 }
 
@@ -43,10 +47,12 @@ padding:15px 25px;
 color:white;
 text-decoration:none;
 font-size:18px;
+transition:0.3s;
 }
 
 .sidebar a:hover{
-background:#1e293b;
+background:#1f2937;
+padding-left:35px;
 }
 
 .overlay{
@@ -54,7 +60,7 @@ position:fixed;
 display:none;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.6);
+background:rgba(0,0,0,0.7);
 top:0;
 left:0;
 z-index:900;
@@ -62,12 +68,20 @@ z-index:900;
 
 /* SECTIONS */
 section{
-padding:100px 20px;
+padding:120px 20px;
 text-align:center;
+opacity:0;
+transform:translateY(40px);
+transition:1s ease;
+}
+
+section.visible{
+opacity:1;
+transform:translateY(0);
 }
 
 h1{
-font-size:48px;
+font-size:52px;
 margin-bottom:20px;
 }
 
@@ -79,27 +93,44 @@ font-size:20px;
 }
 
 .card{
-background:#111827;
-padding:30px;
-margin:30px auto;
+background:#1e293b;
+padding:40px;
+margin:40px auto;
 max-width:800px;
-border-radius:12px;
+border-radius:16px;
+box-shadow:0 0 30px rgba(0,0,0,0.4);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
 }
 
 button{
-margin-top:20px;
-padding:15px 30px;
-background:#22c55e;
+margin-top:25px;
+padding:15px 35px;
+background:linear-gradient(90deg,#22c55e,#16a34a);
 border:none;
-border-radius:8px;
+border-radius:10px;
 color:white;
-font-size:16px;
+font-size:18px;
 cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.price{
+font-size:32px;
+margin-top:20px;
+color:#22c55e;
 }
 
 footer{
-padding:30px;
-background:#000;
+padding:40px;
+background:#020617;
 color:#64748b;
 text-align:center;
 }
@@ -114,58 +145,44 @@ text-align:center;
 <a href="#home" onclick="closeMenu()">Home</a>
 <a href="#previsao" onclick="closeMenu()">Previsão Avançada</a>
 <a href="#planos" onclick="closeMenu()">Planos</a>
-<a href="#resultados" onclick="closeMenu()">Resultados</a>
 <a href="#contato" onclick="closeMenu()">Contato</a>
 </div>
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
-<!-- HOME -->
 <section id="home">
 <h1>NeuroQuant AI</h1>
 <p class="subtitle">
-Plataforma avançada de previsão de sinais utilizando Inteligência Artificial e análise quantitativa.
+Previsão de sinais com Inteligência Artificial e análise quantitativa institucional.
 </p>
 </section>
 
-<!-- PREVISÃO -->
 <section id="previsao">
 <h2>Previsão Avançada</h2>
 <div class="card">
 <p>
-Modelos estatísticos e leitura de liquidez institucional para identificar zonas de alta probabilidade no mercado de criptomoedas.
+Algoritmos estatísticos + leitura de liquidez + probabilidade matemática aplicada ao mercado cripto.
 </p>
 </div>
 </section>
 
-<!-- PLANOS -->
 <section id="planos">
-<h2>Planos</h2>
+<h2>Plano PRO</h2>
 <div class="card">
-<h3>Plano PRO</h3>
-<p>Sinais exclusivos + Relatórios + Atualizações em tempo real</p>
-<h2>R$ 97/mês</h2>
-<button onclick="window.location.href='https://wa.me/SEUNUMEROAQUI'">
-Quero Acessar
+<p>Acesso completo à plataforma + sinais exclusivos</p>
+<div class="price">R$ 97/mês</div>
+
+<!-- https://mpago.la/1DYvFBL -->
+<button onclick="window.location.href='LINK_DO_MERCADO_PAGO_AQUI'">
+Assinar Agora
 </button>
+
 </div>
 </section>
 
-<!-- RESULTADOS -->
-<section id="resultados">
-<h2>Resultados</h2>
-<div class="card">
-<p>
-Histórico de operações com análise detalhada de entradas e saídas baseadas em probabilidade estatística.
-</p>
-</div>
-</section>
-
-<!-- CONTATO -->
 <section id="contato">
 <h2>Contato</h2>
 <div class="card">
-<p>Entre em contato para mais informações.</p>
 <button onclick="window.location.href='https://wa.me/SEUNUMEROAQUI'">
 Falar no WhatsApp
 </button>
@@ -173,19 +190,36 @@ Falar no WhatsApp
 </section>
 
 <footer>
-© 2026 NeuroQuant AI — Todos os direitos reservados
+© 2026 NeuroQuant AI
 </footer>
 
 <script>
+
+/* MENU */
 function openMenu(){
 document.getElementById("sidebar").style.left="0";
 document.getElementById("overlay").style.display="block";
 }
-
 function closeMenu(){
 document.getElementById("sidebar").style.left="-260px";
 document.getElementById("overlay").style.display="none";
 }
+
+/* ANIMAÇÃO SUAVE AO ROLAR */
+const sections = document.querySelectorAll("section");
+
+function revealSections(){
+sections.forEach(section=>{
+const rect = section.getBoundingClientRect();
+if(rect.top < window.innerHeight - 100){
+section.classList.add("visible");
+}
+});
+}
+
+window.addEventListener("scroll", revealSections);
+revealSections();
+
 </script>
 
 </body>
