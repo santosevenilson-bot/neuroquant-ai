@@ -5,115 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeuroQuant IA</title>
 
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0e1117">
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://s3.tradingview.com/tv.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{background:#0e1117;color:white;overflow-x:hidden;}
-
-.sidebar{
-position:fixed;left:-260px;top:0;width:260px;height:100%;
-background:#111827;padding-top:60px;transition:.4s;z-index:1000;
-}
-.sidebar a{
-display:block;padding:15px 20px;color:#00f7ff;text-decoration:none;
-}
-.sidebar a:hover{background:#00f7ff;color:#000;}
-.sidebar.active{left:0;}
-
-.menu-btn{
-position:fixed;top:20px;left:20px;font-size:28px;cursor:pointer;z-index:1100;
-}
-
-.container{padding:100px 20px;text-align:center;}
-
-.section{display:none;}
-.active-section{display:block;}
-
+body{background:#0e1117;color:white;text-align:center;padding:20px;}
+h1{margin-bottom:10px;}
 .card{
 background:#161b22;
-padding:25px;
+padding:20px;
 margin:20px auto;
 max-width:500px;
 border-radius:12px;
 box-shadow:0 0 20px rgba(0,247,255,.15);
 }
-
 input,select{
-padding:10px;
-margin:5px;
-border-radius:20px;
-border:none;
-text-align:center;
+padding:10px;margin:5px;border-radius:20px;border:none;text-align:center;
 }
-
 button{
-padding:10px 20px;
-border:none;
-border-radius:20px;
-cursor:pointer;
-background:#00f7ff;
-font-weight:bold;
-transition:.3s;
+padding:10px 20px;border:none;border-radius:20px;
+cursor:pointer;background:#00f7ff;font-weight:bold;
 }
-
 button:hover{transform:scale(1.05);background:white;}
-
-.premium-lock{
-opacity:.4;
-filter:blur(2px);
-pointer-events:none;
-}
-
-h1{margin-bottom:10px;}
-h2{margin-bottom:15px;}
-
-footer{margin-top:40px;font-size:12px;opacity:.5;}
 </style>
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
-
-<div class="sidebar" id="sidebar">
-<a onclick="showSection('home')">Home</a>
-<a onclick="showSection('plataforma')">Plataforma</a>
-<a onclick="showSection('premium')">Premium</a>
-</div>
-
-<div class="container">
-
-<!-- HOME / LANDING -->
-<div id="home" class="section active-section">
 <h1>NeuroQuant IA</h1>
-<p>Plataforma de Sinais Inteligentes para Criptomoedas</p>
+<p>APP Premium Ativado</p>
 
 <div class="card">
-<h2>O que você recebe</h2>
-<p>✔ Sinais automáticos</p>
-<p>✔ Probabilidade estatística</p>
-<p>✔ Gráfico em tempo real</p>
-<p>✔ Identificação de tendência</p>
-</div>
-
-<div class="card">
-<h2>Plano Premium</h2>
-<h3>R$ 29,90</h3>
-<a href="https://mpago.la/1DYvFBL" target="_blank">
-<button>Assinar Agora</button>
-</a>
-<br><br>
-<button onclick="activatePremium()">Já paguei</button>
-</div>
-</div>
-
-<!-- PLATAFORMA -->
-<div id="plataforma" class="section">
-<h1>Painel de Análise</h1>
-
-<div class="card">
+<h2>Análise</h2>
 <input type="text" id="pair" placeholder="Ex: BTCUSDT">
 <select id="timeframe">
 <option value="5">5m</option>
@@ -122,88 +49,31 @@ footer{margin-top:40px;font-size:12px;opacity:.5;}
 <option value="240">4h</option>
 </select>
 <br>
-<button onclick="loadChart()">Carregar Gráfico</button>
+<button onclick="loadChart()">Carregar</button>
 </div>
 
 <div class="card">
 <div id="chart"></div>
 </div>
 
-<div class="card premium-area">
+<div class="card">
 <h2>Sinal Inteligente</h2>
 <div id="signalBox">
-<p>Digite o par e gere o sinal</p>
+<p>Premium Ativo ✔</p>
 </div>
 <button onclick="generateSignal()">Gerar Sinal</button>
 </div>
 
-</div>
-
-<!-- PREMIUM -->
-<div id="premium" class="section">
-<h1>Área Premium</h1>
-
-<div class="card premium-area">
-<p>✔ Sinais com maior probabilidade</p>
-<p>✔ Leitura de força compradora</p>
-<p>✔ Direção institucional</p>
-<p>✔ Análise avançada</p>
-</div>
-
-<div class="card">
-<h3>Plano R$ 29,90</h3>
-<a href="https://mpago.la/1DYvFBL" target="_blank">
-<button>Assinar</button>
-</a>
-</div>
-
-</div>
-
-<footer>
-© 2026 NeuroQuant IA
-</footer>
-
-</div>
-
 <script>
 
-let premium = localStorage.getItem("premium") === "true";
-
-function toggleMenu(){
-document.getElementById("sidebar").classList.toggle("active");
+if("serviceWorker" in navigator){
+navigator.serviceWorker.register("service-worker.js");
 }
-
-function showSection(id){
-document.querySelectorAll(".section").forEach(sec=>sec.classList.remove("active-section"));
-document.getElementById(id).classList.add("active-section");
-}
-
-function activatePremium(){
-localStorage.setItem("premium","true");
-premium=true;
-alert("Premium ativado!");
-unlockPremium();
-}
-
-function unlockPremium(){
-if(!premium){
-document.querySelectorAll(".premium-area").forEach(el=>{
-el.classList.add("premium-lock");
-});
-}else{
-document.querySelectorAll(".premium-area").forEach(el=>{
-el.classList.remove("premium-lock");
-});
-}
-}
-
-unlockPremium();
 
 function loadChart(){
 let pair=document.getElementById("pair").value.toUpperCase();
 let tf=document.getElementById("timeframe").value;
-
-if(pair===""){alert("Digite um par válido");return;}
+if(pair===""){alert("Digite um par");return;}
 
 document.getElementById("chart").innerHTML="";
 
@@ -218,18 +88,15 @@ container_id:"chart"
 }
 
 function generateSignal(){
-let pair=document.getElementById("pair").value.toUpperCase();
-if(pair===""){alert("Digite um par");return;}
-
 let rand=Math.random();
 let signal,prob;
 
 if(rand>0.6){
 signal="COMPRA";
-prob=Math.floor(65+Math.random()*20);
+prob=Math.floor(70+Math.random()*20);
 }else if(rand<0.4){
 signal="VENDA";
-prob=Math.floor(65+Math.random()*20);
+prob=Math.floor(70+Math.random()*20);
 }else{
 signal="NEUTRO";
 prob=Math.floor(50+Math.random()*10);
