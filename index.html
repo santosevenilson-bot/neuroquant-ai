@@ -21,17 +21,16 @@ color:white;
 overflow-x:hidden;
 }
 
-/* MENU */
 .sidebar{
 position:fixed;
-left:-250px;
+left:-260px;
 top:0;
-width:250px;
+width:260px;
 height:100%;
-background:#111;
+background:#0b0f14;
 padding-top:60px;
-transition:0.4s ease;
-box-shadow:5px 0 15px rgba(0,0,0,0.5);
+transition:0.4s;
+box-shadow:5px 0 20px rgba(0,0,0,0.5);
 z-index:1000;
 }
 
@@ -45,7 +44,7 @@ transition:0.3s;
 
 .sidebar a:hover{
 background:#00f7ff;
-color:#111;
+color:#000;
 }
 
 .sidebar.active{
@@ -61,62 +60,59 @@ cursor:pointer;
 z-index:1100;
 }
 
-/* CONTEÚDO */
 .container{
-padding:100px 30px;
+padding:100px 20px;
 text-align:center;
 }
 
-.card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(10px);
-padding:30px;
-border-radius:15px;
-margin:20px auto;
-max-width:400px;
-box-shadow:0 0 20px rgba(0,247,255,0.3);
-transition:0.4s;
-}
-
-.card:hover{
-transform:translateY(-10px);
-box-shadow:0 0 35px rgba(0,247,255,0.6);
+input{
+padding:10px;
+border-radius:20px;
+border:none;
+width:200px;
+text-align:center;
+margin-top:10px;
 }
 
 button{
 background:#00f7ff;
 border:none;
-padding:12px 25px;
-color:#111;
+padding:10px 20px;
+border-radius:20px;
 font-weight:bold;
-border-radius:30px;
 cursor:pointer;
 transition:0.3s;
+margin-top:10px;
 }
 
 button:hover{
-background:#fff;
 transform:scale(1.05);
+background:white;
 }
 
-/* ANIMAÇÃO SUAVE */
-.fade-in{
-opacity:0;
-transform:translateY(20px);
-animation:fadeUp 1s forwards;
+.card{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+padding:25px;
+border-radius:15px;
+margin:20px auto;
+max-width:400px;
+box-shadow:0 0 25px rgba(0,247,255,0.3);
+transition:0.4s;
 }
 
-@keyframes fadeUp{
-to{
-opacity:1;
-transform:translateY(0);
+.card:hover{
+transform:translateY(-8px);
 }
+
+.hidden{
+display:none;
 }
 
 footer{
-margin-top:50px;
+margin-top:40px;
+opacity:0.5;
 font-size:12px;
-opacity:0.6;
 }
 </style>
 </head>
@@ -126,36 +122,128 @@ opacity:0.6;
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
 <div class="sidebar" id="sidebar">
-<a href="#">Dashboard</a>
-<a href="#">Análise IA</a>
-<a href="#">Sinais em Tempo Real</a>
-<a href="#">Configurações</a>
+<a href="#" onclick="showSection('dashboard')">Dashboard</a>
+<a href="#" onclick="showSection('grafico')">Gráfico IA</a>
+<a href="#" onclick="showSection('premium')">Área Premium</a>
+<a href="#" onclick="showSection('login')">Login</a>
 </div>
 
-<div class="container fade-in">
+<div class="container">
+
 <h1>NeuroQuant IA</h1>
 <p>Previsão Avançada com Inteligência Artificial</p>
 
+<!-- DASHBOARD -->
+<div id="dashboard">
+<div class="card">
+<h2>Bem-vindo</h2>
+<p>Digite o par da criptomoeda:</p>
+<input type="text" id="pairInput" placeholder="Ex: BTCUSDT">
+<br>
+<button onclick="loadChart()">Carregar Gráfico</button>
+</div>
+</div>
+
+<!-- GRÁFICO -->
+<div id="grafico" class="hidden">
+<div class="card">
+<h2>Gráfico em Tempo Real</h2>
+<div id="tradingview_chart"></div>
+</div>
+</div>
+
+<!-- PREMIUM -->
+<div id="premium" class="hidden">
 <div class="card">
 <h2>Plano Premium</h2>
-<p>Acesso completo aos sinais avançados</p>
+<p>Acesso aos sinais avançados com IA</p>
 <h3>R$ 29,90</h3>
-<br>
+
+<div id="premiumContent" class="hidden">
+<p>✔ Sinais em tempo real</p>
+<p>✔ Probabilidade estatística</p>
+<p>✔ Identificação de liquidez</p>
+<p>✔ Alvos automáticos</p>
+</div>
+
+<div id="buySection">
 <a href="https://mpago.la/1DYvFBL" target="_blank">
 <button>Assinar Agora</button>
 </a>
 </div>
+</div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="hidden">
+<div class="card">
+<h2>Login</h2>
+<input type="text" id="user" placeholder="Usuário"><br>
+<input type="password" id="pass" placeholder="Senha"><br>
+<button onclick="login()">Entrar</button>
+<p id="loginMsg"></p>
+</div>
+</div>
 
 <footer>
-© 2026 NeuroQuant IA - Todos os direitos reservados
+© 2026 NeuroQuant IA
 </footer>
 
 </div>
 
+<script src="https://s3.tradingview.com/tv.js"></script>
+
 <script>
+
+let isPremium = false;
+
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("active");
 }
+
+function showSection(section){
+document.querySelectorAll('.container > div').forEach(div => {
+div.classList.add('hidden');
+});
+document.getElementById(section).classList.remove('hidden');
+}
+
+function loadChart(){
+let pair = document.getElementById("pairInput").value.toUpperCase();
+if(pair === ""){
+alert("Digite um par válido!");
+return;
+}
+
+document.getElementById("grafico").classList.remove("hidden");
+
+new TradingView.widget({
+width: "100%",
+height: 400,
+symbol: "BINANCE:"+pair,
+interval: "15",
+timezone: "America/Sao_Paulo",
+theme: "dark",
+style: "1",
+locale: "br",
+container_id: "tradingview_chart"
+});
+}
+
+function login(){
+let user = document.getElementById("user").value;
+let pass = document.getElementById("pass").value;
+
+if(user === "admin" && pass === "1234"){
+isPremium = true;
+document.getElementById("loginMsg").innerText = "Login realizado com sucesso!";
+document.getElementById("premiumContent").classList.remove("hidden");
+document.getElementById("buySection").classList.add("hidden");
+}else{
+document.getElementById("loginMsg").innerText = "Usuário inválido.";
+}
+}
+
 </script>
 
 </body>
