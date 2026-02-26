@@ -12,6 +12,7 @@ font-family:Arial, sans-serif;
 background:linear-gradient(135deg,#0f172a,#020617);
 color:white;
 text-align:center;
+overflow-x:hidden;
 }
 
 /* MENU */
@@ -27,8 +28,8 @@ z-index:1001;
 .sidebar{
 position:fixed;
 top:0;
-left:-250px;
-width:250px;
+left:-260px;
+width:260px;
 height:100%;
 background:#0b1220;
 padding-top:80px;
@@ -60,29 +61,30 @@ left:0;
 z-index:900;
 }
 
-header{
-padding:120px 20px 80px;
-}
-
-h1{
-font-size:48px;
-}
-
-.subtitle{
-color:#94a3b8;
-max-width:700px;
-margin:20px auto;
-font-size:20px;
-}
-
 section{
-padding:80px 20px;
+padding:100px 20px;
+display:none;
+}
+
+.active{
+display:block;
 }
 
 canvas{
 background:#0b1220;
 border-radius:12px;
-max-width:90%;
+margin-top:40px;
+max-width:95%;
+}
+
+button{
+margin-top:20px;
+padding:12px 25px;
+background:#22c55e;
+border:none;
+border-radius:8px;
+color:white;
+cursor:pointer;
 }
 
 footer{
@@ -99,23 +101,23 @@ margin-top:40px;
 <div class="menu-btn" onclick="openMenu()">☰</div>
 
 <div id="sidebar" class="sidebar">
-<a href="#">Home</a>
-<a href="#padroes">PADRÕES DE ALTA</a>
-<a href="#">Contato</a>
+<a href="#" onclick="showHome()">Home</a>
+<a href="#" onclick="showPatterns()">PADRÕES DE ALTA</a>
 </div>
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
-<header>
+<!-- HOME -->
+<section id="home" class="active">
 <h1>NeuroQuant AI</h1>
-<p class="subtitle">
-Plataforma avançada de previsão de sinais com Inteligência Artificial e análise quantitativa.
-</p>
-</header>
+<p>Plataforma avançada de previsão de sinais com Inteligência Artificial.</p>
+</section>
 
-<section id="padroes">
-<h2>Simulação de Padrão de Alta (Fundo Duplo)</h2>
-<canvas id="chartCanvas" width="800" height="400"></canvas>
+<!-- PADRÕES -->
+<section id="patterns">
+<h2>Padrão de Alta — Fundo Duplo</h2>
+<canvas id="chartCanvas" width="900" height="450"></canvas>
+<button onclick="restartAnimation()">Gerar Novo Padrão</button>
 </section>
 
 <footer>
@@ -131,45 +133,71 @@ document.getElementById("overlay").style.display="block";
 }
 
 function closeMenu(){
-document.getElementById("sidebar").style.left="-250px";
+document.getElementById("sidebar").style.left="-260px";
 document.getElementById("overlay").style.display="none";
 }
 
-/* ANIMAÇÃO DO GRÁFICO */
-window.onload = function(){
+function showHome(){
+document.getElementById("home").classList.add("active");
+document.getElementById("patterns").classList.remove("active");
+closeMenu();
+}
 
+function showPatterns(){
+document.getElementById("patterns").classList.add("active");
+document.getElementById("home").classList.remove("active");
+closeMenu();
+}
+
+/* CANDLE ANIMATION */
 const canvas = document.getElementById("chartCanvas");
 const ctx = canvas.getContext("2d");
 
-let points = [
-{ x: 50, y: 200 },
-{ x: 150, y: 300 },
-{ x: 250, y: 150 },
-{ x: 350, y: 300 },
-{ x: 450, y: 150 },
-{ x: 550, y: 120 },
-{ x: 650, y: 80 }
+let candles;
+let index;
+
+function generatePattern(){
+return [
+[200,220],[220,260],[260,180],[180,260],
+[260,180],[180,160],[160,140],[140,120]
 ];
-
-let index = 0;
-
-function drawNext(){
-if(index >= points.length - 1) return;
-
-ctx.beginPath();
-ctx.moveTo(points[index].x, points[index].y);
-ctx.lineTo(points[index+1].x, points[index+1].y);
-ctx.strokeStyle = "#22c55e";
-ctx.lineWidth = 3;
-ctx.stroke();
-
-index++;
-setTimeout(drawNext, 600);
 }
 
-drawNext();
+function drawCandle(x, open, close){
+let color = close > open ? "#22c55e" : "#ef4444";
+ctx.strokeStyle = color;
+ctx.fillStyle = color;
 
-};
+let top = Math.min(open, close);
+let bottom = Math.max(open, close);
+
+ctx.fillRect(x, top, 10, bottom-top);
+ctx.beginPath();
+ctx.moveTo(x+5, top-15);
+ctx.lineTo(x+5, bottom+15);
+ctx.stroke();
+}
+
+function animate(){
+if(index >= candles.length) return;
+
+let x = 80 + index*60;
+let open = candles[index][0];
+let close = candles[index][1];
+
+drawCandle(x, open, close);
+index++;
+setTimeout(animate, 500);
+}
+
+function restartAnimation(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+candles = generatePattern();
+index = 0;
+animate();
+}
+
+restartAnimation();
 
 </script>
 
