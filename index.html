@@ -4,223 +4,143 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeuroQuant AI</title>
+
 <style>
 body{
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:linear-gradient(135deg,#0f172a,#020617);
-  color:white;
-  text-align:center;
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#0f172a,#020617);
+color:white;
+text-align:center;
+}
+
+/* MENU BUTTON */
+.menu-btn{
+position:fixed;
+top:20px;
+left:20px;
+font-size:28px;
+cursor:pointer;
+z-index:1001;
+}
+
+/* SIDEBAR */
+.sidebar{
+position:fixed;
+top:0;
+left:-250px;
+width:250px;
+height:100%;
+background:#0b1220;
+padding-top:80px;
+transition:0.3s;
+z-index:1000;
+text-align:left;
+}
+
+.sidebar a{
+display:block;
+padding:15px 25px;
+color:white;
+text-decoration:none;
+font-size:18px;
+}
+
+.sidebar a:hover{
+background:#1e293b;
+}
+
+/* OVERLAY */
+.overlay{
+position:fixed;
+display:none;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+top:0;
+left:0;
+z-index:900;
 }
 
 header{
-  padding:60px 20px;
+padding:120px 20px 80px;
 }
 
 h1{
-  font-size:50px;
-  margin-bottom:15px;
+font-size:48px;
 }
 
 .subtitle{
-  font-size:20px;
-  color:#94a3b8;
-  max-width:750px;
-  margin:0 auto 30px;
-}
-
-.highlight{
-  color:#22c55e;
-  font-weight:bold;
+color:#94a3b8;
+max-width:700px;
+margin:20px auto;
+font-size:20px;
 }
 
 button{
-  padding:15px 35px;
-  font-size:18px;
-  background:#22c55e;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  color:white;
-  transition:0.3s;
-}
-button:hover{
-  background:#16a34a;
+padding:15px 35px;
+font-size:18px;
+background:#22c55e;
+border:none;
+border-radius:8px;
+cursor:pointer;
+color:white;
 }
 
 section{
-  padding:80px 20px;
-}
-
-.section-title{
-  font-size:32px;
-  margin-bottom:40px;
-}
-
-.card{
-  background:#111827;
-  padding:30px;
-  margin:20px auto;
-  max-width:800px;
-  border-radius:12px;
-  transition:0.3s;
-}
-.card:hover{
-  transform:translateY(-5px);
-}
-
-.pricing{
-  background:#0b1220;
-  padding:40px;
-  border-radius:12px;
-  max-width:600px;
-  margin:0 auto;
-  text-align:center;
+padding:80px 20px;
 }
 
 footer{
-  padding:30px;
-  background:#000;
-  color:#64748b;
-  margin-top:40px;
-}
-
-/* LOGIN */
-.login-container{
-  max-width:400px;
-  margin:50px auto;
-  background:#111827;
-  padding:40px;
-  border-radius:12px;
-  text-align:center;
-}
-
-input{
-  width:90%;
-  padding:12px;
-  margin:12px 0;
-  border-radius:8px;
-  border:none;
-  font-size:16px;
-}
-
-.dashboard{
-  max-width:900px;
-  margin:50px auto;
-  background:#111827;
-  padding:30px;
-  border-radius:12px;
-  text-align:center;
-}
-
-.signal-card{
-  background:#0b1220;
-  padding:20px;
-  margin:15px;
-  border-radius:10px;
-}
-
-/* imagem */
-header img{
-  width:200px;
-  margin-bottom:20px;
-  border-radius:20px;
+padding:30px;
+background:#000;
+color:#64748b;
 }
 </style>
 </head>
+
 <body>
 
+<div class="menu-btn" onclick="openMenu()">☰</div>
+
+<div id="sidebar" class="sidebar">
+<a href="#">Home</a>
+<a href="#">Previsão Avançada</a>
+<a href="#">Planos</a>
+<a href="#">Resultados</a>
+<a href="#">Contato</a>
+</div>
+
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+
 <header>
-  <img src="https://images.unsplash.com/photo-1612832020931-b8b2e5c8339d?auto=format&fit=crop&w=500&q=80" alt="IA + Criptomoeda">
-  <h1>NeuroQuant AI</h1>
-  <p class="subtitle">
-    Plataforma avançada de <span class="highlight">previsão de sinais</span> utilizando
-    Inteligência Artificial, análise quantitativa e leitura de liquidez institucional.
-  </p>
-  <button onclick="showLogin()">Entrar / Assinar R$ 9,90</button>
+<h1>NeuroQuant AI</h1>
+<p class="subtitle">
+Plataforma avançada de previsão de sinais utilizando Inteligência Artificial e análise quantitativa.
+</p>
+<button onclick="window.location.href='https://wa.me/SEUNUMEROAQUI'">
+Receber Sinais
+</button>
 </header>
 
 <section>
-<h2 class="section-title">Como funciona a Previsão Avançada?</h2>
-<div class="card"><h3>📊 Modelagem Estatística</h3><p>Algoritmos analisam padrões históricos e volatilidade.</p></div>
-<div class="card"><h3>🧠 IA Adaptativa</h3><p>Sistema aprende com ciclos de mercado e ajusta parâmetros.</p></div>
-<div class="card"><h3>⚡ Identificação de Liquidez</h3><p>Detecta zonas de maior concentração de ordens e stops.</p></div>
-<div class="card"><h3>🎯 Sinal com Probabilidade</h3><p>Cada entrada tem análise técnica e nível estimado de probabilidade.</p></div>
+<h2>Previsão Avançada</h2>
+<p>Modelos estatísticos, leitura de liquidez e probabilidade aplicada ao mercado de criptomoedas.</p>
 </section>
-
-<section>
-<h2 class="section-title">Plano NeuroQuant PRO</h2>
-<div class="pricing">
-<h3>Acesso Completo à Previsão Avançada</h3>
-<p>Sinais + Relatórios Quantitativos + Atualizações em tempo real</p>
-<h2>R$ 9,90/mês</h2>
-<button onclick="showLogin()">Quero Acessar Agora</button>
-</div>
-</section>
-
-<!-- LOGIN -->
-<div class="login-container" id="login" style="display:none;">
-  <h2>Login / Cadastro</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="senha" placeholder="Senha">
-  <button onclick="login()">Entrar</button>
-  <p style="margin-top:15px;">Após pagamento via Pix, acesso será liberado automaticamente.</p>
-</div>
-
-<!-- DASHBOARD -->
-<div class="dashboard" id="dashboard" style="display:none;">
-  <h2>📈 Painel de Previsão Avançada</h2>
-  <input type="text" id="parCrypto" placeholder="Digite o par da criptomoeda (ex: BTC/USDT)">
-  <button onclick="atualizarSinal()">Ver Análise</button>
-
-  <div class="signal-card" id="signalCard">
-    <h3 id="tendencia">Tendência Atual: --</h3>
-    <p id="probabilidade">Probabilidade: --</p>
-    <p id="liquidez">Zona de Liquidez: --</p>
-    <p id="sinal">Sinal: --</p>
-    <p>Atualizado: <span id="hora"></span></p>
-  </div>
-</div>
 
 <footer>
-© 2026 NeuroQuant AI — Tecnologia em previsão quantitativa
+© 2026 NeuroQuant AI
 </footer>
 
 <script>
-function showLogin(){
-  document.getElementById('login').style.display='block';
-  window.scrollTo(0, document.getElementById('login').offsetTop);
+function openMenu(){
+document.getElementById("sidebar").style.left="0";
+document.getElementById("overlay").style.display="block";
 }
 
-function login(){
-  let email = document.getElementById('email').value;
-  if(email){
-    alert("Login realizado com sucesso!");
-    document.getElementById('login').style.display='none';
-    document.getElementById('dashboard').style.display='block';
-    updateSignal();
-  }else{
-    alert("Preencha seu email.");
-  }
-}
-
-// Função para atualizar sinal do par digitado (simulação)
-function atualizarSinal(){
-  const par = document.getElementById('parCrypto').value.toUpperCase() || "--";
-  const tendencias = ["Alta ⬆️", "Baixa ⬇️", "Lateral ↔️"];
-  const sinais = ["BUY", "SELL", "HOLD"];
-  
-  document.getElementById('tendencia').innerText = "Tendência Atual: " + tendencias[Math.floor(Math.random()*tendencias.length)];
-  document.getElementById('probabilidade').innerText = "Probabilidade: " + Math.floor(Math.random()*100) + "%";
-  document.getElementById('liquidez').innerText = "Zona de Liquidez: " + (Math.floor(Math.random()*10000)+50000) + " - " + (Math.floor(Math.random()*10000)+60000);
-  document.getElementById('sinal').innerText = "Sinal: " + sinais[Math.floor(Math.random()*sinais.length)];
-  document.getElementById('hora').innerText = new Date().toLocaleTimeString();
-}
-
-// Atualização automática a cada 5s
-function updateSignal(){
-  atualizarSinal();
-  setTimeout(updateSignal,5000);
+function closeMenu(){
+document.getElementById("sidebar").style.left="-250px";
+document.getElementById("overlay").style.display="none";
 }
 </script>
 
