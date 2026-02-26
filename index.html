@@ -15,14 +15,55 @@ body{
     color:white;
 }
 
+/* MENU */
+.menu-btn{
+    position:absolute;
+    left:15px;
+    top:15px;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.sidebar{
+    position:fixed;
+    left:-250px;
+    top:0;
+    width:250px;
+    height:100%;
+    background:#111827;
+    padding-top:60px;
+    transition:0.3s;
+    box-shadow:5px 0 20px rgba(0,255,255,0.2);
+    z-index:1000;
+}
+
+.sidebar a{
+    display:block;
+    padding:15px;
+    color:white;
+    text-decoration:none;
+    border-bottom:1px solid #1f2937;
+}
+
+.sidebar a:hover{
+    background:#1f2937;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+/* HEADER */
 header{
     background:linear-gradient(90deg,#00f5ff,#0066ff);
     padding:15px;
     text-align:center;
     font-size:20px;
     font-weight:600;
+    position:relative;
 }
 
+/* CONTAINER */
 .container{
     max-width:520px;
     margin:auto;
@@ -86,7 +127,16 @@ button:hover{
 </head>
 <body>
 
+<div class="sidebar" id="sidebar">
+<a href="#">🏠 Início</a>
+<a href="#">📊 Mercado</a>
+<a href="#">⭐ Premium</a>
+<a href="#">⚙️ Configurações</a>
+<a href="#">❓ Suporte</a>
+</div>
+
 <header>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 🚀 NeuroQuant PRO – Mercado em Tempo Real
 </header>
 
@@ -94,21 +144,16 @@ button:hover{
 
 <div class="card">
 <h3>Selecionar Criptomoeda</h3>
-
 <select id="pairSelect"></select>
-
 <button onclick="gerarSinal()">Analisar Mercado</button>
-
 <div class="signal" id="resultado"></div>
 </div>
 
 <div class="card">
 <h3>Área Premium <span class="badge">PRO</span></h3>
-
 <a href="https://mpago.la/1DYvFBL" target="_blank">
 <button>Assinar Agora – R$ 29,90</button>
 </a>
-
 </div>
 
 <div class="footer">
@@ -119,10 +164,13 @@ NeuroQuant © 2026
 
 <script>
 
+function toggleMenu(){
+    document.getElementById("sidebar").classList.toggle("active");
+}
+
 let intervaloAtualizacao;
 let pares = [];
 
-// Carregar todos os pares USDT automaticamente
 async function carregarPares(){
     let response = await fetch("https://api.binance.com/api/v3/exchangeInfo");
     let data = await response.json();
@@ -141,7 +189,6 @@ async function carregarPares(){
     });
 }
 
-// Buscar dados reais
 async function buscarDados(par){
     let priceReq = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${par}`);
     let priceData = await priceReq.json();
@@ -159,7 +206,6 @@ async function buscarDados(par){
 async function gerarSinal(){
 
     let par = document.getElementById("pairSelect").value;
-
     let dados = await buscarDados(par);
 
     let preco = dados.preco;
@@ -224,7 +270,6 @@ function atualizarTela(par, preco, high, low, tipo, tendencia, prob, alvo, stop,
 
     document.getElementById("resultado").innerHTML = `
     Par: ${par}<br><br>
-
     💰 Preço Atual: ${preco.toFixed(2)}<br>
     📊 High 24h: ${high.toFixed(2)}<br>
     📊 Low 24h: ${low.toFixed(2)}<br><br>
@@ -236,7 +281,7 @@ function atualizarTela(par, preco, high, low, tipo, tendencia, prob, alvo, stop,
     🎯 <b>Alvo:</b> ${alvo}<br>
     🛑 <b>Stop:</b> ${stop}<br><br>
 
-    📐 <b>Fibonacci:</b><br>
+    📐 Fibonacci:<br>
     0.236 → ${fib236}<br>
     0.382 → ${fib382}<br>
     0.5 → ${fib50}<br>
