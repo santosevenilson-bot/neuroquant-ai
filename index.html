@@ -64,7 +64,7 @@ button:hover{
 
 .signal{
     text-align:center;
-    font-size:18px;
+    font-size:16px;
     margin-top:10px;
 }
 
@@ -92,7 +92,7 @@ button:hover{
 <body>
 
 <header>
-🚀 NeuroQuant PRO
+🚀 NeuroQuant PRO – Sinais Inteligentes
 </header>
 
 <div class="container">
@@ -108,19 +108,14 @@ button:hover{
 <div class="card">
 <h3>Área Premium <span class="badge">PRO</span></h3>
 <div class="premium-lock">
-🔒 Estatísticas avançadas<br>
-🔒 Sinais com 85%+ precisão<br>
-🔒 Alertas automáticos<br><br>
+🔒 Sinais com maior probabilidade<br>
+🔒 Cálculo técnico com Fibonacci<br>
+🔒 Alvos e Stops sugeridos<br><br>
 
-<button onclick="pagar()">Desbloquear por R$ 9,90</button>
+<a href="https://mpago.la/1DYvFBL" target="_blank">
+<button>Assinar Agora – R$ 29,90</button>
+</a>
 </div>
-</div>
-
-<div class="card">
-<h3>Login</h3>
-<input type="email" placeholder="Email">
-<input type="password" placeholder="Senha">
-<button>Entrar</button>
 </div>
 
 <div class="footer">
@@ -130,9 +125,7 @@ NeuroQuant © 2026
 </div>
 
 <script>
-<script>
 function gerarSinal(){
-
     let pair = document.getElementById("pair").value;
     if(pair==""){
         alert("Digite o par!");
@@ -152,7 +145,7 @@ function gerarSinal(){
     let fundo;
 
     if(movimento > 0.6){
-        tendencia = "Tendência de Alta 📈";
+        tendencia = "📈 Tendência de Alta";
         tipo = "COMPRA";
         prob = Math.floor(Math.random()*10)+78;
 
@@ -160,7 +153,7 @@ function gerarSinal(){
         topo = precoAtual + Math.floor(Math.random()*2500);
 
     } else if(movimento < 0.4){
-        tendencia = "Tendência de Baixa 📉";
+        tendencia = "📉 Tendência de Baixa";
         tipo = "VENDA";
         prob = Math.floor(Math.random()*10)+78;
 
@@ -168,7 +161,7 @@ function gerarSinal(){
         fundo = precoAtual - Math.floor(Math.random()*2500);
 
     } else {
-        tendencia = "Consolidação ⚖️";
+        tendencia = "⚖️ Consolidação";
         tipo = "NEUTRO";
         prob = Math.floor(Math.random()*10)+55;
 
@@ -204,27 +197,18 @@ function gerarSinal(){
     Preço Atual: ${precoAtual}<br>
     ${tendencia}<br><br>
 
-    🔥 Sinal: <b>${tipo}</b><br>
-    🎯 Probabilidade: ${prob}%<br><br>
+    🔥 <b>Sinal:</b> ${tipo}<br>
+    🎯 <b>Probabilidade:</b> ${prob}%<br><br>
 
-    🎯 Alvo Técnico: ${alvo}<br>
-    🛑 Stop Técnico: ${stop}<br><br>
+    🎯 <b>Alvo Técnico:</b> ${alvo}<br>
+    🛑 <b>Stop Técnico:</b> ${stop}<br><br>
 
-    📊 Níveis Fibonacci:<br>
+    📊 <b>Níveis Fibonacci:</b><br>
     0.236 → ${fib236}<br>
     0.382 → ${fib382}<br>
     0.5 → ${fib50}<br>
     0.618 → ${fib618}
     `;
-}
-
-function pagar(){
-    window.location.href="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=SUA_PREFERENCE_ID";
-}
-</script>
-
-function pagar(){
-    window.location.href="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=SUA_PREFERENCE_ID";
 }
 </script>
 
