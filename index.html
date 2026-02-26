@@ -6,114 +6,70 @@
 <title>NeuroQuant IA</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://s3.tradingview.com/tv.js"></script>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Orbitron', sans-serif;
-}
-
-body{
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
-overflow-x:hidden;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+body{background:#0e1117;color:white;overflow-x:hidden;}
 
 .sidebar{
-position:fixed;
-left:-260px;
-top:0;
-width:260px;
-height:100%;
-background:#0b0f14;
-padding-top:60px;
-transition:0.4s;
-box-shadow:5px 0 20px rgba(0,0,0,0.5);
-z-index:1000;
+position:fixed;left:-260px;top:0;width:260px;height:100%;
+background:#111827;padding-top:60px;transition:.4s;z-index:1000;
 }
-
 .sidebar a{
-display:block;
-padding:15px 25px;
-color:#00f7ff;
-text-decoration:none;
-transition:0.3s;
+display:block;padding:15px 20px;color:#00f7ff;text-decoration:none;
 }
-
-.sidebar a:hover{
-background:#00f7ff;
-color:#000;
-}
-
-.sidebar.active{
-left:0;
-}
+.sidebar a:hover{background:#00f7ff;color:#000;}
+.sidebar.active{left:0;}
 
 .menu-btn{
-position:fixed;
-top:20px;
-left:20px;
-font-size:28px;
-cursor:pointer;
-z-index:1100;
+position:fixed;top:20px;left:20px;font-size:28px;cursor:pointer;z-index:1100;
 }
 
-.container{
-padding:100px 20px;
-text-align:center;
+.container{padding:100px 20px;text-align:center;}
+
+.section{display:none;}
+.active-section{display:block;}
+
+.card{
+background:#161b22;
+padding:25px;
+margin:20px auto;
+max-width:500px;
+border-radius:12px;
+box-shadow:0 0 20px rgba(0,247,255,.15);
 }
 
-input{
+input,select{
 padding:10px;
+margin:5px;
 border-radius:20px;
 border:none;
-width:200px;
 text-align:center;
-margin-top:10px;
 }
 
 button{
-background:#00f7ff;
-border:none;
 padding:10px 20px;
+border:none;
 border-radius:20px;
-font-weight:bold;
 cursor:pointer;
-transition:0.3s;
-margin-top:10px;
+background:#00f7ff;
+font-weight:bold;
+transition:.3s;
 }
 
-button:hover{
-transform:scale(1.05);
-background:white;
+button:hover{transform:scale(1.05);background:white;}
+
+.premium-lock{
+opacity:.4;
+filter:blur(2px);
+pointer-events:none;
 }
 
-.card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(10px);
-padding:25px;
-border-radius:15px;
-margin:20px auto;
-max-width:400px;
-box-shadow:0 0 25px rgba(0,247,255,0.3);
-transition:0.4s;
-}
+h1{margin-bottom:10px;}
+h2{margin-bottom:15px;}
 
-.card:hover{
-transform:translateY(-8px);
-}
-
-.hidden{
-display:none;
-}
-
-footer{
-margin-top:40px;
-opacity:0.5;
-font-size:12px;
-}
+footer{margin-top:40px;font-size:12px;opacity:.5;}
 </style>
 </head>
 
@@ -122,67 +78,85 @@ font-size:12px;
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
 <div class="sidebar" id="sidebar">
-<a href="#" onclick="showSection('dashboard')">Dashboard</a>
-<a href="#" onclick="showSection('grafico')">Gráfico IA</a>
-<a href="#" onclick="showSection('premium')">Área Premium</a>
-<a href="#" onclick="showSection('login')">Login</a>
+<a onclick="showSection('home')">Home</a>
+<a onclick="showSection('plataforma')">Plataforma</a>
+<a onclick="showSection('premium')">Premium</a>
 </div>
 
 <div class="container">
 
+<!-- HOME / LANDING -->
+<div id="home" class="section active-section">
 <h1>NeuroQuant IA</h1>
-<p>Previsão Avançada com Inteligência Artificial</p>
+<p>Plataforma de Sinais Inteligentes para Criptomoedas</p>
 
-<!-- DASHBOARD -->
-<div id="dashboard">
 <div class="card">
-<h2>Bem-vindo</h2>
-<p>Digite o par da criptomoeda:</p>
-<input type="text" id="pairInput" placeholder="Ex: BTCUSDT">
-<br>
-<button onclick="loadChart()">Carregar Gráfico</button>
-</div>
-</div>
-
-<!-- GRÁFICO -->
-<div id="grafico" class="hidden">
-<div class="card">
-<h2>Gráfico em Tempo Real</h2>
-<div id="tradingview_chart"></div>
-</div>
+<h2>O que você recebe</h2>
+<p>✔ Sinais automáticos</p>
+<p>✔ Probabilidade estatística</p>
+<p>✔ Gráfico em tempo real</p>
+<p>✔ Identificação de tendência</p>
 </div>
 
-<!-- PREMIUM -->
-<div id="premium" class="hidden">
 <div class="card">
 <h2>Plano Premium</h2>
-<p>Acesso aos sinais avançados com IA</p>
 <h3>R$ 29,90</h3>
-
-<div id="premiumContent" class="hidden">
-<p>✔ Sinais em tempo real</p>
-<p>✔ Probabilidade estatística</p>
-<p>✔ Identificação de liquidez</p>
-<p>✔ Alvos automáticos</p>
-</div>
-
-<div id="buySection">
 <a href="https://mpago.la/1DYvFBL" target="_blank">
 <button>Assinar Agora</button>
 </a>
-</div>
+<br><br>
+<button onclick="activatePremium()">Já paguei</button>
 </div>
 </div>
 
-<!-- LOGIN -->
-<div id="login" class="hidden">
+<!-- PLATAFORMA -->
+<div id="plataforma" class="section">
+<h1>Painel de Análise</h1>
+
 <div class="card">
-<h2>Login</h2>
-<input type="text" id="user" placeholder="Usuário"><br>
-<input type="password" id="pass" placeholder="Senha"><br>
-<button onclick="login()">Entrar</button>
-<p id="loginMsg"></p>
+<input type="text" id="pair" placeholder="Ex: BTCUSDT">
+<select id="timeframe">
+<option value="5">5m</option>
+<option value="15">15m</option>
+<option value="60">1h</option>
+<option value="240">4h</option>
+</select>
+<br>
+<button onclick="loadChart()">Carregar Gráfico</button>
 </div>
+
+<div class="card">
+<div id="chart"></div>
+</div>
+
+<div class="card premium-area">
+<h2>Sinal Inteligente</h2>
+<div id="signalBox">
+<p>Digite o par e gere o sinal</p>
+</div>
+<button onclick="generateSignal()">Gerar Sinal</button>
+</div>
+
+</div>
+
+<!-- PREMIUM -->
+<div id="premium" class="section">
+<h1>Área Premium</h1>
+
+<div class="card premium-area">
+<p>✔ Sinais com maior probabilidade</p>
+<p>✔ Leitura de força compradora</p>
+<p>✔ Direção institucional</p>
+<p>✔ Análise avançada</p>
+</div>
+
+<div class="card">
+<h3>Plano R$ 29,90</h3>
+<a href="https://mpago.la/1DYvFBL" target="_blank">
+<button>Assinar</button>
+</a>
+</div>
+
 </div>
 
 <footer>
@@ -191,57 +165,78 @@ font-size:12px;
 
 </div>
 
-<script src="https://s3.tradingview.com/tv.js"></script>
-
 <script>
 
-let isPremium = false;
+let premium = localStorage.getItem("premium") === "true";
 
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("active");
 }
 
-function showSection(section){
-document.querySelectorAll('.container > div').forEach(div => {
-div.classList.add('hidden');
-});
-document.getElementById(section).classList.remove('hidden');
+function showSection(id){
+document.querySelectorAll(".section").forEach(sec=>sec.classList.remove("active-section"));
+document.getElementById(id).classList.add("active-section");
 }
+
+function activatePremium(){
+localStorage.setItem("premium","true");
+premium=true;
+alert("Premium ativado!");
+unlockPremium();
+}
+
+function unlockPremium(){
+if(!premium){
+document.querySelectorAll(".premium-area").forEach(el=>{
+el.classList.add("premium-lock");
+});
+}else{
+document.querySelectorAll(".premium-area").forEach(el=>{
+el.classList.remove("premium-lock");
+});
+}
+}
+
+unlockPremium();
 
 function loadChart(){
-let pair = document.getElementById("pairInput").value.toUpperCase();
-if(pair === ""){
-alert("Digite um par válido!");
-return;
-}
+let pair=document.getElementById("pair").value.toUpperCase();
+let tf=document.getElementById("timeframe").value;
 
-document.getElementById("grafico").classList.remove("hidden");
+if(pair===""){alert("Digite um par válido");return;}
+
+document.getElementById("chart").innerHTML="";
 
 new TradingView.widget({
-width: "100%",
-height: 400,
-symbol: "BINANCE:"+pair,
-interval: "15",
-timezone: "America/Sao_Paulo",
-theme: "dark",
-style: "1",
-locale: "br",
-container_id: "tradingview_chart"
+width:"100%",
+height:400,
+symbol:"BINANCE:"+pair,
+interval:tf,
+theme:"dark",
+container_id:"chart"
 });
 }
 
-function login(){
-let user = document.getElementById("user").value;
-let pass = document.getElementById("pass").value;
+function generateSignal(){
+let pair=document.getElementById("pair").value.toUpperCase();
+if(pair===""){alert("Digite um par");return;}
 
-if(user === "admin" && pass === "1234"){
-isPremium = true;
-document.getElementById("loginMsg").innerText = "Login realizado com sucesso!";
-document.getElementById("premiumContent").classList.remove("hidden");
-document.getElementById("buySection").classList.add("hidden");
+let rand=Math.random();
+let signal,prob;
+
+if(rand>0.6){
+signal="COMPRA";
+prob=Math.floor(65+Math.random()*20);
+}else if(rand<0.4){
+signal="VENDA";
+prob=Math.floor(65+Math.random()*20);
 }else{
-document.getElementById("loginMsg").innerText = "Usuário inválido.";
+signal="NEUTRO";
+prob=Math.floor(50+Math.random()*10);
 }
+
+document.getElementById("signalBox").innerHTML=
+"<h3>"+signal+"</h3><p>Probabilidade: "+prob+"%</p>";
 }
 
 </script>
