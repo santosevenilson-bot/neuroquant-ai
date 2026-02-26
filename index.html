@@ -1,225 +1,161 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant AI</title>
+<title>NeuroQuant IA</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-body{
+*{
 margin:0;
-font-family:'Segoe UI', sans-serif;
-background:#0f172a;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron', sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 color:white;
-scroll-behavior:smooth;
+overflow-x:hidden;
 }
 
 /* MENU */
-.menu-btn{
-position:fixed;
-top:20px;
-left:20px;
-font-size:30px;
-cursor:pointer;
-z-index:1001;
-transition:0.3s;
-}
-
-.menu-btn:hover{
-transform:scale(1.1);
-}
-
 .sidebar{
 position:fixed;
+left:-250px;
 top:0;
-left:-260px;
-width:260px;
+width:250px;
 height:100%;
-background:#111827;
-padding-top:80px;
+background:#111;
+padding-top:60px;
 transition:0.4s ease;
+box-shadow:5px 0 15px rgba(0,0,0,0.5);
 z-index:1000;
 }
 
 .sidebar a{
 display:block;
 padding:15px 25px;
-color:white;
+color:#00f7ff;
 text-decoration:none;
-font-size:18px;
 transition:0.3s;
 }
 
 .sidebar a:hover{
-background:#1f2937;
-padding-left:35px;
+background:#00f7ff;
+color:#111;
 }
 
-.overlay{
-position:fixed;
-display:none;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.7);
-top:0;
+.sidebar.active{
 left:0;
-z-index:900;
 }
 
-/* SECTIONS */
-section{
-padding:120px 20px;
+.menu-btn{
+position:fixed;
+top:20px;
+left:20px;
+font-size:28px;
+cursor:pointer;
+z-index:1100;
+}
+
+/* CONTEÚDO */
+.container{
+padding:100px 30px;
 text-align:center;
-opacity:0;
-transform:translateY(40px);
-transition:1s ease;
-}
-
-section.visible{
-opacity:1;
-transform:translateY(0);
-}
-
-h1{
-font-size:52px;
-margin-bottom:20px;
-}
-
-.subtitle{
-max-width:700px;
-margin:0 auto;
-color:#94a3b8;
-font-size:20px;
 }
 
 .card{
-background:#1e293b;
-padding:40px;
-margin:40px auto;
-max-width:800px;
-border-radius:16px;
-box-shadow:0 0 30px rgba(0,0,0,0.4);
-transition:0.3s;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+padding:30px;
+border-radius:15px;
+margin:20px auto;
+max-width:400px;
+box-shadow:0 0 20px rgba(0,247,255,0.3);
+transition:0.4s;
 }
 
 .card:hover{
 transform:translateY(-10px);
+box-shadow:0 0 35px rgba(0,247,255,0.6);
 }
 
 button{
-margin-top:25px;
-padding:15px 35px;
-background:linear-gradient(90deg,#22c55e,#16a34a);
+background:#00f7ff;
 border:none;
-border-radius:10px;
-color:white;
-font-size:18px;
+padding:12px 25px;
+color:#111;
+font-weight:bold;
+border-radius:30px;
 cursor:pointer;
 transition:0.3s;
 }
 
 button:hover{
+background:#fff;
 transform:scale(1.05);
 }
 
-.price{
-font-size:32px;
-margin-top:20px;
-color:#22c55e;
+/* ANIMAÇÃO SUAVE */
+.fade-in{
+opacity:0;
+transform:translateY(20px);
+animation:fadeUp 1s forwards;
+}
+
+@keyframes fadeUp{
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 footer{
-padding:40px;
-background:#020617;
-color:#64748b;
-text-align:center;
+margin-top:50px;
+font-size:12px;
+opacity:0.6;
 }
 </style>
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="openMenu()">☰</div>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<div id="sidebar" class="sidebar">
-<a href="#home" onclick="closeMenu()">Home</a>
-<a href="#previsao" onclick="closeMenu()">Previsão Avançada</a>
-<a href="#planos" onclick="closeMenu()">Planos</a>
-<a href="#contato" onclick="closeMenu()">Contato</a>
+<div class="sidebar" id="sidebar">
+<a href="#">Dashboard</a>
+<a href="#">Análise IA</a>
+<a href="#">Sinais em Tempo Real</a>
+<a href="#">Configurações</a>
 </div>
 
-<div id="overlay" class="overlay" onclick="closeMenu()"></div>
+<div class="container fade-in">
+<h1>NeuroQuant IA</h1>
+<p>Previsão Avançada com Inteligência Artificial</p>
 
-<section id="home">
-<h1>NeuroQuant AI</h1>
-<p class="subtitle">
-Previsão de sinais com Inteligência Artificial e análise quantitativa institucional.
-</p>
-</section>
-
-<section id="previsao">
-<h2>Previsão Avançada</h2>
 <div class="card">
-<p>
-Algoritmos estatísticos + leitura de liquidez + probabilidade matemática aplicada ao mercado cripto.
-</p>
+<h2>Plano Premium</h2>
+<p>Acesso completo aos sinais avançados</p>
+<h3>R$ 29,90</h3>
+<br>
+<a href="https://mpago.la/1DYvFBL" target="_blank">
+<button>Assinar Agora</button>
+</a>
 </div>
-</section>
-
-<section id="planos">
-<h2>Plano PRO</h2>
-<div class="card">
-<p>Acesso completo à plataforma + sinais exclusivos</p>
-<div class="price">R$ 97/mês</div>
-
-<!-- https://mpago.la/1DYvFBL -->
-<button onclick="window.location.href='LINK_DO_MERCADO_PAGO_AQUI'">
-Assinar Agora
-</button>
-
-</div>
-</section>
-
-<section id="contato">
-<h2>Contato</h2>
-<div class="card">
-<button onclick="window.location.href='https://wa.me/SEUNUMEROAQUI'">
-Falar no WhatsApp
-</button>
-</div>
-</section>
 
 <footer>
-© 2026 NeuroQuant AI
+© 2026 NeuroQuant IA - Todos os direitos reservados
 </footer>
 
+</div>
+
 <script>
-
-/* MENU */
-function openMenu(){
-document.getElementById("sidebar").style.left="0";
-document.getElementById("overlay").style.display="block";
+function toggleMenu(){
+document.getElementById("sidebar").classList.toggle("active");
 }
-function closeMenu(){
-document.getElementById("sidebar").style.left="-260px";
-document.getElementById("overlay").style.display="none";
-}
-
-/* ANIMAÇÃO SUAVE AO ROLAR */
-const sections = document.querySelectorAll("section");
-
-function revealSections(){
-sections.forEach(section=>{
-const rect = section.getBoundingClientRect();
-if(rect.top < window.innerHeight - 100){
-section.classList.add("visible");
-}
-});
-}
-
-window.addEventListener("scroll", revealSections);
-revealSections();
-
 </script>
 
 </body>
