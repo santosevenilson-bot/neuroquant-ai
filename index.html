@@ -3,274 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IA Crypto Pro</title>
+<title>NeuroQuant PRO</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-
 body{
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
-min-height:100vh;
-overflow-x:hidden;
+    margin:0;
+    background:#0f0f1a;
+    font-family:'Orbitron',sans-serif;
+    color:white;
 }
 
 /* MENU */
 .menu-btn{
-position:fixed;
-top:20px;
-left:20px;
-font-size:28px;
-cursor:pointer;
-z-index:1001;
-transition:0.3s;
+    position:absolute;
+    left:15px;
+    top:15px;
+    font-size:22px;
+    cursor:pointer;
 }
 
 .sidebar{
-position:fixed;
-left:-260px;
-top:0;
-width:250px;
-height:100%;
-background:#111;
-padding:25px;
-transition:0.4s ease;
-z-index:1000;
-box-shadow:4px 0 15px rgba(0,0,0,0.5);
-}
-
-.sidebar.active{ left:0; }
-
-.overlay{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.5);
-display:none;
-z-index:999;
-}
-
-.overlay.active{ display:block; }
-
-.sidebar h2{
-margin-bottom:25px;
-font-size:20px;
-text-align:center;
+    position:fixed;
+    left:-250px;
+    top:0;
+    width:250px;
+    height:100%;
+    background:#111827;
+    padding-top:60px;
+    transition:0.3s;
+    box-shadow:5px 0 20px rgba(0,255,255,0.2);
+    z-index:1000;
 }
 
 .sidebar a{
-display:flex;
-align-items:center;
-gap:10px;
-color:white;
-text-decoration:none;
-margin:15px 0;
-padding:10px;
-border-radius:8px;
-transition:0.3s;
+    display:block;
+    padding:15px;
+    color:white;
+    text-decoration:none;
+    border-bottom:1px solid #1f2937;
 }
 
 .sidebar a:hover{
-background:#1f3c88;
+    background:#1f2937;
 }
 
-/* CONTEÚDO */
+.sidebar.active{
+    left:0;
+}
+
+/* HEADER */
+header{
+    background:linear-gradient(90deg,#00f5ff,#0066ff);
+    padding:15px;
+    text-align:center;
+    font-size:20px;
+    font-weight:600;
+    position:relative;
+}
+
+/* CONTAINER */
 .container{
-padding:80px 20px 30px 20px;
-text-align:center;
-animation:fadeIn 0.8s ease;
-}
-
-@keyframes fadeIn{
-from{opacity:0; transform:translateY(15px);}
-to{opacity:1; transform:translateY(0);}
+    max-width:520px;
+    margin:auto;
+    padding:20px;
 }
 
 .card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(12px);
-border-radius:20px;
-padding:25px;
-margin-top:20px;
-box-shadow:0 8px 20px rgba(0,0,0,0.4);
+    background:#1a1a2e;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,255,255,0.2);
+    margin-bottom:20px;
 }
 
 select{
-width:100%;
-padding:12px;
-border-radius:10px;
-margin-top:15px;
-border:none;
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:15px;
+    font-size:14px;
 }
 
 button{
-margin-top:15px;
-padding:12px;
-width:100%;
-border:none;
-border-radius:10px;
-background:linear-gradient(90deg,#00c6ff,#0072ff);
-color:white;
-font-weight:600;
-cursor:pointer;
-transition:0.3s;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:linear-gradient(90deg,#00f5ff,#0066ff);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
 }
 
-button:hover{ transform:scale(1.05); }
-
-.premium{
-margin-top:25px;
-background:linear-gradient(135deg,#1f4037,#99f2c8);
-padding:20px;
-border-radius:15px;
-color:#000;
-font-weight:600;
+button:hover{
+    opacity:0.85;
 }
 
-canvas{
-margin-top:20px;
-background:white;
-border-radius:15px;
-padding:10px;
+.signal{
+    font-size:14px;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+.badge{
+    background:gold;
+    color:black;
+    padding:5px 10px;
+    border-radius:5px;
+    font-size:12px;
+}
+
+.footer{
+    text-align:center;
+    font-size:12px;
+    opacity:0.6;
+    margin-top:20px;
 }
 </style>
 </head>
-
 <body>
 
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
-
 <div class="sidebar" id="sidebar">
-<h2>🤖 IA Crypto</h2>
-<a href="#" onclick="openScreen('home')">🏠 Home</a>
-<a href="#" onclick="scanMarket()">📡 Varredura</a>
-<a href="#" onclick="alert('Premium ativo após pagamento.')">💎 Premium</a>
-<a href="#" onclick="alert('Sistema de análise inteligente com indicadores técnicos.')">🧠 Sobre</a>
+<a href="#">🏠 Início</a>
+<a href="#">📊 Mercado</a>
+<a href="#">⭐ Premium</a>
+<a href="#">⚙️ Configurações</a>
+<a href="#">❓ Suporte</a>
 </div>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<header>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+🚀 NeuroQuant PRO – Mercado em Tempo Real
+</header>
 
 <div class="container">
 
-<h1>IA Crypto Pro</h1>
-<p>Análise Inteligente em Tempo Real</p>
-
 <div class="card">
-
-<select id="symbol">
-<option value="BTCUSDT">BTC/USDT</option>
-<option value="ETHUSDT">ETH/USDT</option>
-<option value="SOLUSDT">SOL/USDT</option>
-<option value="BNBUSDT">BNB/USDT</option>
-<option value="XRPUSDT">XRP/USDT</option>
-<option value="ADAUSDT">ADA/USDT</option>
-<option value="DOGEUSDT">DOGE/USDT</option>
-</select>
-
-<button onclick="loadData()">Buscar Análise</button>
-
-<h3 id="price"></h3>
-<h3 id="signal"></h3>
-<h4 id="fibo"></h4>
-
-<canvas id="chart"></canvas>
+<h3>Selecionar Criptomoeda</h3>
+<select id="pairSelect"></select>
+<button onclick="gerarSinal()">Analisar Mercado</button>
+<div class="signal" id="resultado"></div>
 </div>
 
-<div class="premium">
-Plano Premium R$ 29,90<br><br>
+<div class="card">
+<h3>Área Premium <span class="badge">PRO</span></h3>
 <a href="https://mpago.la/1DYvFBL" target="_blank">
-<button>Ativar Premium</button>
+<button>Assinar Agora – R$ 29,90</button>
 </a>
+</div>
+
+<div class="footer">
+NeuroQuant © 2026
 </div>
 
 </div>
 
 <script>
-let chart;
 
 function toggleMenu(){
-document.getElementById("sidebar").classList.toggle("active");
-document.getElementById("overlay").classList.toggle("active");
+    document.getElementById("sidebar").classList.toggle("active");
 }
 
-function openScreen(screen){
-toggleMenu();
-if(screen==="home"){ location.reload(); }
+let intervaloAtualizacao;
+let pares = [];
+
+async function carregarPares(){
+    let response = await fetch("https://api.binance.com/api/v3/exchangeInfo");
+    let data = await response.json();
+
+    pares = data.symbols
+        .filter(s => s.quoteAsset === "USDT" && s.status === "TRADING")
+        .map(s => s.symbol);
+
+    let select = document.getElementById("pairSelect");
+
+    pares.forEach(par=>{
+        let option = document.createElement("option");
+        option.value = par;
+        option.textContent = par;
+        select.appendChild(option);
+    });
 }
 
-async function loadData(){
-let symbol=document.getElementById("symbol").value;
+async function buscarDados(par){
+    let priceReq = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${par}`);
+    let priceData = await priceReq.json();
 
-let url=`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1m&limit=100`;
-let response=await fetch(url);
-let data=await response.json();
+    let statsReq = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${par}`);
+    let statsData = await statsReq.json();
 
-let prices=data.map(d=>parseFloat(d[4]));
-let lastPrice=prices[prices.length-1];
-
-document.getElementById("price").innerText="Preço Atual: "+lastPrice.toFixed(4);
-
-// SINAL IA (SMA 50)
-let sma=prices.slice(-50).reduce((a,b)=>a+b)/50;
-let signal= lastPrice>sma ? "🟢 Sinal: Compra" : "🔴 Sinal: Venda";
-document.getElementById("signal").innerText=signal;
-
-// FIBONACCI
-let high=Math.max(...prices);
-let low=Math.min(...prices);
-let fib50=high-(high-low)*0.5;
-let fib618=high-(high-low)*0.618;
-
-document.getElementById("fibo").innerText=
-"Fibo 50%: "+fib50.toFixed(4)+" | Fibo 61.8%: "+fib618.toFixed(4);
-
-// GRÁFICO
-if(chart) chart.destroy();
-
-let ctx=document.getElementById("chart");
-
-chart=new Chart(ctx,{
-type:"line",
-data:{
-labels:prices.map((_,i)=>i),
-datasets:[
-{
-label:symbol,
-data:prices,
-borderColor:"#0072ff",
-fill:false
-}
-]
-}
-});
+    return {
+        preco: parseFloat(priceData.price),
+        high: parseFloat(statsData.highPrice),
+        low: parseFloat(statsData.lowPrice)
+    };
 }
 
-// VARREDURA
-async function scanMarket(){
-let pairs=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT","XRPUSDT","ADAUSDT","DOGEUSDT"];
+async function gerarSinal(){
 
-for(let pair of pairs){
-let url=`https://api.binance.com/api/v3/klines?symbol=${pair}&interval=1m&limit=50`;
-let response=await fetch(url);
-let data=await response.json();
+    let par = document.getElementById("pairSelect").value;
+    let dados = await buscarDados(par);
 
-let prices=data.map(d=>parseFloat(d[4]));
-let last=prices[prices.length-1];
-let sma=prices.slice(-20).reduce((a,b)=>a+b)/20;
+    let preco = dados.preco;
+    let high = dados.high;
+    let low = dados.low;
 
-if(last>sma){
-alert("🟢 Compra detectada em "+pair);
+    let fib236 = (high - (high - low) * 0.236).toFixed(2);
+    let fib382 = (high - (high - low) * 0.382).toFixed(2);
+    let fib50  = (high - (high - low) * 0.5).toFixed(2);
+    let fib618 = (high - (high - low) * 0.618).toFixed(2);
+
+    let posicao = (preco - low) / (high - low);
+
+    let tipo, tendencia, prob, alvo, stop;
+
+    if(posicao < 0.3){
+        tipo = "COMPRA 📈";
+        tendencia = "Preço próximo ao suporte";
+        prob = 82;
+        alvo = high.toFixed(2);
+        stop = fib618;
+    }
+    else if(posicao > 0.7){
+        tipo = "VENDA 📉";
+        tendencia = "Preço próximo à resistência";
+        prob = 82;
+        alvo = low.toFixed(2);
+        stop = fib382;
+    }
+    else{
+        tipo = "NEUTRO ⚖️";
+        tendencia = "Zona intermediária";
+        prob = 60;
+        alvo = fib50;
+        stop = fib50;
+    }
+
+    atualizarTela(par, preco, high, low, tipo, tendencia, prob, alvo, stop, fib236, fib382, fib50, fib618);
+
+    clearInterval(intervaloAtualizacao);
+
+    intervaloAtualizacao = setInterval(async ()=>{
+        let dadosAtualizados = await buscarDados(par);
+        atualizarTela(par,
+            dadosAtualizados.preco,
+            dadosAtualizados.high,
+            dadosAtualizados.low,
+            tipo,
+            tendencia,
+            prob,
+            alvo,
+            stop,
+            fib236,
+            fib382,
+            fib50,
+            fib618
+        );
+    },5000);
 }
-}
+
+function atualizarTela(par, preco, high, low, tipo, tendencia, prob, alvo, stop, fib236, fib382, fib50, fib618){
+
+    document.getElementById("resultado").innerHTML = `
+    Par: ${par}<br><br>
+    💰 Preço Atual: ${preco.toFixed(2)}<br>
+    📊 High 24h: ${high.toFixed(2)}<br>
+    📊 Low 24h: ${low.toFixed(2)}<br><br>
+
+    🔥 <b>Sinal:</b> ${tipo}<br>
+    🎯 <b>Probabilidade:</b> ${prob}%<br>
+    🧠 ${tendencia}<br><br>
+
+    🎯 <b>Alvo:</b> ${alvo}<br>
+    🛑 <b>Stop:</b> ${stop}<br><br>
+
+    📐 Fibonacci:<br>
+    0.236 → ${fib236}<br>
+    0.382 → ${fib382}<br>
+    0.5 → ${fib50}<br>
+    0.618 → ${fib618}<br><br>
+
+    🔄 Atualizando automaticamente...
+    `;
 }
 
-// Atualização automática a cada 10 segundos
-setInterval(()=>{
-loadData();
-},10000);
+carregarPares();
 
 </script>
 
