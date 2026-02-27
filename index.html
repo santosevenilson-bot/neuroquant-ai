@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CryptoVision AI</title>
+<title>NeuroQuant AI | Criptomoedas Inteligentes</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
+
+/* ===== GLOBAL ===== */
 *{
 margin:0;
 padding:0;
@@ -16,100 +18,34 @@ font-family:'Orbitron',sans-serif;
 }
 
 body{
-background:#071a1f;
-color:#e0ffff;
+background:#0a0f1f;
+color:#fff;
 overflow-x:hidden;
 }
 
-/* HERO */
-.hero{
-height:100vh;
-background:url("1772226489900.png") center/cover no-repeat;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-position:relative;
-}
-
-.hero::before{
-content:"";
-position:absolute;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.7);
-}
-
-.hero h1{
-position:relative;
-font-size:42px;
-color:#00ffee;
-}
-
-.hero p{
-position:relative;
-margin-top:15px;
-font-size:18px;
-max-width:600px;
-}
-
-.btn{
-margin-top:25px;
-padding:12px 30px;
-background:#00ffee;
-border:none;
-border-radius:30px;
-cursor:pointer;
-font-weight:bold;
-transition:0.3s;
-}
-
-.btn:hover{
-background:#00c8cc;
-}
-
-/* SECTION */
-.section{
-padding:60px 20px;
-max-width:1000px;
-margin:auto;
-}
-
-.section h2{
-color:#00ffee;
-margin-bottom:20px;
-}
-
-.card{
-background:rgba(255,255,255,0.05);
-padding:20px;
-border-radius:15px;
-margin-bottom:20px;
-box-shadow:0 0 20px rgba(0,255,238,0.2);
-}
-
-/* MENU */
+/* ===== MENU BUTTON ===== */
 .menu-btn{
 position:fixed;
 top:20px;
 left:20px;
 font-size:30px;
 cursor:pointer;
-color:#00ffee;
 z-index:1001;
+color:#00f0ff;
 }
 
+/* ===== SIDEBAR ===== */
 .sidebar{
 position:fixed;
 top:0;
 left:-260px;
 width:260px;
 height:100%;
-background:#031114;
+background:#111827;
 padding-top:80px;
-transition:0.4s;
+transition:.4s;
 z-index:1000;
+box-shadow:4px 0 20px rgba(0,255,255,0.2);
 }
 
 .sidebar.active{
@@ -118,127 +54,176 @@ left:0;
 
 .sidebar a{
 display:block;
-padding:15px 20px;
-color:#00ffee;
+padding:15px 25px;
+color:#00f0ff;
 text-decoration:none;
+transition:.3s;
+font-size:15px;
 }
 
 .sidebar a:hover{
-background:#00ffee;
-color:#031114;
+background:#00f0ff;
+color:#000;
 }
 
-/* FOOTER */
-footer{
+/* ===== HERO ===== */
+.hero{
+height:100vh;
+background:url("1772226489900.png") center center no-repeat;
+background-size:cover;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 text-align:center;
 padding:20px;
-opacity:0.6;
 }
+
+.hero h1{
+font-size:38px;
+margin-bottom:20px;
+}
+
+.hero p{
+max-width:700px;
+margin-bottom:30px;
+color:#ccc;
+}
+
+.btn{
+padding:15px 30px;
+background:#00f0ff;
+color:#000;
+text-decoration:none;
+font-weight:bold;
+border-radius:30px;
+transition:.3s;
+}
+
+.btn:hover{
+background:#fff;
+}
+
+/* ===== SECTIONS ===== */
+section{
+padding:80px 20px;
+text-align:center;
+}
+
+.section-dark{
+background:#111827;
+}
+
+h2{
+margin-bottom:30px;
+font-size:28px;
+}
+
+.cards{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+}
+
+.card{
+background:#1f2937;
+padding:25px;
+width:280px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(0,255,255,0.1);
+}
+
+.card h3{
+margin-bottom:15px;
+color:#00f0ff;
+}
+
+.price-box{
+background:#00f0ff;
+color:#000;
+padding:40px;
+border-radius:20px;
+display:inline-block;
+margin-top:20px;
+}
+
+footer{
+background:#000;
+padding:30px;
+text-align:center;
+font-size:14px;
+color:#777;
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<div class="sidebar" id="menu">
-<a href="#inicio">Início</a>
-<a href="#educacao">Educação</a>
+<div class="sidebar" id="sidebar">
+<a href="#">Início</a>
+<a href="#aprenda">Aprenda Cripto</a>
 <a href="#sinais">Sinais</a>
-<a href="#planos">Planos</a>
-<a href="#blog">Blog</a>
-<a href="#contato">Contato</a>
+<a href="#plano">Plano PRO</a>
+<a href="#">Contato</a>
 </div>
 
-<section class="hero" id="inicio">
-<h1>CryptoVision AI</h1>
-<p>Aprenda criptomoedas do zero e acompanhe análises educacionais baseadas em inteligência artificial.</p>
-<button class="btn" onclick="scrollToPlan()">Assinar por R$9,90</button>
-</section>
+<div class="hero">
+<h1>Aprenda Criptomoedas do Zero e Receba Sinais Inteligentes</h1>
+<p>Educação estratégica + análise técnica + inteligência artificial para você entender o mercado e operar com mais consciência.</p>
+<a href="#plano" class="btn">Quero Evoluir Agora</a>
+</div>
 
-<section class="section" id="educacao">
-<h2>📚 Educação Cripto</h2>
-
+<section id="aprenda">
+<h2>O Que Você Vai Aprender</h2>
+<div class="cards">
 <div class="card">
-<h3>O que é Bitcoin?</h3>
-<p>Bitcoin é uma moeda digital descentralizada criada em 2009 que funciona através da tecnologia blockchain.</p>
+<h3>Fundamentos</h3>
+<p>O que é Bitcoin, Blockchain e como funciona o mercado cripto.</p>
 </div>
-
 <div class="card">
-<h3>O que é Blockchain?</h3>
-<p>Blockchain é um livro digital público onde todas as transações são registradas de forma transparente e imutável.</p>
+<h3>Análise Técnica</h3>
+<p>Suporte, resistência, liquidez, Fibonacci e leitura de tendência.</p>
 </div>
-
 <div class="card">
 <h3>Gestão de Risco</h3>
-<p>Nunca arrisque mais do que pode perder. Divida capital e utilize stop loss.</p>
+<p>Como proteger seu capital e evitar erros de iniciantes.</p>
+</div>
 </div>
 </section>
 
-<section class="section" id="sinais">
-<h2>⚡ Sinais Educacionais</h2>
+<section id="sinais" class="section-dark">
+<h2>Sinais Estratégicos</h2>
+<p>Receba análises baseadas em estrutura de mercado, liquidez e comportamento institucional.</p>
+</section>
 
-<div class="card">
-<strong>BTC/USDT</strong><br>
-Zona de Interesse: 29.500<br>
-Alvo Educacional: 31.000
-</div>
+<section id="plano">
+<h2>Plano PRO</h2>
 
-<div class="card">
-<strong>ETH/USDT</strong><br>
-Zona de Interesse: 1.850<br>
-Alvo Educacional: 1.980
-</div>
-
-<p style="font-size:13px;opacity:0.6;margin-top:10px;">
-Aviso: Conteúdo educacional. Mercado de criptomoedas envolve risco.
+<div class="price-box">
+<h3>R$ 9,90 / mês</h3>
+<p>
+✔ Sinais em tempo real<br>
+✔ Análises completas<br>
+✔ Gestão de risco<br>
+✔ Acesso exclusivo
 </p>
-</section>
-
-<section class="section" id="planos">
-<h2>💳 Plano Premium</h2>
-
-<div class="card">
-<h3>Assinatura Mensal</h3>
-<p>✔ Acesso aos sinais educacionais</p>
-<p>✔ Atualizações semanais</p>
-<p>✔ Conteúdo exclusivo</p>
 <br>
-<strong>R$9,90 / mês</strong>
-<br><br>
-<button class="btn">Pagar com Pix</button>
-</div>
-</section>
-
-<section class="section" id="blog">
-<h2>📰 Blog Cripto</h2>
-
-<div class="card">
-<h3>Como começar no mercado?</h3>
-<p>Estude fundamentos, escolha uma corretora confiável e comece pequeno.</p>
+<a href="#" class="btn">Assinar Agora</a>
 </div>
 
-<div class="card">
-<h3>O que move o preço do Bitcoin?</h3>
-<p>Oferta, demanda, notícias globais e adoção institucional.</p>
-</div>
-</section>
-
-<section class="section" id="contato">
-<h2>📞 Contato</h2>
-<p>WhatsApp: Seu número aqui</p>
 </section>
 
 <footer>
-© 2026 CryptoVision AI - Plataforma Educacional
+© 2026 NeuroQuant AI - Educação e Inteligência de Mercado
 </footer>
 
 <script>
 function toggleMenu(){
-document.getElementById("menu").classList.toggle("active");
-}
-
-function scrollToPlan(){
-document.getElementById("planos").scrollIntoView({behavior:"smooth"});
+document.getElementById("sidebar").classList.toggle("active");
 }
 </script>
 
