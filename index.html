@@ -3,188 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Crypto Tech</title>
+<title>AI Crypto Academy</title>
+
+<!-- Import font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
+/* ===== GLOBAL ===== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Orbitron', sans-serif;
 }
 
 body {
-    height: 100vh;
-    background: url("fundo.png") no-repeat center center fixed;
-    background-size: cover;
+    background: #0a1f26;
+    color: #e6fefe;
+    min-height: 100vh;
     overflow-x: hidden;
-    color: white;
 }
 
-/* Overlay escuro futurista */
-body::before {
-    content: "";
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(4px);
-    z-index: -1;
-}
-
-/* Botão menu */
+/* ===== MENU ===== */
 .menu-btn {
     position: fixed;
     top: 20px;
     left: 20px;
-    font-size: 28px;
+    font-size: 32px;
     cursor: pointer;
     z-index: 1001;
-    transition: 0.3s;
+    color: #00ffcc;
 }
 
-.menu-btn:hover {
-    color: #00f7ff;
-    transform: scale(1.1);
-}
-
-/* Menu lateral */
 .sidebar {
     position: fixed;
     top: 0;
     left: -260px;
     width: 260px;
     height: 100%;
-    background: rgba(0,0,0,0.95);
+    background: #06181d;
     padding-top: 80px;
-    transition: 0.4s ease;
-    box-shadow: 0 0 20px #00f7ff;
-}
-
-.sidebar a {
-    display: block;
-    padding: 15px 25px;
-    color: #00f7ff;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.sidebar a:hover {
-    background: #00f7ff;
-    color: black;
+    transition: 0.4s;
+    box-shadow: 4px 0 25px rgba(0,255,200,0.2);
+    z-index: 1000;
 }
 
 .sidebar.active {
     left: 0;
 }
 
-/* Conteúdo central */
-.container {
+.sidebar a {
+    display: block;
+    padding: 15px 25px;
+    color: #00ffcc;
+    text-decoration: none;
+    font-size: 16px;
+    margin-bottom: 8px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background: #00f5ff;
+    color: #003b40;
+}
+
+/* ===== HEADER HERO ===== */
+.header {
+    width: 100%;
+    height: 300px;
+    background: url("fundo.png") no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
+    justify-content: center;
 }
 
-/* Card futurista */
-.card {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(12px);
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    width: 400px;
-    box-shadow: 0 0 30px rgba(0,255,255,0.3);
-    animation: glow 3s infinite alternate;
-}
-
-.card h1 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #00f7ff;
-}
-
-.card p {
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-/* Botão futurista */
-.btn {
-    margin-top: 25px;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 30px;
-    background: linear-gradient(45deg, #00f7ff, #005eff);
-    color: white;
-    cursor: pointer;
-    transition: 0.4s;
-}
-
-.btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px #00f7ff;
-}
-
-/* Animação glow */
-@keyframes glow {
-    from {
-        box-shadow: 0 0 15px rgba(0,255,255,0.3);
-    }
-    to {
-        box-shadow: 0 0 35px rgba(0,255,255,0.8);
-    }
-}
-
-/* Linhas animadas estilo hacker */
-.lines {
-    position: fixed;
+.header::before {
+    content: "";
+    position: absolute;
     width: 100%;
     height: 100%;
-    pointer-events: none;
-    background-image: repeating-linear-gradient(
-        0deg,
-        rgba(0,255,255,0.05) 0px,
-        rgba(0,255,255,0.05) 1px,
-        transparent 1px,
-        transparent 3px
-    );
-    animation: moveLines 3s linear infinite;
+    background: rgba(0,0,0,0.6);
 }
 
-@keyframes moveLines {
-    from { background-position: 0 0; }
-    to { background-position: 0 100px; }
+.header-text {
+    position: relative;
+    text-align: center;
+    color: #00ffcc;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+    padding: 50px 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.section h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #00f5ff;
+}
+
+.section p {
+    font-size: 16px;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+/* ===== BOXES ===== */
+.box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 30px rgba(0,255,200,0.15);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.6;
+    padding: 20px;
 }
 </style>
 </head>
-
 <body>
-
-<div class="lines"></div>
 
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<div class="sidebar" id="menu">
-    <a href="#">Dashboard</a>
-    <a href="#">Inteligência Artificial</a>
-    <a href="#">Criptomoedas</a>
-    <a href="#">Segurança</a>
-    <a href="#">Contato</a>
+<div class="sidebar" id="sideMenu">
+    <a href="#home">🏠 Início</a>
+    <a href="#o-que-sao">📘 O que são criptomoedas?</a>
+    <a href="#como-funciona">📈 Como funciona</a>
+    <a href="#sinais">⚡ Sinais de Cripto</a>
+    <a href="#dicas">💡 Dicas</a>
+    <a href="#sobre-ia">🤖 Sobre a IA</a>
+    <a href="#contato">📞 Contato</a>
 </div>
 
-<div class="container">
-    <div class="card">
-        <h1>AI & Blockchain System</h1>
-        <p>Monitoramento avançado de Inteligência Artificial e Criptomoedas com segurança de nível militar.</p>
-        <button class="btn">Acessar Sistema</button>
+<div class="header" id="home">
+    <div class="header-text">AI Crypto Academy</div>
+</div>
+
+<!-- ===== SECTION: O que são criptomoedas ===== -->
+<div class="section" id="o-que-sao">
+    <h2>O que são criptomoedas?</h2>
+    <p>Criptomoedas são moedas digitais que utilizam criptografia para garantir a segurança, descentralização e transparência das transações. Ao contrário do dinheiro tradicional, elas operam em redes descentralizadas chamadas <b>blockchain</b>.</p>
+    <div class="box">
+        <strong>Exemplos:</strong> Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Cardano (ADA).
     </div>
 </div>
 
+<!-- ===== SECTION: Como funciona ===== -->
+<div class="section" id="como-funciona">
+    <h2>Como funciona o mercado?</h2>
+    <p>O mercado de criptomoedas funciona 24h por dia e conta com investidores, traders e mineradores. Os preços variam de acordo com oferta e demanda.</p>
+    <div class="box">
+        <strong>Trading:</strong> Comprar barato e vender mais caro.</div>
+    <div class="box">
+        <strong>Holding:</strong> Manter por longo prazo esperando valorização.
+    </div>
+</div>
+
+<!-- ===== SECTION: Sinais de Cripto ===== -->
+<div class="section" id="sinais">
+    <h2>⚡ Sinais de Cripto</h2>
+    <p>Aqui serão exibidos sinais de entrada e saída com base na análise técnica e inteligência artificial.</p>
+    <div class="box">
+        <strong>BTC/USDT:</strong> Entrada: 29500 ● Saída: 31000</div>
+    <div class="box">
+        <strong>ETH/USDT:</strong> Entrada: 1850 ● Saída: 1980</div>
+    <div class="box">
+        <strong>XRP/USDT:</strong> Entrada: 0.62 ● Saída: 0.72</div>
+</div>
+
+<!-- ===== SECTION: Dicas ===== -->
+<div class="section" id="dicas">
+    <h2>💡 Dicas para Iniciantes</h2>
+    <p>Comece estudando fundamentos, aprenda sobre gerenciamento de risco, e nunca invista mais do que pode perder.</p>
+    <div class="box">
+        🔹 Utilize gráficos de 1h, 4h e diário.  
+        🔹 Estude candles básicos.  
+    </div>
+</div>
+
+<!-- ===== SECTION: Sobre a IA ===== -->
+<div class="section" id="sobre-ia">
+    <h2>🤖 Sobre a IA de Análise</h2>
+    <p>Esta inteligência artificial analisa dados históricos e calcula tendências com base em indicadores como EMA, RSI e Fibonacci, ajudando a identificar possíveis movimentos de preço.</p>
+</div>
+
+<!-- ===== SECTION: Contato ===== -->
+<div class="section" id="contato">
+    <h2>📞 Contato</h2>
+    <p>Entre em contato pelo WhatsApp ou Instagram para mais informações, cursos e suporte.</p>
+    <div class="box">
+        WhatsApp: <a href="https://wa.me/55SEUNUMERO" style="color:#00ffcc;">Clique aqui</a>
+    </div>
+</div>
+
+<div class="footer">© 2026 AI Crypto Academy — Todos os direitos reservados.</div>
+
 <script>
 function toggleMenu() {
-    document.getElementById("menu").classList.toggle("active");
+    document.getElementById("sideMenu").classList.toggle("active");
 }
 </script>
 
