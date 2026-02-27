@@ -3,269 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant PRO</title>
+<title>Crypto IA Pro 4.0</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 body{
-    margin:0;
-    background:#0f0f1a;
-    font-family:'Orbitron',sans-serif;
-    color:white;
+margin:0;
+font-family:'Orbitron',sans-serif;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+overflow-x:hidden;
 }
-
-/* ===== MENU PROFISSIONAL ===== */
-
-.menu-btn{
-    position:absolute;
-    left:15px;
-    top:15px;
-    font-size:22px;
-    cursor:pointer;
-}
-
-.sidebar{
-    position:fixed;
-    left:-280px;
-    top:0;
-    width:280px;
-    height:100%;
-    background:linear-gradient(180deg,#0f172a,#111827);
-    transition:0.4s cubic-bezier(.77,0,.18,1);
-    box-shadow:5px 0 25px rgba(0,255,255,0.15);
-    z-index:1000;
-    display:flex;
-    flex-direction:column;
-}
-
-.sidebar.active{
-    left:0;
-}
-
-.overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
-    opacity:0;
-    pointer-events:none;
-    transition:0.3s;
-    z-index:900;
-}
-
-.overlay.active{
-    opacity:1;
-    pointer-events:auto;
-}
-
-.menu-header{
-    padding:20px;
-    border-bottom:1px solid #1f2937;
-    position:relative;
-}
-
-.logo{
-    font-size:18px;
-    font-weight:600;
-    color:#00f5ff;
-}
-
-.subtitle{
-    font-size:12px;
-    opacity:0.6;
-}
-
-.close-btn{
-    position:absolute;
-    right:15px;
-    top:20px;
-    cursor:pointer;
-    font-size:16px;
-    opacity:0.7;
-}
-
-.close-btn:hover{
-    opacity:1;
-    color:#00f5ff;
-}
-
-.sidebar a{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:15px 20px;
-    color:white;
-    text-decoration:none;
-    font-size:14px;
-    border-left:3px solid transparent;
-    transition:0.3s;
-}
-
-.sidebar a span{
-    font-size:16px;
-}
-
-.sidebar a:hover{
-    background:#1f2937;
-    border-left:3px solid #00f5ff;
-    padding-left:25px;
-}
-
-.menu-footer{
-    margin-top:auto;
-    padding:15px 20px;
-    font-size:12px;
-    opacity:0.4;
-}
-
-/* ===== HEADER ===== */
 
 header{
-    background:linear-gradient(90deg,#00f5ff,#0066ff);
-    padding:15px;
-    text-align:center;
-    font-size:20px;
-    font-weight:600;
-    position:relative;
+display:flex;
+align-items:center;
+padding:15px;
+background:rgba(0,0,0,0.4);
+backdrop-filter:blur(10px);
 }
 
-/* ===== CONTAINER ===== */
+.menu-btn{
+font-size:24px;
+cursor:pointer;
+margin-right:15px;
+}
 
 .container{
-    max-width:520px;
-    margin:auto;
-    padding:20px;
+padding:20px;
+text-align:center;
 }
 
-.card{
-    background:#1a1a2e;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 0 20px rgba(0,255,255,0.2);
-    margin-bottom:20px;
-}
-
-select{
-    width:100%;
-    padding:12px;
-    border-radius:8px;
-    border:none;
-    margin-bottom:15px;
+select,input{
+width:90%;
+padding:12px;
+margin:10px 0;
+border-radius:10px;
+border:none;
+font-size:16px;
 }
 
 button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    background:linear-gradient(90deg,#00f5ff,#0066ff);
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
+padding:12px 25px;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+background:linear-gradient(90deg,#00c6ff,#0072ff);
+color:white;
+margin-top:10px;
 }
 
-.badge{
-    background:gold;
-    color:black;
-    padding:5px 10px;
-    border-radius:5px;
-    font-size:12px;
+.card{
+background:rgba(255,255,255,0.1);
+border-radius:15px;
+padding:20px;
+margin-top:20px;
+backdrop-filter:blur(10px);
 }
 
-.footer{
-    text-align:center;
-    font-size:12px;
-    opacity:0.6;
+.price{
+font-size:26px;
+margin:10px 0;
 }
 
-.loader{
-    border:4px solid #1f2937;
-    border-top:4px solid #00f5ff;
-    border-radius:50%;
-    width:30px;
-    height:30px;
-    animation:spin 1s linear infinite;
-    margin:auto;
+.signal{
+font-size:22px;
+font-weight:bold;
+margin-top:10px;
 }
 
-@keyframes spin{
-    100%{transform:rotate(360deg);}
+.buy{color:#00ff88;}
+.sell{color:#ff4444;}
+.neutral{color:#ffaa00;}
+
+.fibo{
+margin-top:10px;
+font-size:14px;
 }
 
-.signal span{
-    animation:pulse 1.2s infinite;
+.premium{
+margin-top:20px;
+padding:15px;
+background:rgba(255,255,255,0.08);
+border-radius:12px;
 }
 
-@keyframes pulse{
-    0%{opacity:1;}
-    50%{opacity:0.4;}
-    100%{opacity:1;}
+/* MENU */
+
+.sidebar{
+position:fixed;
+top:0;
+left:-260px;
+width:250px;
+height:100%;
+background:#111;
+padding-top:60px;
+transition:0.3s;
+z-index:1000;
+}
+
+.sidebar a{
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
+border-bottom:1px solid #222;
+}
+
+.sidebar a:hover{
+background:#1f1f1f;
+}
+
+.overlay{
+position:fixed;
+display:none;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+z-index:900;
 }
 </style>
 </head>
+
 <body>
 
-<!-- MENU -->
-<div class="sidebar" id="sidebar">
+<div class="overlay" onclick="closeMenu()"></div>
 
-<div class="menu-header">
-    <div class="logo">🧠 NeuroQuant</div>
-    <div class="subtitle">IA Quantitativa</div>
-    <div class="close-btn" onclick="toggleMenu()">✕</div>
+<div class="sidebar" id="menu">
+<a href="#">🤖 IA Overview</a>
+<a href="#">📊 Sinais</a>
+<a href="#">📈 Fibonacci</a>
+<a href="#">👑 Premium</a>
 </div>
-
-<a href="#"><span>🏠</span> Início</a>
-<a href="#"><span>📊</span> Mercado</a>
-<a href="#"><span>⭐</span> Premium</a>
-<a href="#"><span>📡</span> Scanner IA</a>
-<a href="#"><span>⚙️</span> Configurações</a>
-<a href="#"><span>❓</span> Suporte</a>
-
-<div class="menu-footer">
-    v6.0 PRO
-</div>
-
-</div>
-
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <header>
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
-🚀 NeuroQuant PRO – IA Avançada
+<div class="menu-btn" onclick="openMenu()">☰</div>
+<h2>Crypto IA Pro 4.0</h2>
 </header>
 
-<!-- CONTEÚDO ORIGINAL (INALTERADO) -->
 <div class="container">
 
-<div class="card">
-<h3>Selecionar Criptomoeda</h3>
-<select id="pairSelect"></select>
-<button onclick="gerarSinal()">Analisar Mercado</button>
-<div class="signal" id="resultado"></div>
-</div>
+<h3>Selecione o Par</h3>
+
+<select id="cryptoSelect"></select>
+
+<input type="text" id="manualPair" placeholder="Ou digite manualmente (ex: BTCUSDT)">
+
+<button onclick="analisar()">Analisar</button>
 
 <div class="card">
-<h3>Área Premium <span class="badge">PRO</span></h3>
-<a href="https://mpago.la/1DYvFBL" target="_blank">
-<button>Assinar Agora – R$ 29,90</button>
-</a>
+<div class="price" id="price">Preço: --</div>
+<div class="signal neutral" id="signal">Sinal: --</div>
+<div class="fibo" id="fibo"></div>
 </div>
 
-<div class="footer">
-NeuroQuant © 2026
+<div class="premium">
+<h3>Versão Premium</h3>
+<p>Acesso total aos sinais inteligentes</p>
+<h2>R$ 29,90</h2>
+<button onclick="window.open('https://mpago.la/1DYvFBL')">
+Ativar Premium
+</button>
 </div>
 
 </div>
 
 <script>
 
-function toggleMenu(){
-    document.getElementById("sidebar").classList.toggle("active");
-    document.getElementById("overlay").classList.toggle("active");
+let currentPair = "BTCUSDT";
+
+async function carregarCriptos(){
+let res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
+let data = await res.json();
+
+let usdtPairs = data
+.filter(c => c.symbol.endsWith("USDT"))
+.slice(0,50);
+
+let select = document.getElementById("cryptoSelect");
+select.innerHTML="";
+
+usdtPairs.forEach(c=>{
+let option = document.createElement("option");
+option.value = c.symbol;
+option.text = c.symbol;
+select.appendChild(option);
+});
 }
+
+async function analisar(){
+
+let manual = document.getElementById("manualPair").value.trim().toUpperCase();
+currentPair = manual || document.getElementById("cryptoSelect").value;
+
+let res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${currentPair}&interval=15m&limit=50`);
+let data = await res.json();
+
+let closes = data.map(c => parseFloat(c[4]));
+let lastPrice = closes[closes.length-1];
+
+document.getElementById("price").innerText = "Preço: " + lastPrice.toFixed(4);
+
+let high = Math.max(...closes);
+let low = Math.min(...closes);
+
+let fib236 = high - (high-low)*0.236;
+let fib382 = high - (high-low)*0.382;
+let fib618 = high - (high-low)*0.618;
+
+document.getElementById("fibo").innerHTML = `
+Fibo 23.6%: ${fib236.toFixed(4)} <br>
+Fibo 38.2%: ${fib382.toFixed(4)} <br>
+Fibo 61.8%: ${fib618.toFixed(4)}
+`;
+
+let signal = "NEUTRO";
+let signalClass = "neutral";
+
+if(lastPrice <= fib618){
+signal = "🟢 COMPRA";
+signalClass="buy";
+}else if(lastPrice >= fib236){
+signal="🔴 VENDA";
+signalClass="sell";
+}
+
+let signalDiv = document.getElementById("signal");
+signalDiv.innerText="Sinal: "+signal;
+signalDiv.className="signal "+signalClass;
+
+}
+
+function openMenu(){
+document.getElementById("menu").style.left="0";
+document.querySelector(".overlay").style.display="block";
+}
+
+function closeMenu(){
+document.getElementById("menu").style.left="-260px";
+document.querySelector(".overlay").style.display="none";
+}
+
+carregarCriptos();
+setInterval(analisar,15000);
 
 </script>
 
