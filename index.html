@@ -3,74 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant AI | Criptomoedas Inteligentes</title>
-
+<title>NeuroQuant AI | Plataforma Premium</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+body{background:#0c111d;color:#fff;overflow-x:hidden;}
+a{text-decoration:none;}
 
-/* ===== GLOBAL ===== */
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Orbitron',sans-serif;
-}
-
-body{
-background:#0a0f1f;
-color:#fff;
-overflow-x:hidden;
-}
-
-/* ===== MENU BUTTON ===== */
 .menu-btn{
 position:fixed;
 top:20px;
 left:20px;
-font-size:30px;
+font-size:28px;
 cursor:pointer;
+color:#00e5ff;
 z-index:1001;
-color:#00f0ff;
 }
 
-/* ===== SIDEBAR ===== */
 .sidebar{
 position:fixed;
 top:0;
 left:-260px;
 width:260px;
 height:100%;
-background:#111827;
+background:#121826;
 padding-top:80px;
 transition:.4s;
 z-index:1000;
-box-shadow:4px 0 20px rgba(0,255,255,0.2);
+box-shadow:4px 0 20px rgba(0,229,255,0.2);
 }
-
-.sidebar.active{
-left:0;
-}
-
+.sidebar.active{left:0;}
 .sidebar a{
 display:block;
 padding:15px 25px;
-color:#00f0ff;
-text-decoration:none;
-transition:.3s;
-font-size:15px;
+color:#00e5ff;
+font-size:14px;
 }
-
 .sidebar a:hover{
-background:#00f0ff;
+background:#00e5ff;
 color:#000;
 }
 
-/* ===== HERO ===== */
 .hero{
 height:100vh;
-background:url("1772226489900.png") center center no-repeat;
-background-size:cover;
+background:url("17722264899900.png") center/cover no-repeat;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -78,46 +55,24 @@ justify-content:center;
 text-align:center;
 padding:20px;
 }
-
-.hero h1{
-font-size:38px;
-margin-bottom:20px;
-}
-
-.hero p{
-max-width:700px;
-margin-bottom:30px;
-color:#ccc;
-}
+.hero h1{font-size:42px;margin-bottom:20px;}
+.hero p{max-width:700px;color:#ccc;margin-bottom:30px;}
 
 .btn{
-padding:15px 30px;
-background:#00f0ff;
+padding:14px 28px;
+background:#00e5ff;
 color:#000;
-text-decoration:none;
-font-weight:bold;
 border-radius:30px;
+font-weight:bold;
+cursor:pointer;
+display:inline-block;
 transition:.3s;
+border:none;
 }
+.btn:hover{background:#fff;}
 
-.btn:hover{
-background:#fff;
-}
-
-/* ===== SECTIONS ===== */
-section{
-padding:80px 20px;
-text-align:center;
-}
-
-.section-dark{
-background:#111827;
-}
-
-h2{
-margin-bottom:30px;
-font-size:28px;
-}
+section{padding:80px 20px;text-align:center;}
+.section-dark{background:#121826;}
 
 .cards{
 display:flex;
@@ -125,37 +80,45 @@ flex-wrap:wrap;
 justify-content:center;
 gap:20px;
 }
-
 .card{
-background:#1f2937;
+background:#1a2235;
 padding:25px;
 width:280px;
 border-radius:15px;
-box-shadow:0 0 20px rgba(0,255,255,0.1);
+box-shadow:0 0 20px rgba(0,229,255,0.08);
 }
 
-.card h3{
-margin-bottom:15px;
-color:#00f0ff;
+.dashboard{
+background:#121826;
+padding:40px 20px;
+display:none;
 }
 
-.price-box{
-background:#00f0ff;
-color:#000;
-padding:40px;
-border-radius:20px;
-display:inline-block;
-margin-top:20px;
+.panel{
+background:#1a2235;
+padding:25px;
+border-radius:15px;
+margin:20px auto;
+max-width:700px;
+text-align:left;
+}
+
+select,input{
+padding:10px;
+margin:10px 0;
+border-radius:8px;
+border:none;
+width:100%;
 }
 
 footer{
 background:#000;
 padding:30px;
 text-align:center;
-font-size:14px;
+font-size:13px;
 color:#777;
 }
-
+small{color:#aaa;font-size:12px;}
 </style>
 </head>
 
@@ -165,65 +128,97 @@ color:#777;
 
 <div class="sidebar" id="sidebar">
 <a href="#">Início</a>
-<a href="#aprenda">Aprenda Cripto</a>
-<a href="#sinais">Sinais</a>
 <a href="#plano">Plano PRO</a>
-<a href="#">Contato</a>
+<a href="#login">Login</a>
+<a href="#dashboard">Dashboard</a>
 </div>
 
 <div class="hero">
-<h1>Aprenda Criptomoedas do Zero e Receba Sinais Inteligentes</h1>
-<p>Educação estratégica + análise técnica + inteligência artificial para você entender o mercado e operar com mais consciência.</p>
-<a href="#plano" class="btn">Quero Evoluir Agora</a>
+<h1>NeuroQuant AI</h1>
+<p>Plataforma institucional de análise técnica avançada com foco em estrutura de mercado, liquidez e comportamento institucional.</p>
+<a href="#plano" class="btn">Acessar Plano PRO</a>
 </div>
-
-<section id="aprenda">
-<h2>O Que Você Vai Aprender</h2>
-<div class="cards">
-<div class="card">
-<h3>Fundamentos</h3>
-<p>O que é Bitcoin, Blockchain e como funciona o mercado cripto.</p>
-</div>
-<div class="card">
-<h3>Análise Técnica</h3>
-<p>Suporte, resistência, liquidez, Fibonacci e leitura de tendência.</p>
-</div>
-<div class="card">
-<h3>Gestão de Risco</h3>
-<p>Como proteger seu capital e evitar erros de iniciantes.</p>
-</div>
-</div>
-</section>
-
-<section id="sinais" class="section-dark">
-<h2>Sinais Estratégicos</h2>
-<p>Receba análises baseadas em estrutura de mercado, liquidez e comportamento institucional.</p>
-</section>
 
 <section id="plano">
-<h2>Plano PRO</h2>
-
-<div class="price-box">
-<h3>R$ 9,90 / mês</h3>
-<p>
-✔ Sinais em tempo real<br>
-✔ Análises completas<br>
-✔ Gestão de risco<br>
-✔ Acesso exclusivo
-</p>
+<h2>Plano PRO – R$ 9,90 / mês</h2>
+<p>Acesso à sala privada de análises técnicas avançadas.</p>
 <br>
-<a href="#" class="btn">Assinar Agora</a>
+<a href="https://mpago.la/1DYvFBL" target="_blank" class="btn">
+Pagar com Mercado Pago
+</a>
+<br><br>
+<small>Pagamento seguro via Mercado Pago. Liberação após confirmação.</small>
+</section>
+
+<section id="login" class="section-dark">
+<h2>Área de Membros</h2>
+<div style="max-width:400px;margin:auto;">
+<input type="password" id="senha" placeholder="Digite sua senha">
+<button class="btn" onclick="login()">Entrar</button>
 </div>
+</section>
+
+<section id="dashboard" class="dashboard">
+<h2>Dashboard de Análise Técnica</h2>
+
+<div class="panel">
+<h3>Selecionar Par Binance</h3>
+<select>
+<option>BTC/USDT</option>
+<option>ETH/USDT</option>
+<option>SOL/USDT</option>
+<option>BNB/USDT</option>
+<option>XRP/USDT</option>
+<option>ADA/USDT</option>
+<option>DOGE/USDT</option>
+</select>
+</div>
+
+<div class="panel">
+<h3>Análise Técnica Estrutural</h3>
+<p><strong>Tendência:</strong> Alta no 4H</p>
+<p><strong>EMA 9 x EMA 21:</strong> Cruzamento altista</p>
+<p><strong>EMA 200:</strong> Suporte dinâmico principal</p>
+<p><strong>RSI:</strong> 56 – Região de força compradora</p>
+<p><strong>Fibonacci:</strong> Retração 0.618 respeitada</p>
+<p><strong>Estrutura:</strong> HH e HL confirmados</p>
+<p><strong>Liquidez:</strong> Sweep abaixo do último fundo</p>
+<p><strong>Zona Técnica:</strong> Região institucional</p>
+</div>
+
+<div class="panel">
+<h3>Atualizar Dados Manualmente</h3>
+<input type="text" placeholder="Atualizar Tendência">
+<input type="text" placeholder="Atualizar RSI">
+<input type="text" placeholder="Atualizar Fibonacci">
+<button class="btn">Salvar Alterações</button>
+</div>
+
+<p style="margin-top:20px;">
+<small>
+Aviso: Mercado de criptomoedas envolve alto risco. Conteúdo educacional. Não constitui recomendação de investimento.
+</small>
+</p>
 
 </section>
 
 <footer>
-© 2026 NeuroQuant AI - Educação e Inteligência de Mercado
+© 2026 NeuroQuant AI – Plataforma Institucional de Análise
 </footer>
 
 <script>
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("active");
+}
+
+function login(){
+let senha = document.getElementById("senha").value;
+if(senha === "neuropro"){
+document.getElementById("dashboard").style.display="block";
+alert("Acesso liberado.");
+}else{
+alert("Senha incorreta.");
+}
 }
 </script>
 
