@@ -3,345 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant IA</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<title>AI Crypto Tech</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Orbitron', sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-body{
-background:linear-gradient(135deg,#03121a,#0b3a40,#0a1f26);
-color:#e6fefe;
-min-height:100vh;
-overflow-x:hidden;
+body {
+    height: 100vh;
+    background: url("fundo.png") no-repeat center center fixed;
+    background-size: cover;
+    overflow-x: hidden;
+    color: white;
 }
 
-/* BOTÃO MENU */
-.menu-toggle{
-position:fixed;
-top:20px;
-left:20px;
-font-size:28px;
-cursor:pointer;
-z-index:1001;
-color:#00ffcc;
+/* Overlay escuro futurista */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    z-index: -1;
 }
 
-/* MENU LATERAL */
-.menu{
-position:fixed;
-top:0;
-left:-260px;
-width:250px;
-height:100%;
-background:#06181d;
-padding:30px 20px;
-transition:0.4s;
-z-index:1002;
-box-shadow:4px 0 25px rgba(0,255,200,0.2);
+/* Botão menu */
+.menu-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1001;
+    transition: 0.3s;
 }
 
-.menu.active{
-left:0;
+.menu-btn:hover {
+    color: #00f7ff;
+    transform: scale(1.1);
 }
 
-.logo{
-font-size:18px;
-margin-bottom:40px;
-color:#00ffcc;
-text-align:center;
+/* Menu lateral */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    padding-top: 80px;
+    transition: 0.4s ease;
+    box-shadow: 0 0 20px #00f7ff;
 }
 
-.menu-item{
-padding:12px;
-margin-bottom:12px;
-border-radius:12px;
-cursor:pointer;
-transition:0.3s;
+.sidebar a {
+    display: block;
+    padding: 15px 25px;
+    color: #00f7ff;
+    text-decoration: none;
+    transition: 0.3s;
 }
 
-.menu-item:hover{
-background:linear-gradient(90deg,#00f5ff,#00ffcc);
-color:#003b40;
+.sidebar a:hover {
+    background: #00f7ff;
+    color: black;
 }
 
-/* OVERLAY */
-.overlay{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-opacity:0;
-visibility:hidden;
-transition:0.3s;
-z-index:1000;
+.sidebar.active {
+    left: 0;
 }
 
-.overlay.active{
-opacity:1;
-visibility:visible;
+/* Conteúdo central */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* HERO IMAGE */
-.hero{
-width:100%;
-max-height:400px;
-overflow:hidden;
-position:relative;
+/* Card futurista */
+.card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0 0 30px rgba(0,255,255,0.3);
+    animation: glow 3s infinite alternate;
 }
 
-.hero img{
-width:100%;
-height:100%;
-object-fit:cover;
-filter:brightness(0.6);
+.card h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #00f7ff;
 }
 
-.hero-text{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-color:#00ffcc;
-font-size:28px;
+.card p {
+    font-size: 14px;
+    opacity: 0.8;
 }
 
-/* CONTEÚDO */
-.main{
-display:flex;
-flex-direction:column;
-align-items:center;
-padding:20px;
+/* Botão futurista */
+.btn {
+    margin-top: 25px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(45deg, #00f7ff, #005eff);
+    color: white;
+    cursor: pointer;
+    transition: 0.4s;
 }
 
-.center{
-text-align:center;
-width:100%;
-max-width:600px;
-margin-top:20px;
+.btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #00f7ff;
 }
 
-.card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(20px);
-border-radius:25px;
-padding:25px;
-margin-bottom:20px;
-box-shadow:0 0 40px rgba(0,255,200,0.2);
+/* Animação glow */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 15px rgba(0,255,255,0.3);
+    }
+    to {
+        box-shadow: 0 0 35px rgba(0,255,255,0.8);
+    }
 }
 
-select,input{
-width:100%;
-padding:12px;
-margin-top:10px;
-border-radius:15px;
-border:none;
-background:#0f2a30;
-color:white;
+/* Linhas animadas estilo hacker */
+.lines {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0,255,255,0.05) 0px,
+        rgba(0,255,255,0.05) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    animation: moveLines 3s linear infinite;
 }
 
-button{
-margin-top:15px;
-padding:14px;
-border:none;
-border-radius:50px;
-width:100%;
-font-size:16px;
-background:linear-gradient(90deg,#00f5ff,#00ffcc);
-color:#003b40;
-cursor:pointer;
-}
-
-.indicators{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:15px;
-}
-
-.box{
-background:#082026;
-padding:10px;
-border-radius:15px;
-font-size:13px;
-text-align:center;
-}
-
-.alta{ color:#00ff88; font-weight:bold;}
-.baixa{ color:#ff4d4d; font-weight:bold;}
-.neutro{ color:#ffd000; font-weight:bold;}
-
-canvas{
-background:white;
-border-radius:20px;
-margin-top:20px;
-}
-
-.footer{
-text-align:center;
-font-size:12px;
-opacity:0.6;
-padding:20px;
+@keyframes moveLines {
+    from { background-position: 0 0; }
+    to { background-position: 0 100px; }
 }
 </style>
 </head>
+
 <body>
 
-<div class="menu-toggle" onclick="toggleMenu()">☰</div>
+<div class="lines"></div>
 
-<div class="menu" id="sideMenu">
-<div class="logo">NeuroQuant IA</div>
-<div class="menu-item">🏠 Dashboard</div>
-<div class="menu-item">📊 Análise Técnica</div>
-<div class="menu-item">🔔 Alertas</div>
-<div class="menu-item">💎 Premium</div>
-<div class="menu-item">⚙️ Configurações</div>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<div class="sidebar" id="menu">
+    <a href="#">Dashboard</a>
+    <a href="#">Inteligência Artificial</a>
+    <a href="#">Criptomoedas</a>
+    <a href="#">Segurança</a>
+    <a href="#">Contato</a>
 </div>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
-<!-- IMAGEM PRINCIPAL -->
-<div class="hero">
-<img src="ia-cripto.png" alt="IA e Criptomoeda">
-<div class="hero-text">Inteligência Artificial Aplicada ao Mercado Cripto</div>
-</div>
-
-<div class="main">
-
-<div class="center">
-
-<div class="card">
-<select id="binancePairs"></select>
-<input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
-<button onclick="analisar()">Analisar Agora</button>
-<div class="indicators" id="indicadores"></div>
-</div>
-
-<div class="card">
-<canvas id="grafico"></canvas>
-</div>
-
-</div>
-
-<div class="footer">
-© 2026 NeuroQuant IA - Todos os direitos reservados
-</div>
-
+<div class="container">
+    <div class="card">
+        <h1>AI & Blockchain System</h1>
+        <p>Monitoramento avançado de Inteligência Artificial e Criptomoedas com segurança de nível militar.</p>
+        <button class="btn">Acessar Sistema</button>
+    </div>
 </div>
 
 <script>
-
-function toggleMenu(){
-document.getElementById("sideMenu").classList.toggle("active");
-document.getElementById("overlay").classList.toggle("active");
+function toggleMenu() {
+    document.getElementById("menu").classList.toggle("active");
 }
-
-// Carregar pares Binance
-fetch('https://api.binance.com/api/v3/exchangeInfo')
-.then(res=>res.json())
-.then(data=>{
-let select=document.getElementById("binancePairs");
-data.symbols.forEach(s=>{
-if(s.status==="TRADING"){
-let opt=document.createElement("option");
-opt.value=s.symbol;
-opt.text=s.symbol;
-select.add(opt);
-}
-});
-});
-
-function calcularEMA(periodo,dados){
-let k=2/(periodo+1);
-let ema=[dados[0]];
-for(let i=1;i<dados.length;i++){
-ema.push(dados[i]*k+ema[i-1]*(1-k));
-}
-return ema;
-}
-
-function calcularRSI(periodo,dados){
-let ganhos=0,perdas=0;
-for(let i=1;i<=periodo;i++){
-let diff=dados[i]-dados[i-1];
-if(diff>=0) ganhos+=diff;
-else perdas+=Math.abs(diff);
-}
-let rs=ganhos/perdas;
-return 100-(100/(1+rs));
-}
-
-let graficoAtual;
-
-async function analisar(){
-let select=document.getElementById("binancePairs").value;
-let custom=document.getElementById("customPair").value;
-let par=custom!==""?custom.toUpperCase():select;
-
-let url=`https://api.binance.com/api/v3/klines?symbol=${par}&interval=1h&limit=100`;
-let response=await fetch(url);
-let data=await response.json();
-
-if(!data || data.length===0){
-alert("Par inválido ou sem dados.");
-return;
-}
-
-let closes=data.map(c=>parseFloat(c[4]));
-let highs=data.map(c=>parseFloat(c[2]));
-let lows=data.map(c=>parseFloat(c[3]));
-
-let ema9=calcularEMA(9,closes);
-let ema21=calcularEMA(21,closes);
-let rsi=calcularRSI(14,closes);
-
-let tendencia="Neutro";
-let classe="neutro";
-
-if(ema9.at(-1)>ema21.at(-1)&&rsi>55){
-tendencia="Alta 🚀";
-classe="alta";
-}
-else if(ema9.at(-1)<ema21.at(-1)&&rsi<45){
-tendencia="Baixa 📉";
-classe="baixa";
-}
-
-let max=Math.max(...highs);
-let min=Math.min(...lows);
-let fib50=(min+(max-min)*0.5).toFixed(2);
-let fib618=(min+(max-min)*0.618).toFixed(2);
-
-document.getElementById("indicadores").innerHTML=`
-<div class="box">EMA 9<br>${ema9.at(-1).toFixed(2)}</div>
-<div class="box">EMA 21<br>${ema21.at(-1).toFixed(2)}</div>
-<div class="box">RSI<br>${rsi.toFixed(2)}</div>
-<div class="box ${classe}">Tendência<br>${tendencia}</div>
-<div class="box">Fibo 50%<br>${fib50}</div>
-<div class="box">Fibo 61.8%<br>${fib618}</div>
-`;
-
-if(graficoAtual) graficoAtual.destroy();
-
-graficoAtual = new Chart(document.getElementById("grafico"),{
-type:'line',
-data:{
-labels:closes.map((_,i)=>i),
-datasets:[{label:par,data:closes}]
-}
-});
-}
-
 </script>
 
 </body>
