@@ -3,132 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Crypto Academy</title>
+<title>CryptoVision AI</title>
 
-<!-- Import font -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-/* ===== GLOBAL ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Orbitron', sans-serif;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
 }
 
-body {
-    background: #0a1f26;
-    color: #e6fefe;
-    min-height: 100vh;
-    overflow-x: hidden;
+body{
+background:#071a1f;
+color:#e0ffff;
+overflow-x:hidden;
 }
 
-/* ===== MENU ===== */
-.menu-btn {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    font-size: 32px;
-    cursor: pointer;
-    z-index: 1001;
-    color: #00ffcc;
+/* HERO */
+.hero{
+height:100vh;
+background:url("1772226489900.png") center/cover no-repeat;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+position:relative;
 }
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -260px;
-    width: 260px;
-    height: 100%;
-    background: #06181d;
-    padding-top: 80px;
-    transition: 0.4s;
-    box-shadow: 4px 0 25px rgba(0,255,200,0.2);
-    z-index: 1000;
+.hero::before{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
 }
 
-.sidebar.active {
-    left: 0;
+.hero h1{
+position:relative;
+font-size:42px;
+color:#00ffee;
 }
 
-.sidebar a {
-    display: block;
-    padding: 15px 25px;
-    color: #00ffcc;
-    text-decoration: none;
-    font-size: 16px;
-    margin-bottom: 8px;
-    transition: 0.3s;
+.hero p{
+position:relative;
+margin-top:15px;
+font-size:18px;
+max-width:600px;
 }
 
-.sidebar a:hover {
-    background: #00f5ff;
-    color: #003b40;
+.btn{
+margin-top:25px;
+padding:12px 30px;
+background:#00ffee;
+border:none;
+border-radius:30px;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
 }
 
-/* ===== HEADER HERO ===== */
-.header {
-    width: 100%;
-    height: 300px;
-    background: url("fundo.png") no-repeat center center fixed;
-    background-size: cover;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.btn:hover{
+background:#00c8cc;
 }
 
-.header::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
+/* SECTION */
+.section{
+padding:60px 20px;
+max-width:1000px;
+margin:auto;
 }
 
-.header-text {
-    position: relative;
-    text-align: center;
-    color: #00ffcc;
-    font-size: 36px;
-    font-weight: bold;
+.section h2{
+color:#00ffee;
+margin-bottom:20px;
 }
 
-/* ===== SECTIONS ===== */
-.section {
-    padding: 50px 20px;
-    max-width: 900px;
-    margin: auto;
+.card{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 0 20px rgba(0,255,238,0.2);
 }
 
-.section h2 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #00f5ff;
+/* MENU */
+.menu-btn{
+position:fixed;
+top:20px;
+left:20px;
+font-size:30px;
+cursor:pointer;
+color:#00ffee;
+z-index:1001;
 }
 
-.section p {
-    font-size: 16px;
-    margin-bottom: 15px;
-    line-height: 1.6;
+.sidebar{
+position:fixed;
+top:0;
+left:-260px;
+width:260px;
+height:100%;
+background:#031114;
+padding-top:80px;
+transition:0.4s;
+z-index:1000;
 }
 
-/* ===== BOXES ===== */
-.box {
-    background: rgba(255,255,255,0.05);
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 30px rgba(0,255,200,0.15);
+.sidebar.active{
+left:0;
 }
 
-/* ===== FOOTER ===== */
-.footer {
-    text-align: center;
-    font-size: 14px;
-    opacity: 0.6;
-    padding: 20px;
+.sidebar a{
+display:block;
+padding:15px 20px;
+color:#00ffee;
+text-decoration:none;
+}
+
+.sidebar a:hover{
+background:#00ffee;
+color:#031114;
+}
+
+/* FOOTER */
+footer{
+text-align:center;
+padding:20px;
+opacity:0.6;
 }
 </style>
 </head>
@@ -136,82 +140,105 @@ body {
 
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<div class="sidebar" id="sideMenu">
-    <a href="#home">🏠 Início</a>
-    <a href="#o-que-sao">📘 O que são criptomoedas?</a>
-    <a href="#como-funciona">📈 Como funciona</a>
-    <a href="#sinais">⚡ Sinais de Cripto</a>
-    <a href="#dicas">💡 Dicas</a>
-    <a href="#sobre-ia">🤖 Sobre a IA</a>
-    <a href="#contato">📞 Contato</a>
+<div class="sidebar" id="menu">
+<a href="#inicio">Início</a>
+<a href="#educacao">Educação</a>
+<a href="#sinais">Sinais</a>
+<a href="#planos">Planos</a>
+<a href="#blog">Blog</a>
+<a href="#contato">Contato</a>
 </div>
 
-<div class="header" id="home">
-    <div class="header-text">AI Crypto Academy</div>
+<section class="hero" id="inicio">
+<h1>CryptoVision AI</h1>
+<p>Aprenda criptomoedas do zero e acompanhe análises educacionais baseadas em inteligência artificial.</p>
+<button class="btn" onclick="scrollToPlan()">Assinar por R$9,90</button>
+</section>
+
+<section class="section" id="educacao">
+<h2>📚 Educação Cripto</h2>
+
+<div class="card">
+<h3>O que é Bitcoin?</h3>
+<p>Bitcoin é uma moeda digital descentralizada criada em 2009 que funciona através da tecnologia blockchain.</p>
 </div>
 
-<!-- ===== SECTION: O que são criptomoedas ===== -->
-<div class="section" id="o-que-sao">
-    <h2>O que são criptomoedas?</h2>
-    <p>Criptomoedas são moedas digitais que utilizam criptografia para garantir a segurança, descentralização e transparência das transações. Ao contrário do dinheiro tradicional, elas operam em redes descentralizadas chamadas <b>blockchain</b>.</p>
-    <div class="box">
-        <strong>Exemplos:</strong> Bitcoin (BTC), Ethereum (ETH), Ripple (XRP), Cardano (ADA).
-    </div>
+<div class="card">
+<h3>O que é Blockchain?</h3>
+<p>Blockchain é um livro digital público onde todas as transações são registradas de forma transparente e imutável.</p>
 </div>
 
-<!-- ===== SECTION: Como funciona ===== -->
-<div class="section" id="como-funciona">
-    <h2>Como funciona o mercado?</h2>
-    <p>O mercado de criptomoedas funciona 24h por dia e conta com investidores, traders e mineradores. Os preços variam de acordo com oferta e demanda.</p>
-    <div class="box">
-        <strong>Trading:</strong> Comprar barato e vender mais caro.</div>
-    <div class="box">
-        <strong>Holding:</strong> Manter por longo prazo esperando valorização.
-    </div>
+<div class="card">
+<h3>Gestão de Risco</h3>
+<p>Nunca arrisque mais do que pode perder. Divida capital e utilize stop loss.</p>
+</div>
+</section>
+
+<section class="section" id="sinais">
+<h2>⚡ Sinais Educacionais</h2>
+
+<div class="card">
+<strong>BTC/USDT</strong><br>
+Zona de Interesse: 29.500<br>
+Alvo Educacional: 31.000
 </div>
 
-<!-- ===== SECTION: Sinais de Cripto ===== -->
-<div class="section" id="sinais">
-    <h2>⚡ Sinais de Cripto</h2>
-    <p>Aqui serão exibidos sinais de entrada e saída com base na análise técnica e inteligência artificial.</p>
-    <div class="box">
-        <strong>BTC/USDT:</strong> Entrada: 29500 ● Saída: 31000</div>
-    <div class="box">
-        <strong>ETH/USDT:</strong> Entrada: 1850 ● Saída: 1980</div>
-    <div class="box">
-        <strong>XRP/USDT:</strong> Entrada: 0.62 ● Saída: 0.72</div>
+<div class="card">
+<strong>ETH/USDT</strong><br>
+Zona de Interesse: 1.850<br>
+Alvo Educacional: 1.980
 </div>
 
-<!-- ===== SECTION: Dicas ===== -->
-<div class="section" id="dicas">
-    <h2>💡 Dicas para Iniciantes</h2>
-    <p>Comece estudando fundamentos, aprenda sobre gerenciamento de risco, e nunca invista mais do que pode perder.</p>
-    <div class="box">
-        🔹 Utilize gráficos de 1h, 4h e diário.  
-        🔹 Estude candles básicos.  
-    </div>
+<p style="font-size:13px;opacity:0.6;margin-top:10px;">
+Aviso: Conteúdo educacional. Mercado de criptomoedas envolve risco.
+</p>
+</section>
+
+<section class="section" id="planos">
+<h2>💳 Plano Premium</h2>
+
+<div class="card">
+<h3>Assinatura Mensal</h3>
+<p>✔ Acesso aos sinais educacionais</p>
+<p>✔ Atualizações semanais</p>
+<p>✔ Conteúdo exclusivo</p>
+<br>
+<strong>R$9,90 / mês</strong>
+<br><br>
+<button class="btn">Pagar com Pix</button>
+</div>
+</section>
+
+<section class="section" id="blog">
+<h2>📰 Blog Cripto</h2>
+
+<div class="card">
+<h3>Como começar no mercado?</h3>
+<p>Estude fundamentos, escolha uma corretora confiável e comece pequeno.</p>
 </div>
 
-<!-- ===== SECTION: Sobre a IA ===== -->
-<div class="section" id="sobre-ia">
-    <h2>🤖 Sobre a IA de Análise</h2>
-    <p>Esta inteligência artificial analisa dados históricos e calcula tendências com base em indicadores como EMA, RSI e Fibonacci, ajudando a identificar possíveis movimentos de preço.</p>
+<div class="card">
+<h3>O que move o preço do Bitcoin?</h3>
+<p>Oferta, demanda, notícias globais e adoção institucional.</p>
 </div>
+</section>
 
-<!-- ===== SECTION: Contato ===== -->
-<div class="section" id="contato">
-    <h2>📞 Contato</h2>
-    <p>Entre em contato pelo WhatsApp ou Instagram para mais informações, cursos e suporte.</p>
-    <div class="box">
-        WhatsApp: <a href="https://wa.me/55SEUNUMERO" style="color:#00ffcc;">Clique aqui</a>
-    </div>
-</div>
+<section class="section" id="contato">
+<h2>📞 Contato</h2>
+<p>WhatsApp: Seu número aqui</p>
+</section>
 
-<div class="footer">© 2026 AI Crypto Academy — Todos os direitos reservados.</div>
+<footer>
+© 2026 CryptoVision AI - Plataforma Educacional
+</footer>
 
 <script>
-function toggleMenu() {
-    document.getElementById("sideMenu").classList.toggle("active");
+function toggleMenu(){
+document.getElementById("menu").classList.toggle("active");
+}
+
+function scrollToPlan(){
+document.getElementById("planos").scrollIntoView({behavior:"smooth"});
 }
 </script>
 
