@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeuroQuant PRO</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 body{
     margin:0;
@@ -12,7 +14,6 @@ body{
     background:#0a0f24;
     color:white;
 }
-
 header{
     background:#081028;
     padding:15px;
@@ -20,49 +21,33 @@ header{
     justify-content:space-between;
     align-items:center;
 }
-
-header h1{
-    color:#00dbb8;
-}
-
-nav a{
-    color:white;
-    margin-left:20px;
-    cursor:pointer;
-    text-decoration:none;
-}
-
-.container{
-    padding:30px;
-}
-
+header h1{ color:#00dbb8; }
+.container{ padding:20px; }
 .card{
     background:#112144;
     padding:20px;
     border-radius:10px;
     margin-bottom:20px;
 }
-
-input, select{
+select,input,button{
     padding:10px;
     width:100%;
     margin-top:10px;
     border-radius:5px;
     border:none;
 }
-
 button{
     background:#00dbb8;
-    border:none;
-    padding:10px 20px;
-    border-radius:5px;
-    margin-top:10px;
-    cursor:pointer;
     font-weight:bold;
+    cursor:pointer;
 }
-
-.hidden{
-    display:none;
+.resultado{
+    margin-top:15px;
+    line-height:1.6;
+}
+canvas{
+    background:white;
+    border-radius:10px;
 }
 </style>
 </head>
@@ -70,105 +55,130 @@ button{
 
 <header>
     <h1>NeuroQuant PRO</h1>
-    <nav>
-        <a onclick="showHome()">Home</a>
-        <a onclick="showLogin()">Login</a>
-        <a onclick="showPlano()">Plano PRO</a>
-    </nav>
 </header>
 
 <div class="container">
+<div class="card">
+<h2>Análise Técnica Completa</h2>
 
-    <!-- HOME -->
-    <div id="home">
-        <div class="card">
-            <h2>Analise de Criptomoedas em Tempo Real</h2>
-            <p>Selecione um par ou digite outro:</p>
+<select id="binancePairs"></select>
+<input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
+<button onclick="analisar()">Analisar</button>
 
-            <select id="binancePairs"></select>
-            <input type="text" id="customPair" placeholder="Digite outro par (Ex: XRP/USDT)">
-            <button onclick="analisar()">Analisar</button>
+<div class="resultado" id="resultado"></div>
+</div>
 
-            <div id="resultado"></div>
-        </div>
-    </div>
-
-    <!-- LOGIN -->
-    <div id="login" class="hidden">
-        <div class="card">
-            <h2>Área de Login</h2>
-            <input type="email" placeholder="Seu email">
-            <input type="password" placeholder="Sua senha">
-            <button onclick="login()">Entrar</button>
-        </div>
-    </div>
-
-    <!-- PLANO -->
-    <div id="plano" class="hidden">
-        <div class="card">
-            <h2>Plano PRO - R$ 9,90</h2>
-            <p>Pagamento via Pix em desenvolvimento backend</p>
-        </div>
-    </div>
-
+<div class="card">
+<canvas id="grafico"></canvas>
+</div>
 </div>
 
 <script>
 
-// Função pra mostrar as telas
-function showHome(){
-    document.getElementById('home').classList.remove('hidden');
-    document.getElementById('login').classList.add('hidden');
-    document.getElementById('plano').classList.add('hidden');
-}
-function showLogin(){
-    document.getElementById('home').classList.add('hidden');
-    document.getElementById('login').classList.remove('hidden');
-    document.getElementById('plano').classList.add('hidden');
-}
-function showPlano(){
-    document.getElementById('home').classList.add('hidden');
-    document.getElementById('login').classList.add('hidden');
-    document.getElementById('plano').classList.remove('hidden');
-}
-
-// Busca pares da Binance automaticamente
+// =========================
+// CARREGAR TODOS OS PARES
+// =========================
 fetch('https://api.binance.com/api/v3/exchangeInfo')
-.then(response => response.json())
-.then(data => {
-    let select = document.getElementById('binancePairs');
-    data.symbols.forEach(symbol => {
-        if(symbol.status === "TRADING"){
-            let option = document.createElement("option");
-            option.value = symbol.symbol;
-            option.text = symbol.symbol;
-            select.add(option);
+.then(res=>res.json())
+.then(data=>{
+    let select = document.getElementById("binancePairs");
+    data.symbols.forEach(s=>{
+        if(s.status==="TRADING"){
+            let opt=document.createElement("option");
+            opt.value=s.symbol;
+            opt.text=s.symbol;
+            select.add(opt);
         }
     });
-})
-.catch(err => {
-    console.error("Erro ao carregar pares:", err);
 });
 
-// Função de análise (simulada)
-function analisar(){
-    let select = document.getElementById("binancePairs").value;
-    let custom = document.getElementById("customPair").value;
-    let par = custom !== "" ? custom.toUpperCase() : select;
-
-    document.getElementById("resultado").innerHTML =
-        `<p>🔍 Analisando: <strong>${par}</strong></p>
-         <p>Tendência: Alta moderada</p>
-         <p>Liquidez: Forte</p>`;
+// =========================
+// FUNÇÕES INDICADORES
+// =========================
+function calcularEMA(periodo, dados){
+    let k = 2/(periodo+1);
+    let ema = [dados[0]];
+    for(let i=1;i<dados.length;i++){
+        ema.push(dados[i]*k + ema[i-1]*(1-k));
+    }
+    return ema;
 }
 
-// Login simulado
-function login(){
-    alert("Login realizado com sucesso!");
-    showHome();
+function calcularRSI(periodo, dados){
+    let ganhos=0, perdas=0;
+    for(let i=1;i<=periodo;i++){
+        let diff = dados[i]-dados[i-1];
+        if(diff>=0) ganhos+=diff;
+        else perdas+=Math.abs(diff);
+    }
+    let rs = ganhos/perdas;
+    return 100 - (100/(1+rs));
+}
+
+// =========================
+// ANALISAR
+// =========================
+async function analisar(){
+
+let select=document.getElementById("binancePairs").value;
+let custom=document.getElementById("customPair").value;
+let par = custom!=="" ? custom.toUpperCase() : select;
+
+let url=`https://api.binance.com/api/v3/klines?symbol=${par}&interval=1h&limit=100`;
+
+let response = await fetch(url);
+let data = await response.json();
+
+let closes = data.map(c=>parseFloat(c[4]));
+let highs = data.map(c=>parseFloat(c[2]));
+let lows = data.map(c=>parseFloat(c[3]));
+let volume = data.map(c=>parseFloat(c[5]));
+
+let ema9 = calcularEMA(9, closes);
+let ema21 = calcularEMA(21, closes);
+let rsi = calcularRSI(14, closes);
+
+let tendencia="NEUTRO";
+
+if(ema9[ema9.length-1] > ema21[ema21.length-1] && rsi>55){
+    tendencia="ALTA 🚀";
+}
+else if(ema9[ema9.length-1] < ema21[ema21.length-1] && rsi<45){
+    tendencia="BAIXA 📉";
+}
+
+// Fibonacci
+let max = Math.max(...highs);
+let min = Math.min(...lows);
+let fib50 = min + (max-min)*0.5;
+let fib618 = min + (max-min)*0.618;
+
+document.getElementById("resultado").innerHTML=`
+<b>Par:</b> ${par} <br>
+<b>Preço Atual:</b> ${closes[closes.length-1]} <br>
+<b>EMA 9:</b> ${ema9[ema9.length-1].toFixed(2)} <br>
+<b>EMA 21:</b> ${ema21[ema21.length-1].toFixed(2)} <br>
+<b>RSI:</b> ${rsi.toFixed(2)} <br>
+<b>Fibo 50%:</b> ${fib50.toFixed(2)} <br>
+<b>Fibo 61.8%:</b> ${fib618.toFixed(2)} <br>
+<b>Volume Atual:</b> ${volume[volume.length-1]} <br><br>
+<b>📊 Tendência Geral:</b> ${tendencia}
+`;
+
+// Gráfico
+new Chart(document.getElementById("grafico"), {
+    type: 'line',
+    data: {
+        labels: closes.map((_,i)=>i),
+        datasets: [{
+            label: 'Preço',
+            data: closes
+        }]
+    }
+});
+
 }
 
 </script>
-
 </body>
 </html>
