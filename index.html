@@ -8,80 +8,158 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{
+*{
     margin:0;
-    font-family: Arial, sans-serif;
-    background:#0a0f24;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg,#0f172a,#020617);
     color:white;
-}
-header{
-    background:#081028;
-    padding:15px;
     display:flex;
-    justify-content:space-between;
-    align-items:center;
 }
-header h1{ color:#00dbb8; }
-.container{ padding:20px; }
-.card{
-    background:#112144;
+
+/* SIDEBAR */
+.sidebar{
+    width:220px;
+    background:#0b1220;
+    height:100vh;
     padding:20px;
-    border-radius:10px;
+    border-right:1px solid #1e293b;
+}
+
+.sidebar h2{
+    color:#00f5c3;
+    margin-bottom:30px;
+}
+
+.sidebar button{
+    width:100%;
+    margin-bottom:10px;
+    padding:10px;
+    background:#111827;
+    border:none;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.sidebar button:hover{
+    background:#00f5c3;
+    color:black;
+}
+
+/* MAIN */
+.main{
+    flex:1;
+    padding:30px;
+}
+
+.header{
+    font-size:24px;
     margin-bottom:20px;
 }
-select,input,button{
-    padding:10px;
+
+/* CARDS */
+.card{
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+select,input{
     width:100%;
+    padding:10px;
     margin-top:10px;
-    border-radius:5px;
+    border-radius:8px;
     border:none;
 }
-button{
-    background:#00dbb8;
+
+button.analisar{
+    margin-top:10px;
+    width:100%;
+    padding:12px;
+    background:#00f5c3;
+    border:none;
+    border-radius:10px;
     font-weight:bold;
     cursor:pointer;
 }
-.resultado{
-    margin-top:15px;
-    line-height:1.6;
+
+.indicador{
+    font-size:18px;
+    margin:10px 0;
 }
+
+.tendencia-alta{ color:#00ff88; font-weight:bold;}
+.tendencia-baixa{ color:#ff4d4d; font-weight:bold;}
+.tendencia-neutro{ color:#ffd000; font-weight:bold;}
+
 canvas{
     background:white;
-    border-radius:10px;
+    border-radius:15px;
 }
 </style>
 </head>
 <body>
 
-<header>
-    <h1>NeuroQuant PRO</h1>
-</header>
+<div class="sidebar">
+    <h2>NeuroQuant</h2>
+    <button>Dashboard</button>
+    <button>Mercado</button>
+    <button>Plano PRO</button>
+</div>
 
-<div class="container">
+<div class="main">
+
+<div class="header">
+📊 Análise Inteligente de Criptomoedas
+</div>
+
 <div class="card">
-<h2>Análise Técnica Completa</h2>
-
+<h3>Selecionar Par</h3>
 <select id="binancePairs"></select>
 <input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
-<button onclick="analisar()">Analisar</button>
+<button class="analisar" onclick="analisar()">Analisar Agora</button>
+</div>
 
-<div class="resultado" id="resultado"></div>
+<div class="grid">
+    <div class="card">
+        <h3>Indicadores</h3>
+        <div id="indicadores"></div>
+    </div>
+
+    <div class="card">
+        <h3>Fibonacci</h3>
+        <div id="fibo"></div>
+    </div>
 </div>
 
 <div class="card">
+<h3>Gráfico</h3>
 <canvas id="grafico"></canvas>
 </div>
+
 </div>
 
 <script>
 
-// =========================
-// CARREGAR TODOS OS PARES
-// =========================
+// carregar pares
 fetch('https://api.binance.com/api/v3/exchangeInfo')
 .then(res=>res.json())
 .then(data=>{
-    let select = document.getElementById("binancePairs");
+    let select=document.getElementById("binancePairs");
     data.symbols.forEach(s=>{
         if(s.status==="TRADING"){
             let opt=document.createElement("option");
@@ -92,93 +170,85 @@ fetch('https://api.binance.com/api/v3/exchangeInfo')
     });
 });
 
-// =========================
-// FUNÇÕES INDICADORES
-// =========================
-function calcularEMA(periodo, dados){
-    let k = 2/(periodo+1);
-    let ema = [dados[0]];
+function calcularEMA(periodo,dados){
+    let k=2/(periodo+1);
+    let ema=[dados[0]];
     for(let i=1;i<dados.length;i++){
-        ema.push(dados[i]*k + ema[i-1]*(1-k));
+        ema.push(dados[i]*k+ema[i-1]*(1-k));
     }
     return ema;
 }
 
-function calcularRSI(periodo, dados){
-    let ganhos=0, perdas=0;
+function calcularRSI(periodo,dados){
+    let ganhos=0,perdas=0;
     for(let i=1;i<=periodo;i++){
-        let diff = dados[i]-dados[i-1];
+        let diff=dados[i]-dados[i-1];
         if(diff>=0) ganhos+=diff;
         else perdas+=Math.abs(diff);
     }
-    let rs = ganhos/perdas;
-    return 100 - (100/(1+rs));
+    let rs=ganhos/perdas;
+    return 100-(100/(1+rs));
 }
 
-// =========================
-// ANALISAR
-// =========================
 async function analisar(){
 
 let select=document.getElementById("binancePairs").value;
 let custom=document.getElementById("customPair").value;
-let par = custom!=="" ? custom.toUpperCase() : select;
+let par=custom!==""?custom.toUpperCase():select;
 
 let url=`https://api.binance.com/api/v3/klines?symbol=${par}&interval=1h&limit=100`;
+let response=await fetch(url);
+let data=await response.json();
 
-let response = await fetch(url);
-let data = await response.json();
+let closes=data.map(c=>parseFloat(c[4]));
+let highs=data.map(c=>parseFloat(c[2]));
+let lows=data.map(c=>parseFloat(c[3]));
 
-let closes = data.map(c=>parseFloat(c[4]));
-let highs = data.map(c=>parseFloat(c[2]));
-let lows = data.map(c=>parseFloat(c[3]));
-let volume = data.map(c=>parseFloat(c[5]));
+let ema9=calcularEMA(9,closes);
+let ema21=calcularEMA(21,closes);
+let rsi=calcularRSI(14,closes);
 
-let ema9 = calcularEMA(9, closes);
-let ema21 = calcularEMA(21, closes);
-let rsi = calcularRSI(14, closes);
+let tendencia="Neutro";
+let classe="tendencia-neutro";
 
-let tendencia="NEUTRO";
-
-if(ema9[ema9.length-1] > ema21[ema21.length-1] && rsi>55){
-    tendencia="ALTA 🚀";
+if(ema9.at(-1)>ema21.at(-1)&&rsi>55){
+    tendencia="Alta 🚀";
+    classe="tendencia-alta";
 }
-else if(ema9[ema9.length-1] < ema21[ema21.length-1] && rsi<45){
-    tendencia="BAIXA 📉";
+else if(ema9.at(-1)<ema21.at(-1)&&rsi<45){
+    tendencia="Baixa 📉";
+    classe="tendencia-baixa";
 }
 
-// Fibonacci
-let max = Math.max(...highs);
-let min = Math.min(...lows);
-let fib50 = min + (max-min)*0.5;
-let fib618 = min + (max-min)*0.618;
+let max=Math.max(...highs);
+let min=Math.min(...lows);
 
-document.getElementById("resultado").innerHTML=`
-<b>Par:</b> ${par} <br>
-<b>Preço Atual:</b> ${closes[closes.length-1]} <br>
-<b>EMA 9:</b> ${ema9[ema9.length-1].toFixed(2)} <br>
-<b>EMA 21:</b> ${ema21[ema21.length-1].toFixed(2)} <br>
-<b>RSI:</b> ${rsi.toFixed(2)} <br>
-<b>Fibo 50%:</b> ${fib50.toFixed(2)} <br>
-<b>Fibo 61.8%:</b> ${fib618.toFixed(2)} <br>
-<b>Volume Atual:</b> ${volume[volume.length-1]} <br><br>
-<b>📊 Tendência Geral:</b> ${tendencia}
+let fib50=(min+(max-min)*0.5).toFixed(2);
+let fib618=(min+(max-min)*0.618).toFixed(2);
+
+document.getElementById("indicadores").innerHTML=`
+<div class="indicador">EMA 9: ${ema9.at(-1).toFixed(2)}</div>
+<div class="indicador">EMA 21: ${ema21.at(-1).toFixed(2)}</div>
+<div class="indicador">RSI: ${rsi.toFixed(2)}</div>
+<div class="indicador ${classe}">Tendência: ${tendencia}</div>
 `;
 
-// Gráfico
-new Chart(document.getElementById("grafico"), {
-    type: 'line',
-    data: {
-        labels: closes.map((_,i)=>i),
-        datasets: [{
-            label: 'Preço',
-            data: closes
-        }]
-    }
+document.getElementById("fibo").innerHTML=`
+<div class="indicador">50%: ${fib50}</div>
+<div class="indicador">61.8%: ${fib618}</div>
+`;
+
+new Chart(document.getElementById("grafico"),{
+type:'line',
+data:{
+labels:closes.map((_,i)=>i),
+datasets:[{label:'Preço',data:closes}]
+}
 });
 
 }
 
 </script>
+
 </body>
 </html>
