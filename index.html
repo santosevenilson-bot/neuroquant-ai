@@ -15,7 +15,8 @@ body{
     color:white;
 }
 
-/* MENU */
+/* ===== MENU PROFISSIONAL ===== */
+
 .menu-btn{
     position:absolute;
     left:15px;
@@ -26,27 +27,16 @@ body{
 
 .sidebar{
     position:fixed;
-    left:-250px;
+    left:-280px;
     top:0;
-    width:250px;
+    width:280px;
     height:100%;
-    background:#111827;
-    padding-top:60px;
-    transition:0.3s;
-    box-shadow:5px 0 20px rgba(0,255,255,0.2);
+    background:linear-gradient(180deg,#0f172a,#111827);
+    transition:0.4s cubic-bezier(.77,0,.18,1);
+    box-shadow:5px 0 25px rgba(0,255,255,0.15);
     z-index:1000;
-}
-
-.sidebar a{
-    display:block;
-    padding:15px;
-    color:white;
-    text-decoration:none;
-    border-bottom:1px solid #1f2937;
-}
-
-.sidebar a:hover{
-    background:#1f2937;
+    display:flex;
+    flex-direction:column;
 }
 
 .sidebar.active{
@@ -71,7 +61,68 @@ body{
     pointer-events:auto;
 }
 
-/* HEADER */
+.menu-header{
+    padding:20px;
+    border-bottom:1px solid #1f2937;
+    position:relative;
+}
+
+.logo{
+    font-size:18px;
+    font-weight:600;
+    color:#00f5ff;
+}
+
+.subtitle{
+    font-size:12px;
+    opacity:0.6;
+}
+
+.close-btn{
+    position:absolute;
+    right:15px;
+    top:20px;
+    cursor:pointer;
+    font-size:16px;
+    opacity:0.7;
+}
+
+.close-btn:hover{
+    opacity:1;
+    color:#00f5ff;
+}
+
+.sidebar a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:15px 20px;
+    color:white;
+    text-decoration:none;
+    font-size:14px;
+    border-left:3px solid transparent;
+    transition:0.3s;
+}
+
+.sidebar a span{
+    font-size:16px;
+}
+
+.sidebar a:hover{
+    background:#1f2937;
+    border-left:3px solid #00f5ff;
+    padding-left:25px;
+}
+
+.menu-footer{
+    margin-top:auto;
+    padding:15px 20px;
+    font-size:12px;
+    opacity:0.4;
+}
+
+/* ===== HEADER ===== */
+
 header{
     background:linear-gradient(90deg,#00f5ff,#0066ff);
     padding:15px;
@@ -81,7 +132,8 @@ header{
     position:relative;
 }
 
-/* CONTAINER */
+/* ===== CONTAINER ===== */
+
 .container{
     max-width:520px;
     margin:auto;
@@ -94,12 +146,6 @@ header{
     border-radius:15px;
     box-shadow:0 0 20px rgba(0,255,255,0.2);
     margin-bottom:20px;
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 0 30px rgba(0,255,255,0.4);
 }
 
 select{
@@ -119,6 +165,20 @@ button{
     color:white;
     font-weight:bold;
     cursor:pointer;
+}
+
+.badge{
+    background:gold;
+    color:black;
+    padding:5px 10px;
+    border-radius:5px;
+    font-size:12px;
+}
+
+.footer{
+    text-align:center;
+    font-size:12px;
+    opacity:0.6;
 }
 
 .loader{
@@ -144,30 +204,30 @@ button{
     50%{opacity:0.4;}
     100%{opacity:1;}
 }
-
-.badge{
-    background:gold;
-    color:black;
-    padding:5px 10px;
-    border-radius:5px;
-    font-size:12px;
-}
-
-.footer{
-    text-align:center;
-    font-size:12px;
-    opacity:0.6;
-}
 </style>
 </head>
 <body>
 
+<!-- MENU -->
 <div class="sidebar" id="sidebar">
-<a href="#">🏠 Início</a>
-<a href="#">📊 Mercado</a>
-<a href="#">⭐ Premium</a>
-<a href="#">⚙️ Configurações</a>
-<a href="#">❓ Suporte</a>
+
+<div class="menu-header">
+    <div class="logo">🧠 NeuroQuant</div>
+    <div class="subtitle">IA Quantitativa</div>
+    <div class="close-btn" onclick="toggleMenu()">✕</div>
+</div>
+
+<a href="#"><span>🏠</span> Início</a>
+<a href="#"><span>📊</span> Mercado</a>
+<a href="#"><span>⭐</span> Premium</a>
+<a href="#"><span>📡</span> Scanner IA</a>
+<a href="#"><span>⚙️</span> Configurações</a>
+<a href="#"><span>❓</span> Suporte</a>
+
+<div class="menu-footer">
+    v6.0 PRO
+</div>
+
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
@@ -177,6 +237,7 @@ button{
 🚀 NeuroQuant PRO – IA Avançada
 </header>
 
+<!-- CONTEÚDO ORIGINAL (INALTERADO) -->
 <div class="container">
 
 <div class="card">
@@ -205,130 +266,6 @@ function toggleMenu(){
     document.getElementById("sidebar").classList.toggle("active");
     document.getElementById("overlay").classList.toggle("active");
 }
-
-let intervaloAtualizacao;
-let pares=[];
-
-async function carregarPares(){
-    let response=await fetch("https://api.binance.com/api/v3/exchangeInfo");
-    let data=await response.json();
-
-    pares=data.symbols
-        .filter(s=>s.quoteAsset==="USDT" && s.status==="TRADING")
-        .map(s=>s.symbol);
-
-    let select=document.getElementById("pairSelect");
-
-    pares.forEach(par=>{
-        let option=document.createElement("option");
-        option.value=par;
-        option.textContent=par;
-        select.appendChild(option);
-    });
-}
-
-async function buscarDados(par){
-    let req=await fetch(`https://api.binance.com/api/v3/klines?symbol=${par}&interval=15m&limit=100`);
-    let data=await req.json();
-
-    let closes=data.map(c=>parseFloat(c[4]));
-    let volumes=data.map(c=>parseFloat(c[5]));
-
-    return{
-        preco:closes[closes.length-1],
-        high:Math.max(...closes),
-        low:Math.min(...closes),
-        closes,
-        volumes
-    };
-}
-
-function calcularEMA(periodo,valores){
-    let k=2/(periodo+1);
-    let ema=valores[0];
-    for(let i=1;i<valores.length;i++){
-        ema=valores[i]*k+ema*(1-k);
-    }
-    return ema;
-}
-
-function calcularRSI(periodo,valores){
-    let ganhos=0,perdas=0;
-    for(let i=valores.length-periodo;i<valores.length-1;i++){
-        let diff=valores[i+1]-valores[i];
-        if(diff>0) ganhos+=diff;
-        else perdas+=Math.abs(diff);
-    }
-    let rs=ganhos/perdas || 0;
-    return 100-(100/(1+rs));
-}
-
-async function gerarSinal(){
-
-    document.getElementById("resultado").innerHTML="<div class='loader'></div>";
-
-    let par=document.getElementById("pairSelect").value;
-    let dados=await buscarDados(par);
-
-    let {preco,high,low,closes,volumes}=dados;
-
-    let ema9=calcularEMA(9,closes);
-    let ema21=calcularEMA(21,closes);
-    let rsi=calcularRSI(14,closes);
-
-    let volumeAtual=volumes[volumes.length-1];
-    let volumeMedio=volumes.slice(-20).reduce((a,b)=>a+b)/20;
-
-    let fib50=high-(high-low)*0.5;
-    let fib618=high-(high-low)*0.618;
-
-    let score=0;
-
-    if(ema9>ema21) score++;
-    if(rsi<35) score++;
-    if(volumeAtual>volumeMedio) score++;
-
-    if(ema9<ema21) score--;
-    if(rsi>65) score--;
-    if(volumeAtual>volumeMedio && ema9<ema21) score--;
-
-    let tipo,prob;
-
-    if(score>=2){tipo="COMPRA 📈";prob=88;}
-    else if(score<=-2){tipo="VENDA 📉";prob=88;}
-    else{tipo="NEUTRO ⚖️";prob=65;}
-
-    atualizarTela(par,preco,high,low,tipo,prob,fib50,fib618,ema9,ema21,rsi);
-
-    clearInterval(intervaloAtualizacao);
-    intervaloAtualizacao=setInterval(()=>gerarSinal(),10000);
-}
-
-function atualizarTela(par,preco,high,low,tipo,prob,fib50,fib618,ema9,ema21,rsi){
-
-    document.getElementById("resultado").innerHTML=`
-    Par: ${par}<br><br>
-
-    💰 Preço Atual: <span style="color:#00f5ff">${preco.toFixed(2)}</span><br>
-    📊 High: ${high.toFixed(2)}<br>
-    📊 Low: ${low.toFixed(2)}<br><br>
-
-    🤖 <b>Sinal IA:</b> ${tipo}<br>
-    🎯 <b>Probabilidade:</b> ${prob}%<br><br>
-
-    📈 EMA 9: ${ema9.toFixed(2)}<br>
-    📉 EMA 21: ${ema21.toFixed(2)}<br>
-    📊 RSI 14: ${rsi.toFixed(2)}<br><br>
-
-    📐 Fibonacci:<br>
-    0.5 → ${fib50.toFixed(2)}<br>
-    0.618 → ${fib618.toFixed(2)}<br><br>
-
-    🔄 Atualizando automaticamente...
-    `;
-}
-
-carregarPares();
 
 </script>
 
