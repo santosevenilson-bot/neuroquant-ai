@@ -3,98 +3,186 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant IA - Dashboard</title>
+<title>NeuroQuant IA</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{background:linear-gradient(135deg,#03121a,#0b3a40,#0a1f26);color:#e6fefe;min-height:100vh;display:flex;flex-direction:column;align-items:center;}
-.top{padding:20px;font-size:28px;}
-.center{width:90%;max-width:600px;text-align:center;padding:20px;}
-.title{font-size:28px;margin-bottom:10px;}
-.subtitle{font-size:14px;opacity:0.8;margin-bottom:30px;}
-.card{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border-radius:25px;padding:25px;margin-bottom:20px;box-shadow:0 0 40px rgba(0,255,200,0.2);}
-input,select,button{width:100%;padding:12px;margin-top:10px;border-radius:15px;border:none;background:#0f2a30;color:white;}
-button{background:linear-gradient(90deg,#00f5ff,#00ffcc);color:#003b40;font-size:16px;cursor:pointer;border-radius:50px;}
-button:hover{opacity:0.9;}
-.indicators{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px;}
-.box{background:#082026;padding:10px;border-radius:15px;font-size:13px;text-align:center;}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Orbitron', sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#03121a,#0b3a40,#0a1f26);
+    color:#e6fefe;
+    min-height:100vh;
+    display:flex;
+}
+
+/* MENU LATERAL */
+.menu{
+    width:80px;
+    background:#0a1f26;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding-top:20px;
+    box-shadow:2px 0 20px rgba(0,255,200,0.2);
+}
+.menu button{
+    width:60px;
+    height:60px;
+    margin:10px 0;
+    border:none;
+    border-radius:15px;
+    background:#082026;
+    color:#00ffcc;
+    cursor:pointer;
+    font-size:20px;
+}
+.menu button:hover{
+    background:#00ff88;
+    color:#003b40;
+}
+
+/* CONTEÚDO PRINCIPAL */
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px;
+}
+
+.top{
+    width:100%;
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+.center{
+    text-align:center;
+    width:100%;
+    max-width:600px;
+}
+
+.title{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    font-size:14px;
+    opacity:0.8;
+    margin-bottom:30px;
+}
+
+.card{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(20px);
+    border-radius:25px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 0 40px rgba(0,255,200,0.2);
+}
+
+select,input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:15px;
+    border:none;
+    background:#0f2a30;
+    color:white;
+}
+
+button{
+    margin-top:15px;
+    padding:14px;
+    border:none;
+    border-radius:50px;
+    width:100%;
+    font-size:16px;
+    background:linear-gradient(90deg,#00f5ff,#00ffcc);
+    color:#003b40;
+    cursor:pointer;
+}
+
+.indicators{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
+
+.box{
+    background:#082026;
+    padding:10px;
+    border-radius:15px;
+    font-size:13px;
+    text-align:center;
+}
+
 .alta{ color:#00ff88; font-weight:bold;}
 .baixa{ color:#ff4d4d; font-weight:bold;}
 .neutro{ color:#ffd000; font-weight:bold;}
-canvas{background:white;border-radius:20px;margin-top:20px;}
-.footer{text-align:center;font-size:12px;opacity:0.6;padding:20px;}
+
+canvas{
+    background:white;
+    border-radius:20px;
+    margin-top:20px;
+}
+
+.footer{
+    text-align:center;
+    font-size:12px;
+    opacity:0.6;
+    padding:20px;
+}
 </style>
 </head>
 <body>
 
-<div class="top">☰ NeuroQuant IA</div>
-
-<div class="center">
-
-<!-- LOGIN -->
-<div class="card" id="loginCard">
-<div class="title">Login</div>
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="senha" placeholder="Senha">
-<button onclick="login()">Entrar</button>
-<div id="loginMsg" style="margin-top:10px;font-size:13px;color:#ffd000;"></div>
+<!-- MENU LATERAL -->
+<div class="menu">
+    <button title="Dashboard">🏠</button>
+    <button title="Análise">📊</button>
+    <button title="Alertas">🔔</button>
+    <button title="Configurações">⚙️</button>
 </div>
 
-<!-- PAGAMENTO -->
-<div class="card" id="pagamentoCard" style="display:none;">
-<div class="title">Assinatura Mensal - R$9,90</div>
-<button onclick="pagarPix()">Pagar com Pix</button>
-<div id="pagamentoMsg" style="margin-top:10px;font-size:13px;color:#00ff88;"></div>
-</div>
+<!-- CONTEÚDO PRINCIPAL -->
+<div class="main">
+    <div class="top">☰ NeuroQuant IA</div>
 
-<!-- DASHBOARD DE ANÁLISE -->
-<div class="card" id="dashboardCard" style="display:none;">
-<div class="title">Análise Cripto</div>
-<select id="binancePairs"></select>
-<input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
-<button onclick="analisar()">Analisar Agora</button>
-<div class="indicators" id="indicadores"></div>
-<button onclick="enviarAlerta()" style="margin-top:20px;">Enviar Alerta 🚀</button>
-<canvas id="grafico"></canvas>
-</div>
+    <div class="center">
+        <div class="title">NeuroQuant IA</div>
+        <div class="subtitle">Previsão Avançada com Inteligência Artificial</div>
 
-</div>
+        <div class="card">
+            <select id="binancePairs"></select>
+            <input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
+            <button onclick="analisar()">Analisar Agora</button>
 
-<div class="footer">© 2026 NeuroQuant IA - Todos os direitos reservados</div>
+            <div class="indicators" id="indicadores"></div>
+        </div>
+
+        <div class="card">
+            <canvas id="grafico"></canvas>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 NeuroQuant IA - Todos os direitos reservados
+    </div>
+</div>
 
 <script>
-// ===== VARIÁVEIS GLOBAIS =====
-let graficoAtual;
-let usuarioLogado=false;
-
-// ===== LOGIN SIMPLES =====
-function login(){
-    const email=document.getElementById("email").value;
-    const senha=document.getElementById("senha").value;
-    const msg=document.getElementById("loginMsg");
-
-    if(email==="teste@neuroquant.com" && senha==="123456"){
-        msg.textContent="Login bem-sucedido!";
-        usuarioLogado=true;
-        document.getElementById("loginCard").style.display="none";
-        document.getElementById("pagamentoCard").style.display="block";
-    } else {
-        msg.textContent="Email ou senha incorretos!";
-    }
-}
-
-// ===== PAGAMENTO SIMULADO =====
-function pagarPix(){
-    const msg=document.getElementById("pagamentoMsg");
-    msg.textContent="Pagamento confirmado! Acesso liberado.";
-    document.getElementById("pagamentoCard").style.display="none";
-    document.getElementById("dashboardCard").style.display="block";
-}
-
-// ===== CARREGAR PARES BINANCE =====
+// Carregar todos os pares Binance
 fetch('https://api.binance.com/api/v3/exchangeInfo')
 .then(res=>res.json())
 .then(data=>{
@@ -109,7 +197,6 @@ fetch('https://api.binance.com/api/v3/exchangeInfo')
     });
 });
 
-// ===== CÁLCULO INDICADORES =====
 function calcularEMA(periodo,dados){
     let k=2/(periodo+1);
     let ema=[dados[0]];
@@ -130,9 +217,9 @@ function calcularRSI(periodo,dados){
     return 100-(100/(1+rs));
 }
 
-// ===== ANÁLISE =====
+let graficoAtual;
+
 async function analisar(){
-    if(!usuarioLogado){ alert("Faça login primeiro!"); return; }
 
     let select=document.getElementById("binancePairs").value;
     let custom=document.getElementById("customPair").value;
@@ -142,8 +229,6 @@ async function analisar(){
     let response=await fetch(url);
     let data=await response.json();
 
-    if(!data || data.length===0){ alert("Par inválido ou sem dados."); return; }
-
     let closes=data.map(c=>parseFloat(c[4]));
     let highs=data.map(c=>parseFloat(c[2]));
     let lows=data.map(c=>parseFloat(c[3]));
@@ -152,47 +237,41 @@ async function analisar(){
     let ema21=calcularEMA(21,closes);
     let rsi=calcularRSI(14,closes);
 
-    let tendencia="Neutro", classe="neutro";
-    if(ema9.at(-1)>ema21.at(-1)&&rsi>55){ tendencia="Alta 🚀"; classe="alta"; }
-    else if(ema9.at(-1)<ema21.at(-1)&&rsi<45){ tendencia="Baixa 📉"; classe="baixa"; }
+    let tendencia="Neutro";
+    let classe="neutro";
 
-    let max=Math.max(...highs), min=Math.min(...lows);
+    if(ema9.at(-1)>ema21.at(-1)&&rsi>55){
+        tendencia="Alta 🚀";
+        classe="alta";
+    }
+    else if(ema9.at(-1)<ema21.at(-1)&&rsi<45){
+        tendencia="Baixa 📉";
+        classe="baixa";
+    }
+
+    let max=Math.max(...highs);
+    let min=Math.min(...lows);
     let fib50=(min+(max-min)*0.5).toFixed(2);
     let fib618=(min+(max-min)*0.618).toFixed(2);
 
     document.getElementById("indicadores").innerHTML=`
-        <div class="box">EMA 9<br>${ema9.at(-1).toFixed(2)}</div>
-        <div class="box">EMA 21<br>${ema21.at(-1).toFixed(2)}</div>
-        <div class="box">RSI<br>${rsi.toFixed(2)}</div>
-        <div class="box ${classe}">Tendência<br>${tendencia}</div>
-        <div class="box">Fibo 50%<br>${fib50}</div>
-        <div class="box">Fibo 61.8%<br>${fib618}</div>
+    <div class="box">EMA 9<br>${ema9.at(-1).toFixed(2)}</div>
+    <div class="box">EMA 21<br>${ema21.at(-1).toFixed(2)}</div>
+    <div class="box">RSI<br>${rsi.toFixed(2)}</div>
+    <div class="box ${classe}">Tendência<br>${tendencia}</div>
+    <div class="box">Fibo 50%<br>${fib50}</div>
+    <div class="box">Fibo 61.8%<br>${fib618}</div>
     `;
 
     if(graficoAtual) graficoAtual.destroy();
+
     graficoAtual = new Chart(document.getElementById("grafico"),{
         type:'line',
         data:{
             labels:closes.map((_,i)=>i),
-            datasets:[{
-                label: par,
-                data: closes,
-                borderColor:'#00f5ff',
-                backgroundColor:'rgba(0,255,204,0.2)',
-                tension:0.2
-            }]
-        },
-        options:{responsive:true,plugins:{legend:{display:true}}}
+            datasets:[{label:par,data:closes}]
+        }
     });
-}
-
-// ===== ENVIAR ALERTA SIMPLES =====
-function enviarAlerta(){
-    let select=document.getElementById("binancePairs").value;
-    let custom=document.getElementById("customPair").value;
-    let par=custom!==""?custom.toUpperCase():select;
-    let url = `https://wa.me/?text=Alerta%20NeuroQuant:%20${par}%20analisado%20agora!`;
-    window.open(url,'_blank');
 }
 </script>
 
