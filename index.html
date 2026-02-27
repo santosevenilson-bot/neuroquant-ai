@@ -23,51 +23,65 @@ body{
     display:flex;
 }
 
-/* MENU LATERAL */
+/* ===== MENU LATERAL EXPANDIDO ===== */
+
 .menu{
-    width:80px;
-    background:#0a1f26;
+    width:230px;
+    background:#06181d;
     display:flex;
     flex-direction:column;
-    align-items:center;
-    padding-top:20px;
-    box-shadow:2px 0 20px rgba(0,255,200,0.2);
-}
-.menu button{
-    width:60px;
-    height:60px;
-    margin:10px 0;
-    border:none;
-    border-radius:15px;
-    background:#082026;
-    color:#00ffcc;
-    cursor:pointer;
-    font-size:20px;
-}
-.menu button:hover{
-    background:#00ff88;
-    color:#003b40;
+    padding:25px 15px;
+    box-shadow:4px 0 25px rgba(0,255,200,0.15);
 }
 
-/* CONTEÚDO PRINCIPAL */
+.logo{
+    font-size:18px;
+    margin-bottom:40px;
+    color:#00ffcc;
+    text-align:center;
+}
+
+.menu-item{
+    display:flex;
+    align-items:center;
+    padding:12px 15px;
+    margin-bottom:10px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:0.3s;
+    font-size:14px;
+}
+
+.menu-item:hover{
+    background:linear-gradient(90deg,#00f5ff,#00ffcc);
+    color:#003b40;
+    transform:translateX(5px);
+}
+
+.menu-item span{
+    margin-left:10px;
+}
+
+/* ===== CONTEÚDO PRINCIPAL ===== */
+
 .main{
     flex:1;
+    padding:30px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:20px;
 }
 
 .top{
     width:100%;
-    font-size:28px;
+    font-size:24px;
     margin-bottom:20px;
 }
 
 .center{
     text-align:center;
     width:100%;
-    max-width:600px;
+    max-width:650px;
 }
 
 .title{
@@ -110,6 +124,11 @@ button{
     background:linear-gradient(90deg,#00f5ff,#00ffcc);
     color:#003b40;
     cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    opacity:0.85;
 }
 
 .indicators{
@@ -149,130 +168,140 @@ canvas{
 
 <!-- MENU LATERAL -->
 <div class="menu">
-    <button title="Dashboard">🏠</button>
-    <button title="Análise">📊</button>
-    <button title="Alertas">🔔</button>
-    <button title="Configurações">⚙️</button>
+    <div class="logo">NeuroQuant IA</div>
+
+    <div class="menu-item">🏠 <span>Dashboard</span></div>
+    <div class="menu-item">📊 <span>Análise Técnica</span></div>
+    <div class="menu-item">🔔 <span>Alertas</span></div>
+    <div class="menu-item">💎 <span>Premium</span></div>
+    <div class="menu-item">⚙️ <span>Configurações</span></div>
 </div>
 
-<!-- CONTEÚDO PRINCIPAL -->
+<!-- CONTEÚDO -->
 <div class="main">
-    <div class="top">☰ NeuroQuant IA</div>
 
-    <div class="center">
-        <div class="title">NeuroQuant IA</div>
-        <div class="subtitle">Previsão Avançada com Inteligência Artificial</div>
+<div class="top">Painel Inteligente</div>
 
-        <div class="card">
-            <select id="binancePairs"></select>
-            <input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
-            <button onclick="analisar()">Analisar Agora</button>
+<div class="center">
 
-            <div class="indicators" id="indicadores"></div>
-        </div>
+<div class="title">NeuroQuant IA</div>
+<div class="subtitle">Previsão Avançada com Inteligência Artificial</div>
 
-        <div class="card">
-            <canvas id="grafico"></canvas>
-        </div>
-    </div>
+<div class="card">
+<select id="binancePairs"></select>
+<input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
+<button onclick="analisar()">Analisar Agora</button>
 
-    <div class="footer">
-        © 2026 NeuroQuant IA - Todos os direitos reservados
-    </div>
+<div class="indicators" id="indicadores"></div>
+</div>
+
+<div class="card">
+<canvas id="grafico"></canvas>
+</div>
+
+</div>
+
+<div class="footer">
+© 2026 NeuroQuant IA - Todos os direitos reservados
+</div>
+
 </div>
 
 <script>
-// Carregar todos os pares Binance
+
+// Carregar pares Binance
 fetch('https://api.binance.com/api/v3/exchangeInfo')
 .then(res=>res.json())
 .then(data=>{
-    let select=document.getElementById("binancePairs");
-    data.symbols.forEach(s=>{
-        if(s.status==="TRADING"){
-            let opt=document.createElement("option");
-            opt.value=s.symbol;
-            opt.text=s.symbol;
-            select.add(opt);
-        }
-    });
+let select=document.getElementById("binancePairs");
+data.symbols.forEach(s=>{
+if(s.status==="TRADING"){
+let opt=document.createElement("option");
+opt.value=s.symbol;
+opt.text=s.symbol;
+select.add(opt);
+}
+});
 });
 
 function calcularEMA(periodo,dados){
-    let k=2/(periodo+1);
-    let ema=[dados[0]];
-    for(let i=1;i<dados.length;i++){
-        ema.push(dados[i]*k+ema[i-1]*(1-k));
-    }
-    return ema;
+let k=2/(periodo+1);
+let ema=[dados[0]];
+for(let i=1;i<dados.length;i++){
+ema.push(dados[i]*k+ema[i-1]*(1-k));
+}
+return ema;
 }
 
 function calcularRSI(periodo,dados){
-    let ganhos=0,perdas=0;
-    for(let i=1;i<=periodo;i++){
-        let diff=dados[i]-dados[i-1];
-        if(diff>=0) ganhos+=diff;
-        else perdas+=Math.abs(diff);
-    }
-    let rs=ganhos/perdas;
-    return 100-(100/(1+rs));
+let ganhos=0,perdas=0;
+for(let i=1;i<=periodo;i++){
+let diff=dados[i]-dados[i-1];
+if(diff>=0) ganhos+=diff;
+else perdas+=Math.abs(diff);
+}
+let rs=ganhos/perdas;
+return 100-(100/(1+rs));
 }
 
 let graficoAtual;
 
 async function analisar(){
 
-    let select=document.getElementById("binancePairs").value;
-    let custom=document.getElementById("customPair").value;
-    let par=custom!==""?custom.toUpperCase():select;
+let select=document.getElementById("binancePairs").value;
+let custom=document.getElementById("customPair").value;
+let par=custom!==""?custom.toUpperCase():select;
 
-    let url=`https://api.binance.com/api/v3/klines?symbol=${par}&interval=1h&limit=100`;
-    let response=await fetch(url);
-    let data=await response.json();
+let url=`https://api.binance.com/api/v3/klines?symbol=${par}&interval=1h&limit=100`;
+let response=await fetch(url);
+let data=await response.json();
 
-    let closes=data.map(c=>parseFloat(c[4]));
-    let highs=data.map(c=>parseFloat(c[2]));
-    let lows=data.map(c=>parseFloat(c[3]));
+let closes=data.map(c=>parseFloat(c[4]));
+let highs=data.map(c=>parseFloat(c[2]));
+let lows=data.map(c=>parseFloat(c[3]));
 
-    let ema9=calcularEMA(9,closes);
-    let ema21=calcularEMA(21,closes);
-    let rsi=calcularRSI(14,closes);
+let ema9=calcularEMA(9,closes);
+let ema21=calcularEMA(21,closes);
+let rsi=calcularRSI(14,closes);
 
-    let tendencia="Neutro";
-    let classe="neutro";
+let tendencia="Neutro";
+let classe="neutro";
 
-    if(ema9.at(-1)>ema21.at(-1)&&rsi>55){
-        tendencia="Alta 🚀";
-        classe="alta";
-    }
-    else if(ema9.at(-1)<ema21.at(-1)&&rsi<45){
-        tendencia="Baixa 📉";
-        classe="baixa";
-    }
-
-    let max=Math.max(...highs);
-    let min=Math.min(...lows);
-    let fib50=(min+(max-min)*0.5).toFixed(2);
-    let fib618=(min+(max-min)*0.618).toFixed(2);
-
-    document.getElementById("indicadores").innerHTML=`
-    <div class="box">EMA 9<br>${ema9.at(-1).toFixed(2)}</div>
-    <div class="box">EMA 21<br>${ema21.at(-1).toFixed(2)}</div>
-    <div class="box">RSI<br>${rsi.toFixed(2)}</div>
-    <div class="box ${classe}">Tendência<br>${tendencia}</div>
-    <div class="box">Fibo 50%<br>${fib50}</div>
-    <div class="box">Fibo 61.8%<br>${fib618}</div>
-    `;
-
-    if(graficoAtual) graficoAtual.destroy();
-
-    graficoAtual = new Chart(document.getElementById("grafico"),{
-        type:'line',
-        data:{
-            labels:closes.map((_,i)=>i),
-            datasets:[{label:par,data:closes}]
-        }
-    });
+if(ema9.at(-1)>ema21.at(-1)&&rsi>55){
+tendencia="Alta 🚀";
+classe="alta";
 }
+else if(ema9.at(-1)<ema21.at(-1)&&rsi<45){
+tendencia="Baixa 📉";
+classe="baixa";
+}
+
+let max=Math.max(...highs);
+let min=Math.min(...lows);
+let fib50=(min+(max-min)*0.5).toFixed(2);
+let fib618=(min+(max-min)*0.618).toFixed(2);
+
+document.getElementById("indicadores").innerHTML=`
+<div class="box">EMA 9<br>${ema9.at(-1).toFixed(2)}</div>
+<div class="box">EMA 21<br>${ema21.at(-1).toFixed(2)}</div>
+<div class="box">RSI<br>${rsi.toFixed(2)}</div>
+<div class="box ${classe}">Tendência<br>${tendencia}</div>
+<div class="box">Fibo 50%<br>${fib50}</div>
+<div class="box">Fibo 61.8%<br>${fib618}</div>
+`;
+
+if(graficoAtual) graficoAtual.destroy();
+
+graficoAtual = new Chart(document.getElementById("grafico"),{
+type:'line',
+data:{
+labels:closes.map((_,i)=>i),
+datasets:[{label:par,data:closes}]
+}
+});
+
+}
+
 </script>
 
 </body>
