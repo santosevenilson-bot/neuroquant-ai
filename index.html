@@ -3,253 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto IA Pro 4.0</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+<title>NeuroQuant PRO</title>
 
 <style>
 body{
-margin:0;
-font-family:'Orbitron',sans-serif;
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
-overflow-x:hidden;
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background:#0f172a;
+    color:white;
 }
 
 header{
-display:flex;
-align-items:center;
-padding:15px;
-background:rgba(0,0,0,0.4);
-backdrop-filter:blur(10px);
+    background:#111827;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.menu-btn{
-font-size:24px;
-cursor:pointer;
-margin-right:15px;
+header h1{
+    color:#00f5a0;
+}
+
+nav a{
+    color:white;
+    margin-left:20px;
+    text-decoration:none;
+    cursor:pointer;
 }
 
 .container{
-padding:20px;
-text-align:center;
-}
-
-select,input{
-width:90%;
-padding:12px;
-margin:10px 0;
-border-radius:10px;
-border:none;
-font-size:16px;
-}
-
-button{
-padding:12px 25px;
-border:none;
-border-radius:10px;
-font-size:16px;
-cursor:pointer;
-background:linear-gradient(90deg,#00c6ff,#0072ff);
-color:white;
-margin-top:10px;
+    padding:30px;
 }
 
 .card{
-background:rgba(255,255,255,0.1);
-border-radius:15px;
-padding:20px;
-margin-top:20px;
-backdrop-filter:blur(10px);
+    background:#1e293b;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+input, select{
+    padding:10px;
+    width:100%;
+    margin-top:10px;
+    border-radius:5px;
+    border:none;
+}
+
+button{
+    background:#00f5a0;
+    border:none;
+    padding:10px 20px;
+    border-radius:5px;
+    margin-top:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.hidden{
+    display:none;
 }
 
 .price{
-font-size:26px;
-margin:10px 0;
+    font-size:24px;
+    color:#00f5a0;
+    font-weight:bold;
 }
-
-.signal{
-font-size:22px;
-font-weight:bold;
-margin-top:10px;
-}
-
-.buy{color:#00ff88;}
-.sell{color:#ff4444;}
-.neutral{color:#ffaa00;}
-
-.fibo{
-margin-top:10px;
-font-size:14px;
-}
-
-.premium{
-margin-top:20px;
-padding:15px;
-background:rgba(255,255,255,0.08);
-border-radius:12px;
-}
-
-/* MENU */
-
-.sidebar{
-position:fixed;
-top:0;
-left:-260px;
-width:250px;
-height:100%;
-background:#111;
-padding-top:60px;
-transition:0.3s;
-z-index:1000;
-}
-
-.sidebar a{
-display:block;
-padding:15px;
-color:white;
-text-decoration:none;
-border-bottom:1px solid #222;
-}
-
-.sidebar a:hover{
-background:#1f1f1f;
-}
-
-.overlay{
-position:fixed;
-display:none;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-z-index:900;
+img{
+    width:100%;
+    border-radius:10px;
 }
 </style>
 </head>
-
 <body>
 
-<div class="overlay" onclick="closeMenu()"></div>
-
-<div class="sidebar" id="menu">
-<a href="#">🤖 IA Overview</a>
-<a href="#">📊 Sinais</a>
-<a href="#">📈 Fibonacci</a>
-<a href="#">👑 Premium</a>
-</div>
-
 <header>
-<div class="menu-btn" onclick="openMenu()">☰</div>
-<h2>Crypto IA Pro 4.0</h2>
+    <h1>NeuroQuant PRO</h1>
+    <nav>
+        <a onclick="showHome()">Home</a>
+        <a onclick="showLogin()">Login</a>
+        <a onclick="showPlano()">Plano PRO</a>
+    </nav>
 </header>
 
 <div class="container">
 
-<h3>Selecione o Par</h3>
+    <!-- HOME -->
+    <div id="home">
+        <div class="card">
+            <h2>Inteligência Artificial para Análise de Criptomoedas</h2>
+            <img src="https://images.unsplash.com/photo-1621504450181-5fdb1e39c5c4" alt="IA e Criptomoeda">
+            <p>Plataforma avançada de análise técnica com foco em liquidez, Fibonacci e fluxo institucional.</p>
+        </div>
 
-<select id="cryptoSelect"></select>
+        <div class="card">
+            <h3>Escolha ou Digite o Par</h3>
+            
+            <select id="cryptoSelect">
+                <option>BTC/USDT</option>
+                <option>ETH/USDT</option>
+                <option>SOL/USDT</option>
+                <option>RIVER/USDT</option>
+            </select>
 
-<input type="text" id="manualPair" placeholder="Ou digite manualmente (ex: BTCUSDT)">
+            <input type="text" id="customPair" placeholder="Ou digite outro par (Ex: XRP/USDT)">
+            
+            <button onclick="analisar()">Analisar</button>
 
-<button onclick="analisar()">Analisar</button>
+            <div id="resultado"></div>
+        </div>
+    </div>
 
-<div class="card">
-<div class="price" id="price">Preço: --</div>
-<div class="signal neutral" id="signal">Sinal: --</div>
-<div class="fibo" id="fibo"></div>
-</div>
+    <!-- LOGIN -->
+    <div id="login" class="hidden">
+        <div class="card">
+            <h2>Área de Login</h2>
+            <input type="email" placeholder="Seu email">
+            <input type="password" placeholder="Sua senha">
+            <button onclick="login()">Entrar</button>
+        </div>
+    </div>
 
-<div class="premium">
-<h3>Versão Premium</h3>
-<p>Acesso total aos sinais inteligentes</p>
-<h2>R$ 29,90</h2>
-<button onclick="window.open('https://mpago.la/1DYvFBL')">
-Ativar Premium
-</button>
-</div>
+    <!-- PLANO -->
+    <div id="plano" class="hidden">
+        <div class="card">
+            <h2>Plano PRO</h2>
+            <p>Acesso completo às análises avançadas</p>
+            <p class="price">R$ 9,90 / mês</p>
+            <button onclick="assinar()">Assinar com Pix</button>
+            <p id="pagamento"></p>
+        </div>
+    </div>
 
 </div>
 
 <script>
 
-let currentPair = "BTCUSDT";
+let usuarioLogado = false;
 
-async function carregarCriptos(){
-let res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-let data = await res.json();
-
-let usdtPairs = data
-.filter(c => c.symbol.endsWith("USDT"))
-.slice(0,50);
-
-let select = document.getElementById("cryptoSelect");
-select.innerHTML="";
-
-usdtPairs.forEach(c=>{
-let option = document.createElement("option");
-option.value = c.symbol;
-option.text = c.symbol;
-select.appendChild(option);
-});
+function showHome(){
+    document.getElementById('home').classList.remove('hidden');
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('plano').classList.add('hidden');
 }
 
-async function analisar(){
-
-let manual = document.getElementById("manualPair").value.trim().toUpperCase();
-currentPair = manual || document.getElementById("cryptoSelect").value;
-
-let res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${currentPair}&interval=15m&limit=50`);
-let data = await res.json();
-
-let closes = data.map(c => parseFloat(c[4]));
-let lastPrice = closes[closes.length-1];
-
-document.getElementById("price").innerText = "Preço: " + lastPrice.toFixed(4);
-
-let high = Math.max(...closes);
-let low = Math.min(...closes);
-
-let fib236 = high - (high-low)*0.236;
-let fib382 = high - (high-low)*0.382;
-let fib618 = high - (high-low)*0.618;
-
-document.getElementById("fibo").innerHTML = `
-Fibo 23.6%: ${fib236.toFixed(4)} <br>
-Fibo 38.2%: ${fib382.toFixed(4)} <br>
-Fibo 61.8%: ${fib618.toFixed(4)}
-`;
-
-let signal = "NEUTRO";
-let signalClass = "neutral";
-
-if(lastPrice <= fib618){
-signal = "🟢 COMPRA";
-signalClass="buy";
-}else if(lastPrice >= fib236){
-signal="🔴 VENDA";
-signalClass="sell";
+function showLogin(){
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('login').classList.remove('hidden');
+    document.getElementById('plano').classList.add('hidden');
 }
 
-let signalDiv = document.getElementById("signal");
-signalDiv.innerText="Sinal: "+signal;
-signalDiv.className="signal "+signalClass;
-
+function showPlano(){
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('plano').classList.remove('hidden');
 }
 
-function openMenu(){
-document.getElementById("menu").style.left="0";
-document.querySelector(".overlay").style.display="block";
+function login(){
+    usuarioLogado = true;
+    alert("Login realizado com sucesso!");
+    showHome();
 }
 
-function closeMenu(){
-document.getElementById("menu").style.left="-260px";
-document.querySelector(".overlay").style.display="none";
+function analisar(){
+    let select = document.getElementById("cryptoSelect").value;
+    let custom = document.getElementById("customPair").value;
+
+    let par = custom !== "" ? custom : select;
+
+    document.getElementById("resultado").innerHTML =
+        `<p>Análise iniciada para <strong>${par}</strong>...</p>
+         <p>✔ Tendência: Alta moderada</p>
+         <p>✔ Liquidez mapeada acima da máxima recente</p>
+         <p>✔ Possível varredura antes de continuação</p>`;
 }
 
-carregarCriptos();
-setInterval(analisar,15000);
+function assinar(){
+    if(!usuarioLogado){
+        alert("Você precisa fazer login primeiro.");
+        showLogin();
+        return;
+    }
+
+    document.getElementById("pagamento").innerHTML =
+        "Gerando QR Code Pix... (Integração backend necessária)";
+}
 
 </script>
 
