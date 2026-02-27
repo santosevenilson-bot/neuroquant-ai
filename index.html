@@ -10,140 +10,163 @@
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Orbitron', sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron', sans-serif;
 }
 
 body{
-    background:linear-gradient(135deg,#03121a,#0b3a40,#0a1f26);
-    color:#e6fefe;
-    min-height:100vh;
-    display:flex;
+background:linear-gradient(135deg,#03121a,#0b3a40,#0a1f26);
+color:#e6fefe;
+min-height:100vh;
+overflow-x:hidden;
 }
 
-/* ===== MENU LATERAL EXPANDIDO ===== */
+/* BOTÃO MENU */
+.menu-toggle{
+position:fixed;
+top:20px;
+left:20px;
+font-size:28px;
+cursor:pointer;
+z-index:1001;
+color:#00ffcc;
+}
 
+/* MENU LATERAL OCULTO */
 .menu{
-    width:230px;
-    background:#06181d;
-    display:flex;
-    flex-direction:column;
-    padding:25px 15px;
-    box-shadow:4px 0 25px rgba(0,255,200,0.15);
+position:fixed;
+top:0;
+left:-260px;
+width:250px;
+height:100%;
+background:#06181d;
+padding:30px 20px;
+transition:0.4s;
+z-index:1002;
+box-shadow:4px 0 25px rgba(0,255,200,0.2);
+}
+
+.menu.active{
+left:0;
 }
 
 .logo{
-    font-size:18px;
-    margin-bottom:40px;
-    color:#00ffcc;
-    text-align:center;
+font-size:18px;
+margin-bottom:40px;
+color:#00ffcc;
+text-align:center;
 }
 
 .menu-item{
-    display:flex;
-    align-items:center;
-    padding:12px 15px;
-    margin-bottom:10px;
-    border-radius:12px;
-    cursor:pointer;
-    transition:0.3s;
-    font-size:14px;
+display:flex;
+align-items:center;
+padding:12px;
+margin-bottom:12px;
+border-radius:12px;
+cursor:pointer;
+transition:0.3s;
 }
 
 .menu-item:hover{
-    background:linear-gradient(90deg,#00f5ff,#00ffcc);
-    color:#003b40;
-    transform:translateX(5px);
+background:linear-gradient(90deg,#00f5ff,#00ffcc);
+color:#003b40;
 }
 
-.menu-item span{
-    margin-left:10px;
+/* OVERLAY */
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+opacity:0;
+visibility:hidden;
+transition:0.3s;
+z-index:1000;
 }
 
-/* ===== CONTEÚDO PRINCIPAL ===== */
+.overlay.active{
+opacity:1;
+visibility:visible;
+}
 
+/* CONTEÚDO PRINCIPAL */
 .main{
-    flex:1;
-    padding:30px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:80px 20px 20px 20px;
 }
 
 .top{
-    width:100%;
-    font-size:24px;
-    margin-bottom:20px;
+font-size:28px;
+margin-bottom:20px;
 }
 
 .center{
-    text-align:center;
-    width:100%;
-    max-width:650px;
+text-align:center;
+width:100%;
+max-width:600px;
 }
 
 .title{
-    font-size:28px;
-    margin-bottom:10px;
+font-size:28px;
+margin-bottom:10px;
 }
 
 .subtitle{
-    font-size:14px;
-    opacity:0.8;
-    margin-bottom:30px;
+font-size:14px;
+opacity:0.8;
+margin-bottom:30px;
 }
 
 .card{
-    background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(20px);
-    border-radius:25px;
-    padding:25px;
-    margin-bottom:20px;
-    box-shadow:0 0 40px rgba(0,255,200,0.2);
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(20px);
+border-radius:25px;
+padding:25px;
+margin-bottom:20px;
+box-shadow:0 0 40px rgba(0,255,200,0.2);
 }
 
 select,input{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border-radius:15px;
-    border:none;
-    background:#0f2a30;
-    color:white;
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:15px;
+border:none;
+background:#0f2a30;
+color:white;
 }
 
 button{
-    margin-top:15px;
-    padding:14px;
-    border:none;
-    border-radius:50px;
-    width:100%;
-    font-size:16px;
-    background:linear-gradient(90deg,#00f5ff,#00ffcc);
-    color:#003b40;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-button:hover{
-    opacity:0.85;
+margin-top:15px;
+padding:14px;
+border:none;
+border-radius:50px;
+width:100%;
+font-size:16px;
+background:linear-gradient(90deg,#00f5ff,#00ffcc);
+color:#003b40;
+cursor:pointer;
 }
 
 .indicators{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:15px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:15px;
 }
 
 .box{
-    background:#082026;
-    padding:10px;
-    border-radius:15px;
-    font-size:13px;
-    text-align:center;
+background:#082026;
+padding:10px;
+border-radius:15px;
+font-size:13px;
+text-align:center;
 }
 
 .alta{ color:#00ff88; font-weight:bold;}
@@ -151,36 +174,41 @@ button:hover{
 .neutro{ color:#ffd000; font-weight:bold;}
 
 canvas{
-    background:white;
-    border-radius:20px;
-    margin-top:20px;
+background:white;
+border-radius:20px;
+margin-top:20px;
 }
 
 .footer{
-    text-align:center;
-    font-size:12px;
-    opacity:0.6;
-    padding:20px;
+text-align:center;
+font-size:12px;
+opacity:0.6;
+padding:20px;
 }
 </style>
 </head>
 <body>
 
-<!-- MENU LATERAL -->
-<div class="menu">
-    <div class="logo">NeuroQuant IA</div>
+<!-- BOTÃO MENU -->
+<div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-    <div class="menu-item">🏠 <span>Dashboard</span></div>
-    <div class="menu-item">📊 <span>Análise Técnica</span></div>
-    <div class="menu-item">🔔 <span>Alertas</span></div>
-    <div class="menu-item">💎 <span>Premium</span></div>
-    <div class="menu-item">⚙️ <span>Configurações</span></div>
+<!-- MENU LATERAL -->
+<div class="menu" id="sideMenu">
+<div class="logo">NeuroQuant IA</div>
+<div class="menu-item">🏠 Dashboard</div>
+<div class="menu-item">📊 Análise Técnica</div>
+<div class="menu-item">🔔 Alertas</div>
+<div class="menu-item">💎 Premium</div>
+<div class="menu-item">⚙️ Configurações</div>
 </div>
 
-<!-- CONTEÚDO -->
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<!-- CONTEÚDO PRINCIPAL -->
 <div class="main">
 
-<div class="top">Painel Inteligente</div>
+<div class="top">NeuroQuant IA</div>
 
 <div class="center">
 
@@ -191,7 +219,6 @@ canvas{
 <select id="binancePairs"></select>
 <input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
 <button onclick="analisar()">Analisar Agora</button>
-
 <div class="indicators" id="indicadores"></div>
 </div>
 
@@ -208,6 +235,12 @@ canvas{
 </div>
 
 <script>
+
+// Toggle menu
+function toggleMenu(){
+document.getElementById("sideMenu").classList.toggle("active");
+document.getElementById("overlay").classList.toggle("active");
+}
 
 // Carregar pares Binance
 fetch('https://api.binance.com/api/v3/exchangeInfo')
@@ -255,6 +288,11 @@ let par=custom!==""?custom.toUpperCase():select;
 let url=`https://api.binance.com/api/v3/klines?symbol=${par}&interval=1h&limit=100`;
 let response=await fetch(url);
 let data=await response.json();
+
+if(!data || data.length===0){
+alert("Par inválido ou sem dados.");
+return;
+}
 
 let closes=data.map(c=>parseFloat(c[4]));
 let highs=data.map(c=>parseFloat(c[2]));
