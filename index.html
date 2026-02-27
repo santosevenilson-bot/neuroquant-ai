@@ -34,7 +34,7 @@ z-index:1001;
 color:#00ffcc;
 }
 
-/* MENU LATERAL OCULTO */
+/* MENU LATERAL */
 .menu{
 position:fixed;
 top:0;
@@ -60,8 +60,6 @@ text-align:center;
 }
 
 .menu-item{
-display:flex;
-align-items:center;
 padding:12px;
 margin-bottom:12px;
 border-radius:12px;
@@ -93,34 +91,44 @@ opacity:1;
 visibility:visible;
 }
 
-/* CONTEÚDO PRINCIPAL */
+/* HERO IMAGE */
+.hero{
+width:100%;
+max-height:400px;
+overflow:hidden;
+position:relative;
+}
+
+.hero img{
+width:100%;
+height:100%;
+object-fit:cover;
+filter:brightness(0.6);
+}
+
+.hero-text{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+color:#00ffcc;
+font-size:28px;
+}
+
+/* CONTEÚDO */
 .main{
 display:flex;
 flex-direction:column;
 align-items:center;
-padding:80px 20px 20px 20px;
-}
-
-.top{
-font-size:28px;
-margin-bottom:20px;
+padding:20px;
 }
 
 .center{
 text-align:center;
 width:100%;
 max-width:600px;
-}
-
-.title{
-font-size:28px;
-margin-bottom:10px;
-}
-
-.subtitle{
-font-size:14px;
-opacity:0.8;
-margin-bottom:30px;
+margin-top:20px;
 }
 
 .card{
@@ -189,10 +197,8 @@ padding:20px;
 </head>
 <body>
 
-<!-- BOTÃO MENU -->
 <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-<!-- MENU LATERAL -->
 <div class="menu" id="sideMenu">
 <div class="logo">NeuroQuant IA</div>
 <div class="menu-item">🏠 Dashboard</div>
@@ -202,18 +208,17 @@ padding:20px;
 <div class="menu-item">⚙️ Configurações</div>
 </div>
 
-<!-- OVERLAY -->
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-<!-- CONTEÚDO PRINCIPAL -->
+<!-- IMAGEM PRINCIPAL -->
+<div class="hero">
+<img src="ia-cripto.png" alt="IA e Criptomoeda">
+<div class="hero-text">Inteligência Artificial Aplicada ao Mercado Cripto</div>
+</div>
+
 <div class="main">
 
-<div class="top">NeuroQuant IA</div>
-
 <div class="center">
-
-<div class="title">NeuroQuant IA</div>
-<div class="subtitle">Previsão Avançada com Inteligência Artificial</div>
 
 <div class="card">
 <select id="binancePairs"></select>
@@ -236,7 +241,6 @@ padding:20px;
 
 <script>
 
-// Toggle menu
 function toggleMenu(){
 document.getElementById("sideMenu").classList.toggle("active");
 document.getElementById("overlay").classList.toggle("active");
@@ -280,7 +284,6 @@ return 100-(100/(1+rs));
 let graficoAtual;
 
 async function analisar(){
-
 let select=document.getElementById("binancePairs").value;
 let custom=document.getElementById("customPair").value;
 let par=custom!==""?custom.toUpperCase():select;
@@ -337,482 +340,7 @@ labels:closes.map((_,i)=>i),
 datasets:[{label:par,data:closes}]
 }
 });
-
 }
-
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Método Confluência PRO</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family: 'Inter', sans-serif;
-    background:#0f1117;
-    color:#fff;
-    line-height:1.6;
-}
-
-header{
-    background:linear-gradient(135deg,#0f1117,#1a1f2e);
-    padding:80px 20px;
-    text-align:center;
-}
-
-header h1{
-    font-family:'Orbitron', sans-serif;
-    font-size:38px;
-    color:#00ff88;
-    margin-bottom:20px;
-}
-
-header p{
-    font-size:18px;
-    max-width:700px;
-    margin:0 auto 30px auto;
-    color:#ccc;
-}
-
-.btn{
-    display:inline-block;
-    padding:15px 35px;
-    background:#00ff88;
-    color:#000;
-    font-weight:700;
-    text-decoration:none;
-    border-radius:6px;
-    transition:0.3s;
-}
-
-.btn:hover{
-    background:#00cc6a;
-}
-
-section{
-    padding:70px 20px;
-    max-width:1100px;
-    margin:auto;
-}
-
-h2{
-    font-size:28px;
-    margin-bottom:30px;
-    color:#00ff88;
-    text-align:center;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-}
-
-.card{
-    background:#1a1f2e;
-    padding:25px;
-    border-radius:10px;
-    border:1px solid #2a3147;
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:translateY(-5px);
-    border-color:#00ff88;
-}
-
-.price{
-    background:#111827;
-    text-align:center;
-    padding:60px 20px;
-}
-
-.price h3{
-    font-size:42px;
-    color:#00ff88;
-    margin:20px 0;
-}
-
-.bonus{
-    background:#141a28;
-}
-
-ul{
-    list-style:none;
-}
-
-ul li{
-    margin-bottom:10px;
-}
-
-footer{
-    background:#0a0c12;
-    padding:30px;
-    text-align:center;
-    font-size:14px;
-    color:#777;
-}
-
-.badge{
-    display:inline-block;
-    background:#ff004c;
-    padding:5px 12px;
-    font-size:12px;
-    border-radius:20px;
-    margin-bottom:15px;
-}
-
-@media(max-width:768px){
-    header h1{
-        font-size:28px;
-    }
-}
-
-</style>
-</head>
-<body>
-
-<header>
-    <div class="badge">LANÇAMENTO</div>
-    <h1>MÉTODO CONFLUÊNCIA PRO</h1>
-    <p>Aprenda a fazer Day Trade com estratégia, gestão profissional e controle emocional. Pare de operar no achismo e comece a operar com método.</p>
-    <a href="#comprar" class="btn">QUERO COMEÇAR AGORA</a>
-</header>
-
-<section>
-    <h2>Você já passou por isso?</h2>
-    <div class="cards">
-        <div class="card">❌ Entrou comprado e o mercado caiu?</div>
-        <div class="card">❌ Tomou stop atrás de stop?</div>
-        <div class="card">❌ Opera sem estratégia clara?</div>
-        <div class="card">❌ Já perdeu dinheiro por falta de gestão?</div>
-    </div>
-</section>
-
-<section>
-    <h2>O que você vai aprender</h2>
-    <div class="cards">
-        <div class="card">
-            <h3>Módulo 1</h3>
-            Fundamentos do Day Trade e estrutura de mercado.
-        </div>
-        <div class="card">
-            <h3>Módulo 2</h3>
-            Leitura profissional com EMA, RSI e Fibonacci.
-        </div>
-        <div class="card">
-            <h3>Módulo 3</h3>
-            Estratégia Confluência 4 Pontos.
-        </div>
-        <div class="card">
-            <h3>Módulo 4</h3>
-            Gestão de risco e controle emocional.
-        </div>
-    </div>
-</section>
-
-<section class="bonus">
-    <h2>Bônus Exclusivos</h2>
-    <div class="cards">
-        <div class="card">📘 Checklist profissional de entrada</div>
-        <div class="card">📊 Planilha de gestão de risco</div>
-        <div class="card">📒 Modelo de diário de trade</div>
-        <div class="card">₿ Estratégia adaptada para criptomoedas</div>
-    </div>
-</section>
-
-<section class="price" id="comprar">
-    <h2>Oferta Especial de Lançamento</h2>
-    <p>De <s>R$ 297</s></p>
-    <h3>R$ 97</h3>
-    <p>Acesso completo + futuras atualizações</p>
-    <br>
-    <a href="#" class="btn">GARANTIR MINHA VAGA</a>
-    <p style="margin-top:20px;font-size:13px;color:#aaa;">
-        7 dias de garantia incondicional.
-    </p>
-</section>
-
-<section>
-    <h2>Aviso Importante</h2>
-    <p style="text-align:center;max-width:800px;margin:auto;color:#aaa;">
-        Operações em mercado financeiro envolvem risco. 
-        Resultados passados não garantem resultados futuros. 
-        Este curso tem finalidade educacional.
-    </p>
-</section>
-
-<footer>
-    © 2026 Método Confluência PRO - Todos os direitos reservados
-</footer>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Método Confluência PRO - Conteúdo</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-body{
-font-family:'Inter',sans-serif;
-background:#0f1117;
-color:#fff;
-padding:40px 20px;
-}
-
-h1{
-font-family:'Orbitron',sans-serif;
-text-align:center;
-margin-bottom:50px;
-color:#00ff88;
-}
-
-.accordion{
-max-width:1000px;
-margin:auto;
-}
-
-.module{
-background:#1a1f2e;
-margin-bottom:15px;
-border-radius:8px;
-overflow:hidden;
-border:1px solid #2a3147;
-}
-
-.module-header{
-padding:20px;
-cursor:pointer;
-font-weight:600;
-font-size:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.module-header:hover{
-background:#22283a;
-}
-
-.module-content{
-max-height:0;
-overflow:hidden;
-transition:max-height 0.4s ease;
-background:#141a28;
-padding:0 20px;
-}
-
-.module-content p{
-margin:15px 0;
-color:#ccc;
-}
-
-.module-content ul{
-margin:15px 0 20px 20px;
-color:#ccc;
-}
-
-.active .module-content{
-padding:20px;
-max-height:2000px;
-}
-
-.badge{
-background:#00ff88;
-color:#000;
-padding:4px 10px;
-font-size:12px;
-border-radius:20px;
-}
-
-</style>
-</head>
-<body>
-
-<h1>Conteúdo Completo do Método Confluência PRO</h1>
-
-<div class="accordion">
-
-<!-- MÓDULO 1 -->
-<div class="module">
-<div class="module-header">
-MÓDULO 1 – Fundamentos Ocultos do Day Trade
-<span class="badge">Clique</span>
-</div>
-<div class="module-content">
-
-<p><strong>Aqui você entende o que quase ninguém ensina:</strong> o mercado não se move por indicadores — ele se move por liquidez.</p>
-
-<p><strong>Você vai aprender:</strong></p>
-<ul>
-<li>Por que 90% dos iniciantes perdem dinheiro (erro estrutural, não emocional)</li>
-<li>Como funciona o fluxo real por trás das ordens</li>
-<li>Por que o mercado “caça stops”</li>
-<li>Diferença entre movimento impulsivo e corretivo</li>
-<li>Como identificar quando o mercado está acumulando</li>
-</ul>
-
-<p><strong>Dica exclusiva:</strong>  
-Antes de qualquer indicador, marque sempre o último topo e último fundo relevantes.  
-Se você não souber onde está a estrutura, qualquer indicador vai te enganar.</p>
-
-<p><strong>Regra de Ouro:</strong>  
-Indicador confirma. Estrutura manda.</p>
-
-</div>
-</div>
-
-<!-- MÓDULO 2 -->
-<div class="module">
-<div class="module-header">
-MÓDULO 2 – Leitura Profissional de Mercado
-<span class="badge">Clique</span>
-</div>
-<div class="module-content">
-
-<p>Você vai aprender a enxergar o gráfico como um institucional enxerga.</p>
-
-<ul>
-<li>EMA 200 como filtro macro</li>
-<li>EMA 21 como zona de defesa</li>
-<li>RSI interpretado em tendência (não use 70/30 de forma comum)</li>
-<li>Fibonacci como zona de armadilha</li>
-<li>Divergência verdadeira vs falsa divergência</li>
-</ul>
-
-<p><strong>Dica avançada:</strong>  
-Se o RSI rompe 70 em tendência forte, isso NÃO é venda.  
-Isso é força.</p>
-
-<p><strong>Outro ponto que quase ninguém ensina:</strong>  
-Quanto mais vezes um suporte é testado, mais fraco ele fica.</p>
-
-</div>
-</div>
-
-<!-- MÓDULO 3 -->
-<div class="module">
-<div class="module-header">
-MÓDULO 3 – Estratégia Confluência 4 Pontos
-<span class="badge">Principal</span>
-</div>
-<div class="module-content">
-
-<p>Você só opera quando pelo menos 3 desses 4 pontos estiverem alinhados:</p>
-
-<ul>
-<li>Tendência clara (EMA 200 alinhada)</li>
-<li>Pullback na EMA 21 ou 0.618</li>
-<li>RSI confirmando direção</li>
-<li>Zona de liquidez ou suporte/resistência relevante</li>
-</ul>
-
-<p><strong>Ensinamento Diferenciado:</strong>  
-Não opere rompimento.  
-Espere o rompimento + correção.  
-O dinheiro consistente está no pullback.</p>
-
-<p><strong>Erro que destrói contas:</strong>  
-Entrar atrasado depois de 3 candles explosivos.</p>
-
-<p><strong>Modelo mental:</strong>  
-Se parece muito óbvio e todo mundo está vendo, provavelmente você é a liquidez.</p>
-
-</div>
-</div>
-
-<!-- MÓDULO 4 -->
-<div class="module">
-<div class="module-header">
-MÓDULO 4 – Gestão de Risco Profissional
-<span class="badge">Essencial</span>
-</div>
-<div class="module-content">
-
-<p>Se você dominar isso, você sobrevive no mercado.</p>
-
-<ul>
-<li>Regra do 1%</li>
-<li>Risco mínimo 1:2</li>
-<li>Como calcular lote corretamente</li>
-<li>Quando NÃO operar</li>
-</ul>
-
-<p><strong>Dica que poucos aplicam:</strong>  
-Se você perdeu 3 operações seguidas, pare no dia.  
-Não negocie emocionalmente.</p>
-
-<p><strong>Realidade:</strong>  
-Você não precisa acertar muito.  
-Você precisa perder pouco.</p>
-
-</div>
-</div>
-
-<!-- MÓDULO 5 -->
-<div class="module">
-<div class="module-header">
-MÓDULO 5 – Psicologia e Controle Mental
-<span class="badge">Avançado</span>
-</div>
-<div class="module-content">
-
-<p>O maior inimigo não é o mercado. É você.</p>
-
-<ul>
-<li>Como evitar overtrade</li>
-<li>Como lidar com stop sem aumentar lote</li>
-<li>Construção de disciplina</li>
-<li>Diário de operações estratégico</li>
-</ul>
-
-<p><strong>Técnica prática:</strong>  
-Antes de cada entrada, responda:  
-"Se eu perder esse trade, continuo tranquilo?"  
-Se a resposta for não, você está arriscando demais.</p>
-
-<p><strong>Verdade dura:</strong>  
-Trader profissional pensa em risco primeiro.  
-Amador pensa em lucro.</p>
-
-</div>
-</div>
-
-</div>
-
-<script>
-
-const modules = document.querySelectorAll(".module");
-
-modules.forEach(module => {
-module.querySelector(".module-header").addEventListener("click", () => {
-module.classList.toggle("active");
-});
-});
 
 </script>
 
