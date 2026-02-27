@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeuroQuant IA</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -16,88 +17,90 @@ font-family:'Orbitron', sans-serif;
 }
 
 body{
-height:100vh;
 background:linear-gradient(135deg,#03121a,#0b3a40,#0a1f26);
+color:#e6fefe;
+min-height:100vh;
 display:flex;
 flex-direction:column;
-justify-content:space-between;
-color:#e6fefe;
 }
 
-/* TOPO */
 .top{
 padding:20px;
-}
-
-.menu{
 font-size:28px;
-cursor:pointer;
 }
 
-/* CENTRO */
 .center{
-flex:1;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
 text-align:center;
 padding:20px;
 }
 
 .title{
-font-size:32px;
+font-size:28px;
 margin-bottom:10px;
-letter-spacing:2px;
 }
 
 .subtitle{
-font-size:16px;
+font-size:14px;
 opacity:0.8;
-margin-bottom:40px;
+margin-bottom:30px;
 }
 
-/* CARD */
 .card{
-width:100%;
-max-width:380px;
 background:rgba(255,255,255,0.05);
 backdrop-filter:blur(20px);
 border-radius:25px;
-padding:30px;
+padding:25px;
+margin-bottom:20px;
 box-shadow:0 0 40px rgba(0,255,200,0.2);
 }
 
-.card h2{
-font-size:22px;
-margin-bottom:15px;
+select,input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:15px;
+border:none;
+background:#0f2a30;
+color:white;
 }
 
-.price{
-font-size:28px;
-margin:15px 0;
-color:#00ffff;
-}
-
-.button{
-margin-top:20px;
-padding:15px;
+button{
+margin-top:15px;
+padding:14px;
 border:none;
 border-radius:50px;
 width:100%;
-font-size:18px;
+font-size:16px;
 background:linear-gradient(90deg,#00f5ff,#00ffcc);
 color:#003b40;
 cursor:pointer;
-transition:0.3s;
 }
 
-.button:hover{
-transform:scale(1.05);
-box-shadow:0 0 20px #00ffff;
+.indicators{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:15px;
 }
 
-/* RODAPÉ */
+.box{
+background:#082026;
+padding:10px;
+border-radius:15px;
+font-size:13px;
+text-align:center;
+}
+
+.alta{ color:#00ff88; font-weight:bold;}
+.baixa{ color:#ff4d4d; font-weight:bold;}
+.neutro{ color:#ffd000; font-weight:bold;}
+
+canvas{
+background:white;
+border-radius:20px;
+margin-top:20px;
+}
+
 .footer{
 text-align:center;
 font-size:12px;
@@ -108,27 +111,122 @@ padding:20px;
 </head>
 <body>
 
-<div class="top">
-<div class="menu">☰</div>
-</div>
+<div class="top">☰</div>
 
 <div class="center">
 <div class="title">NeuroQuant IA</div>
-<div class="subtitle">
-Previsão Avançada com Inteligência Artificial
+<div class="subtitle">Previsão Avançada com Inteligência Artificial</div>
+
+<div class="card">
+<select id="binancePairs"></select>
+<input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
+<button onclick="analisar()">Analisar Agora</button>
+
+<div class="indicators" id="indicadores"></div>
 </div>
 
 <div class="card">
-<h2>Plano Premium</h2>
-<p>Acesso completo aos sinais avançados</p>
-<div class="price">R$ 29,90</div>
-<button class="button">Assinar Agora</button>
+<canvas id="grafico"></canvas>
 </div>
+
 </div>
 
 <div class="footer">
 © 2026 NeuroQuant IA - Todos os direitos reservados
 </div>
+
+<script>
+
+// Carregar todos os pares Binance
+fetch('https://api.binance.com/api/v3/exchangeInfo')
+.then(res=>res.json())
+.then(data=>{
+let select=document.getElementById("binancePairs");
+data.symbols.forEach(s=>{
+if(s.status==="TRADING"){
+let opt=document.createElement("option");
+opt.value=s.symbol;
+opt.text=s.symbol;
+select.add(opt);
+}
+});
+});
+
+function calcularEMA(periodo,dados){
+let k=2/(periodo+1);
+let ema=[dados[0]];
+for(let i=1;i<dados.length;i++){
+ema.push(dados[i]*k+ema[i-1]*(1-k));
+}
+return ema;
+}
+
+function calcularRSI(periodo,dados){
+let ganhos=0,perdas=0;
+for(let i=1;i<=periodo;i++){
+let diff=dados[i]-dados[i-1];
+if(diff>=0) ganhos+=diff;
+else perdas+=Math.abs(diff);
+}
+let rs=ganhos/perdas;
+return 100-(100/(1+rs));
+}
+
+async function analisar(){
+
+let select=document.getElementById("binancePairs").value;
+let custom=document.getElementById("customPair").value;
+let par=custom!==""?custom.toUpperCase():select;
+
+let url=`https://api.binance.com/api/v3/klines?symbol=${par}&interval=1h&limit=100`;
+let response=await fetch(url);
+let data=await response.json();
+
+let closes=data.map(c=>parseFloat(c[4]));
+let highs=data.map(c=>parseFloat(c[2]));
+let lows=data.map(c=>parseFloat(c[3]));
+
+let ema9=calcularEMA(9,closes);
+let ema21=calcularEMA(21,closes);
+let rsi=calcularRSI(14,closes);
+
+let tendencia="Neutro";
+let classe="neutro";
+
+if(ema9.at(-1)>ema21.at(-1)&&rsi>55){
+tendencia="Alta 🚀";
+classe="alta";
+}
+else if(ema9.at(-1)<ema21.at(-1)&&rsi<45){
+tendencia="Baixa 📉";
+classe="baixa";
+}
+
+let max=Math.max(...highs);
+let min=Math.min(...lows);
+let fib50=(min+(max-min)*0.5).toFixed(2);
+let fib618=(min+(max-min)*0.618).toFixed(2);
+
+document.getElementById("indicadores").innerHTML=`
+<div class="box">EMA 9<br>${ema9.at(-1).toFixed(2)}</div>
+<div class="box">EMA 21<br>${ema21.at(-1).toFixed(2)}</div>
+<div class="box">RSI<br>${rsi.toFixed(2)}</div>
+<div class="box ${classe}">Tendência<br>${tendencia}</div>
+<div class="box">Fibo 50%<br>${fib50}</div>
+<div class="box">Fibo 61.8%<br>${fib618}</div>
+`;
+
+new Chart(document.getElementById("grafico"),{
+type:'line',
+data:{
+labels:closes.map((_,i)=>i),
+datasets:[{label:par,data:closes}]
+}
+});
+
+}
+
+</script>
 
 </body>
 </html>
