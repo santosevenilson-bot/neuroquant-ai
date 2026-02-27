@@ -9,185 +9,192 @@
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: 'Segoe UI', sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter', sans-serif;
 }
 
 body{
-    background: linear-gradient(135deg,#0f172a,#020617);
-    color:white;
-    display:flex;
+background:#0b0f1c;
+color:white;
 }
 
-/* SIDEBAR */
-.sidebar{
-    width:220px;
-    background:#0b1220;
-    height:100vh;
-    padding:20px;
-    border-right:1px solid #1e293b;
+/* TOPBAR */
+.topbar{
+height:70px;
+background:#111827;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 30px;
+border-bottom:1px solid #1f2937;
 }
 
-.sidebar h2{
-    color:#00f5c3;
-    margin-bottom:30px;
+.logo{
+font-size:20px;
+font-weight:bold;
+background:linear-gradient(90deg,#00f5c3,#00aaff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-.sidebar button{
-    width:100%;
-    margin-bottom:10px;
-    padding:10px;
-    background:#111827;
-    border:none;
-    color:white;
-    border-radius:8px;
-    cursor:pointer;
+.menu{
+display:flex;
+gap:20px;
 }
 
-.sidebar button:hover{
-    background:#00f5c3;
-    color:black;
+.menu span{
+cursor:pointer;
+color:#9ca3af;
 }
 
-/* MAIN */
-.main{
-    flex:1;
-    padding:30px;
+.menu span:hover{
+color:white;
 }
 
-.header{
-    font-size:24px;
-    margin-bottom:20px;
+/* LAYOUT */
+.wrapper{
+display:grid;
+grid-template-columns: 1fr 350px;
+gap:20px;
+padding:30px;
 }
 
 /* CARDS */
 .card{
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
-    border:1px solid rgba(255,255,255,0.1);
-    padding:20px;
-    border-radius:15px;
-    margin-bottom:20px;
+background:#111827;
+padding:20px;
+border-radius:15px;
+border:1px solid #1f2937;
+box-shadow:0 0 20px rgba(0,255,200,0.05);
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+.card h3{
+margin-bottom:15px;
+color:#00f5c3;
 }
 
-select,input{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    border-radius:8px;
-    border:none;
+input, select{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+background:#1f2937;
+color:white;
 }
 
-button.analisar{
-    margin-top:10px;
-    width:100%;
-    padding:12px;
-    background:#00f5c3;
-    border:none;
-    border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:linear-gradient(90deg,#00f5c3,#00aaff);
+color:black;
+font-weight:bold;
+cursor:pointer;
 }
 
-.indicador{
-    font-size:18px;
-    margin:10px 0;
+.grid-indicators{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-top:15px;
 }
 
-.tendencia-alta{ color:#00ff88; font-weight:bold;}
-.tendencia-baixa{ color:#ff4d4d; font-weight:bold;}
-.tendencia-neutro{ color:#ffd000; font-weight:bold;}
+.indicator-box{
+background:#0f172a;
+padding:15px;
+border-radius:10px;
+text-align:center;
+}
+
+.alta{ color:#00ff88; font-weight:bold;}
+.baixa{ color:#ff4d4d; font-weight:bold;}
+.neutro{ color:#ffd000; font-weight:bold;}
 
 canvas{
-    background:white;
-    border-radius:15px;
+background:white;
+border-radius:15px;
+}
+
+@media(max-width:900px){
+.wrapper{
+grid-template-columns:1fr;
+}
 }
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <h2>NeuroQuant</h2>
-    <button>Dashboard</button>
-    <button>Mercado</button>
-    <button>Plano PRO</button>
+<div class="topbar">
+<div class="logo">NeuroQuant PRO</div>
+<div class="menu">
+<span>Dashboard</span>
+<span>Mercado</span>
+<span>Plano PRO</span>
+</div>
 </div>
 
-<div class="main">
+<div class="wrapper">
 
-<div class="header">
-📊 Análise Inteligente de Criptomoedas
-</div>
-
-<div class="card">
-<h3>Selecionar Par</h3>
-<select id="binancePairs"></select>
-<input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
-<button class="analisar" onclick="analisar()">Analisar Agora</button>
-</div>
-
-<div class="grid">
-    <div class="card">
-        <h3>Indicadores</h3>
-        <div id="indicadores"></div>
-    </div>
-
-    <div class="card">
-        <h3>Fibonacci</h3>
-        <div id="fibo"></div>
-    </div>
-</div>
-
+<!-- AREA PRINCIPAL -->
 <div class="card">
 <h3>Gráfico</h3>
 <canvas id="grafico"></canvas>
+</div>
+
+<!-- LATERAL -->
+<div class="card">
+<h3>Análise Técnica</h3>
+
+<select id="binancePairs"></select>
+<input type="text" id="customPair" placeholder="Ou digite outro par (ex: XRPUSDT)">
+<button onclick="analisar()">Analisar</button>
+
+<div class="grid-indicators" id="indicadores"></div>
+
 </div>
 
 </div>
 
 <script>
 
-// carregar pares
+// Carregar pares automaticamente
 fetch('https://api.binance.com/api/v3/exchangeInfo')
 .then(res=>res.json())
 .then(data=>{
-    let select=document.getElementById("binancePairs");
-    data.symbols.forEach(s=>{
-        if(s.status==="TRADING"){
-            let opt=document.createElement("option");
-            opt.value=s.symbol;
-            opt.text=s.symbol;
-            select.add(opt);
-        }
-    });
+let select=document.getElementById("binancePairs");
+data.symbols.forEach(s=>{
+if(s.status==="TRADING"){
+let opt=document.createElement("option");
+opt.value=s.symbol;
+opt.text=s.symbol;
+select.add(opt);
+}
+});
 });
 
 function calcularEMA(periodo,dados){
-    let k=2/(periodo+1);
-    let ema=[dados[0]];
-    for(let i=1;i<dados.length;i++){
-        ema.push(dados[i]*k+ema[i-1]*(1-k));
-    }
-    return ema;
+let k=2/(periodo+1);
+let ema=[dados[0]];
+for(let i=1;i<dados.length;i++){
+ema.push(dados[i]*k+ema[i-1]*(1-k));
+}
+return ema;
 }
 
 function calcularRSI(periodo,dados){
-    let ganhos=0,perdas=0;
-    for(let i=1;i<=periodo;i++){
-        let diff=dados[i]-dados[i-1];
-        if(diff>=0) ganhos+=diff;
-        else perdas+=Math.abs(diff);
-    }
-    let rs=ganhos/perdas;
-    return 100-(100/(1+rs));
+let ganhos=0,perdas=0;
+for(let i=1;i<=periodo;i++){
+let diff=dados[i]-dados[i-1];
+if(diff>=0) ganhos+=diff;
+else perdas+=Math.abs(diff);
+}
+let rs=ganhos/perdas;
+return 100-(100/(1+rs));
 }
 
 async function analisar(){
@@ -209,15 +216,15 @@ let ema21=calcularEMA(21,closes);
 let rsi=calcularRSI(14,closes);
 
 let tendencia="Neutro";
-let classe="tendencia-neutro";
+let classe="neutro";
 
 if(ema9.at(-1)>ema21.at(-1)&&rsi>55){
-    tendencia="Alta 🚀";
-    classe="tendencia-alta";
+tendencia="Alta 🚀";
+classe="alta";
 }
 else if(ema9.at(-1)<ema21.at(-1)&&rsi<45){
-    tendencia="Baixa 📉";
-    classe="tendencia-baixa";
+tendencia="Baixa 📉";
+classe="baixa";
 }
 
 let max=Math.max(...highs);
@@ -227,22 +234,19 @@ let fib50=(min+(max-min)*0.5).toFixed(2);
 let fib618=(min+(max-min)*0.618).toFixed(2);
 
 document.getElementById("indicadores").innerHTML=`
-<div class="indicador">EMA 9: ${ema9.at(-1).toFixed(2)}</div>
-<div class="indicador">EMA 21: ${ema21.at(-1).toFixed(2)}</div>
-<div class="indicador">RSI: ${rsi.toFixed(2)}</div>
-<div class="indicador ${classe}">Tendência: ${tendencia}</div>
-`;
-
-document.getElementById("fibo").innerHTML=`
-<div class="indicador">50%: ${fib50}</div>
-<div class="indicador">61.8%: ${fib618}</div>
+<div class="indicator-box">EMA 9<br>${ema9.at(-1).toFixed(2)}</div>
+<div class="indicator-box">EMA 21<br>${ema21.at(-1).toFixed(2)}</div>
+<div class="indicator-box">RSI<br>${rsi.toFixed(2)}</div>
+<div class="indicator-box ${classe}">Tendência<br>${tendencia}</div>
+<div class="indicator-box">Fibo 50%<br>${fib50}</div>
+<div class="indicator-box">Fibo 61.8%<br>${fib618}</div>
 `;
 
 new Chart(document.getElementById("grafico"),{
 type:'line',
 data:{
 labels:closes.map((_,i)=>i),
-datasets:[{label:'Preço',data:closes}]
+datasets:[{label:par,data:closes}]
 }
 });
 
