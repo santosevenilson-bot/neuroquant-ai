@@ -8,13 +8,13 @@
 <style>
 body{
     margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background:#0f172a;
+    font-family: Arial, sans-serif;
+    background:#0a0f24;
     color:white;
 }
 
 header{
-    background:#111827;
+    background:#081028;
     padding:15px;
     display:flex;
     justify-content:space-between;
@@ -22,14 +22,14 @@ header{
 }
 
 header h1{
-    color:#00f5a0;
+    color:#00dbb8;
 }
 
 nav a{
     color:white;
     margin-left:20px;
-    text-decoration:none;
     cursor:pointer;
+    text-decoration:none;
 }
 
 .container{
@@ -37,7 +37,7 @@ nav a{
 }
 
 .card{
-    background:#1e293b;
+    background:#112144;
     padding:20px;
     border-radius:10px;
     margin-bottom:20px;
@@ -52,7 +52,7 @@ input, select{
 }
 
 button{
-    background:#00f5a0;
+    background:#00dbb8;
     border:none;
     padding:10px 20px;
     border-radius:5px;
@@ -63,16 +63,6 @@ button{
 
 .hidden{
     display:none;
-}
-
-.price{
-    font-size:24px;
-    color:#00f5a0;
-    font-weight:bold;
-}
-img{
-    width:100%;
-    border-radius:10px;
 }
 </style>
 </head>
@@ -92,23 +82,11 @@ img{
     <!-- HOME -->
     <div id="home">
         <div class="card">
-            <h2>Inteligência Artificial para Análise de Criptomoedas</h2>
-            <img src="https://images.unsplash.com/photo-1621504450181-5fdb1e39c5c4" alt="IA e Criptomoeda">
-            <p>Plataforma avançada de análise técnica com foco em liquidez, Fibonacci e fluxo institucional.</p>
-        </div>
+            <h2>Analise de Criptomoedas em Tempo Real</h2>
+            <p>Selecione um par ou digite outro:</p>
 
-        <div class="card">
-            <h3>Escolha ou Digite o Par</h3>
-            
-            <select id="cryptoSelect">
-                <option>BTC/USDT</option>
-                <option>ETH/USDT</option>
-                <option>SOL/USDT</option>
-                <option>RIVER/USDT</option>
-            </select>
-
-            <input type="text" id="customPair" placeholder="Ou digite outro par (Ex: XRP/USDT)">
-            
+            <select id="binancePairs"></select>
+            <input type="text" id="customPair" placeholder="Digite outro par (Ex: XRP/USDT)">
             <button onclick="analisar()">Analisar</button>
 
             <div id="resultado"></div>
@@ -128,11 +106,8 @@ img{
     <!-- PLANO -->
     <div id="plano" class="hidden">
         <div class="card">
-            <h2>Plano PRO</h2>
-            <p>Acesso completo às análises avançadas</p>
-            <p class="price">R$ 9,90 / mês</p>
-            <button onclick="assinar()">Assinar com Pix</button>
-            <p id="pagamento"></p>
+            <h2>Plano PRO - R$ 9,90</h2>
+            <p>Pagamento via Pix em desenvolvimento backend</p>
         </div>
     </div>
 
@@ -140,54 +115,57 @@ img{
 
 <script>
 
-let usuarioLogado = false;
-
+// Função pra mostrar as telas
 function showHome(){
     document.getElementById('home').classList.remove('hidden');
     document.getElementById('login').classList.add('hidden');
     document.getElementById('plano').classList.add('hidden');
 }
-
 function showLogin(){
     document.getElementById('home').classList.add('hidden');
     document.getElementById('login').classList.remove('hidden');
     document.getElementById('plano').classList.add('hidden');
 }
-
 function showPlano(){
     document.getElementById('home').classList.add('hidden');
     document.getElementById('login').classList.add('hidden');
     document.getElementById('plano').classList.remove('hidden');
 }
 
-function login(){
-    usuarioLogado = true;
-    alert("Login realizado com sucesso!");
-    showHome();
-}
+// Busca pares da Binance automaticamente
+fetch('https://api.binance.com/api/v3/exchangeInfo')
+.then(response => response.json())
+.then(data => {
+    let select = document.getElementById('binancePairs');
+    data.symbols.forEach(symbol => {
+        if(symbol.status === "TRADING"){
+            let option = document.createElement("option");
+            option.value = symbol.symbol;
+            option.text = symbol.symbol;
+            select.add(option);
+        }
+    });
+})
+.catch(err => {
+    console.error("Erro ao carregar pares:", err);
+});
 
+// Função de análise (simulada)
 function analisar(){
-    let select = document.getElementById("cryptoSelect").value;
+    let select = document.getElementById("binancePairs").value;
     let custom = document.getElementById("customPair").value;
-
-    let par = custom !== "" ? custom : select;
+    let par = custom !== "" ? custom.toUpperCase() : select;
 
     document.getElementById("resultado").innerHTML =
-        `<p>Análise iniciada para <strong>${par}</strong>...</p>
-         <p>✔ Tendência: Alta moderada</p>
-         <p>✔ Liquidez mapeada acima da máxima recente</p>
-         <p>✔ Possível varredura antes de continuação</p>`;
+        `<p>🔍 Analisando: <strong>${par}</strong></p>
+         <p>Tendência: Alta moderada</p>
+         <p>Liquidez: Forte</p>`;
 }
 
-function assinar(){
-    if(!usuarioLogado){
-        alert("Você precisa fazer login primeiro.");
-        showLogin();
-        return;
-    }
-
-    document.getElementById("pagamento").innerHTML =
-        "Gerando QR Code Pix... (Integração backend necessária)";
+// Login simulado
+function login(){
+    alert("Login realizado com sucesso!");
+    showHome();
 }
 
 </script>
