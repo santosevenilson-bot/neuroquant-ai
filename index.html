@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    bitcoin-news-free
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeuroQuant AI | Plataforma Algorítmica</title>
@@ -9,7 +8,93 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Rajdhani',sans-serif;}
 body{background:#0b0f1a;color:#fff;overflow-x:hidden;}
+# bitcoin_news_github.py
+import requests
+from bs4 import BeautifulSoup
+import schedule
+import time
+import json
+from datetime import datetime, timedelta
 
+# Arquivo para salvar as notícias
+ARQUIVO_JSON = 'noticias.json'
+
+# Sites de notícias
+sites = [
+    "https://www.coindesk.com/",   # Coindesk
+    "https://cryptopotato.com/"    # CryptoPotato
+]
+
+def carregar_historico():
+    """Carrega notícias do arquivo JSON, se existir"""
+    try:
+        with open(ARQUIVO_JSON, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except:
+        return []
+
+def salvar_historico(noticias):
+    """Salva notícias no arquivo JSON"""
+    with open(ARQUIVO_JSON, 'w', encoding='utf-8') as f:
+        json.dump(noticias, f, ensure_ascii=False, indent=4)
+
+def buscar_noticias():
+    """Busca notícias dos sites e atualiza JSON"""
+    historico = carregar_historico()
+    novas_noticias = []
+
+    for site in sites:
+        try:
+            resposta = requests.get(site, timeout=10)
+            soup = BeautifulSoup(resposta.text, 'html.parser')
+
+            # Captura links e títulos (ajustar conforme site)
+            for artigo in soup.find_all('a', href=True)[:10]:  # Pega até 10 notícias
+                titulo = artigo.get_text(strip=True)
+                link = artigo['href']
+                if titulo and link.startswith("http"):
+                    noticia = {
+                        'titulo': titulo,
+                        'link': link,
+                        'site': site,
+                        'data': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    }
+                    # Evita duplicados
+                    if noticia not in historico and noticia not in novas_noticias:
+                        novas_noticias.append(noticia)
+        except Exception as e:
+            print(f"Erro ao acessar {site}: {e}")
+
+    # Adiciona novas notícias ao histórico
+    historico.extend(novas_noticias)
+
+    # Mantém apenas notícias das últimas 24 horas
+    cutoff = datetime.now() - timedelta(hours=24)
+    historico = [n for n in historico if datetime.strptime(n['data'], '%Y-%m-%d %H:%M:%S') > cutoff]
+
+    # Salva histórico atualizado
+    salvar_historico(historico)
+
+    # Mostra as novas notícias no console
+    print(f"\n=== Notícias Atualizadas: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} ===")
+    if novas_noticias:
+        for idx, noticia in enumerate(novas_noticias, start=1):
+            print(f"{idx}. {noticia['titulo']}")
+            print(f"   Site: {noticia['site']}")
+            print(f"   Link: {noticia['link']}\n")
+    else:
+        print("Nenhuma notícia nova neste ciclo.")
+
+# Agenda para rodar a cada 1 hora
+schedule.every(1).hours.do(buscar_noticias)
+
+# Executa imediatamente ao iniciar
+buscar_noticias()
+
+# Mantém rodando
+while True:
+    schedule.run_pending()
+    time.sleep(10)
 /* MENU */
 .menu-btn{position:fixed;top:20px;left:20px;font-size:30px;cursor:pointer;z-index:1001;}
 .overlay{position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;z-index:999;}
