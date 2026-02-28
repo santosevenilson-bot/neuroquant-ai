@@ -3,32 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant AI</title>
-
+<title>NeuroQuant AI | Plataforma Algorítmica</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Rajdhani',sans-serif;}
 body{background:#0b0f1a;color:#fff;overflow-x:hidden;}
 
-.menu-btn{position:fixed;top:20px;left:20px;font-size:30px;cursor:pointer;z-index:1001;}
+/* MENU */
+.menu-btn{
+position:fixed;top:20px;left:20px;font-size:30px;cursor:pointer;z-index:1001;
+}
 .overlay{position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;z-index:999;}
 .sidebar{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#111827;padding:30px 20px;transition:.4s;z-index:1000;}
 .sidebar.active{left:0;}
-.overlay.active{display:block;}
-
 .sidebar a{display:block;padding:12px;margin:10px 0;color:#00f0ff;border-radius:8px;cursor:pointer;text-decoration:none;}
 .sidebar a:hover{background:#00f0ff;color:#000;}
 
+/* SEÇÕES */
 section{display:none;padding:80px 20px;text-align:center;}
 section.active{display:block;}
-
 .panel{background:#111827;padding:25px;border-radius:15px;margin:auto;max-width:800px;}
-
-select,input{padding:10px;margin:10px 0;border-radius:8px;border:none;width:100%;}
-
+input,textarea,select{padding:10px;margin:10px 0;border-radius:8px;border:none;width:100%;}
 button{padding:10px 20px;background:#00f0ff;border:none;border-radius:20px;cursor:pointer;font-weight:bold;}
 
+/* HERO COM FUNDO */
+.hero {
+    position: relative;
+    height: 100vh;
+    background-image: url("https://raw.githubusercontent.com/SeuUsuario/SeuRepo/main/1772226489900.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+/* Overlay escuro para melhorar leitura */
+.hero .overlay-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    top:0;
+    left:0;
+}
+
+/* Conteúdo central */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    padding: 20px;
+}
+.hero h1 { font-size:42px; margin-bottom:15px; }
+.hero p { font-size:18px; margin-bottom:25px; }
+.btn-hero {
+    padding:12px 30px; font-size:16px; border:none; border-radius:8px;
+    background:#00ffae; color:#000; cursor:pointer; font-weight:bold; transition:0.3s;
+}
+.btn-hero:hover { background:#00cc8a; }
+
+/* Sinais */
 .price{font-size:30px;color:#00ff88;margin:15px 0;}
 .signal{font-size:28px;font-weight:bold;margin-top:15px;}
 .alta{color:#00ff88;}
@@ -36,7 +74,6 @@ button{padding:10px 20px;background:#00f0ff;border:none;border-radius:20px;curso
 .neutro{color:#ffd000;}
 </style>
 </head>
-
 <body>
 
 <div class="menu-btn" onclick="abrirMenu()">☰</div>
@@ -49,20 +86,22 @@ button{padding:10px 20px;background:#00f0ff;border:none;border-radius:20px;curso
 <a onclick="mostrarAba('config')">Configurações</a>
 </div>
 
-<!-- DASHBOARD -->
+<!-- HERO / PÁGINA PRINCIPAL -->
 <section id="dashboard" class="active">
-<div class="panel">
-<h2>Dashboard</h2>
-<p>Painel principal da plataforma</p>
+<div class="hero">
+    <div class="overlay-bg"></div>
+    <div class="hero-content">
+        <h1>NeuroQuant PRO</h1>
+        <p>Sinais de Criptomoedas com Inteligência Artificial em Tempo Real</p>
+        <button class="btn-hero" onclick="mostrarAba('sinais')">Acessar Plataforma</button>
+    </div>
 </div>
 </section>
 
 <!-- SINAIS -->
 <section id="sinais">
 <div class="panel">
-
 <h2>Sinais em Tempo Real</h2>
-
 <select id="parSelect">
 <option value="BTCUSDT">BTC/USDT</option>
 <option value="ETHUSDT">ETH/USDT</option>
@@ -72,144 +111,51 @@ button{padding:10px 20px;background:#00f0ff;border:none;border-radius:20px;curso
 <option value="ADAUSDT">ADA/USDT</option>
 <option value="DOGEUSDT">DOGE/USDT</option>
 </select>
-
 <input type="text" id="parManual" placeholder="Ex: RIVERUSDT">
 <button onclick="usarParManual()">Usar Par</button>
-
 <div class="price">$ <span id="preco">Carregando...</span></div>
-
 <div id="sinal" class="signal neutro">NEUTRO</div>
 <div>Probabilidade: <span id="prob">0%</span></div>
-
 </div>
 </section>
 
 <!-- MERCADO -->
 <section id="mercado">
-<div class="panel">
-<h2>Mercado</h2>
-<p>Área futura de análise global</p>
-</div>
+<div class="panel"><h2>Mercado</h2><p>Área futura de análise global</p></div>
 </section>
 
 <!-- CONFIG -->
 <section id="config">
-<div class="panel">
-<h2>Configurações</h2>
-<p>Área futura de configurações</p>
-</div>
+<div class="panel"><h2>Configurações</h2><p>Área futura de configurações</p></div>
 </section>
 
 <script>
+// MENU
+function abrirMenu(){document.getElementById("sidebar").classList.add("active");document.getElementById("overlay").classList.add("active");}
+function fecharMenu(){document.getElementById("sidebar").classList.remove("active");document.getElementById("overlay").classList.remove("active");}
+function mostrarAba(id){document.querySelectorAll("section").forEach(sec=>sec.classList.remove("active"));document.getElementById(id).classList.add("active");fecharMenu();}
 
+// SINAIS
 let parAtual="BTCUSDT";
 let historico=[];
-
-function abrirMenu(){
-document.getElementById("sidebar").classList.add("active");
-document.getElementById("overlay").classList.add("active");
-}
-
-function fecharMenu(){
-document.getElementById("sidebar").classList.remove("active");
-document.getElementById("overlay").classList.remove("active");
-}
-
-function mostrarAba(id){
-document.querySelectorAll("section").forEach(sec=>sec.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-fecharMenu();
-}
-
-document.getElementById("parSelect").addEventListener("change",function(){
-parAtual=this.value;
-historico=[];
-});
-
-function usarParManual(){
-let par=document.getElementById("parManual").value.toUpperCase();
-if(par!=""){
-parAtual=par;
-historico=[];
-}
-}
+document.getElementById("parSelect").addEventListener("change",function(){parAtual=this.value;historico=[];});
+function usarParManual(){let par=document.getElementById("parManual").value.toUpperCase();if(par!=""){parAtual=par;historico=[];}}
 
 async function buscarDados(){
 try{
 let response=await fetch(`https://api.binance.com/api/v3/klines?symbol=${parAtual}&interval=1m&limit=50`);
 let data=await response.json();
-
-historico=[];
-data.forEach(c=>historico.push(parseFloat(c[4])));
-
+historico=[];data.forEach(c=>historico.push(parseFloat(c[4])));
 let precoAtual=historico[historico.length-1];
 document.getElementById("preco").innerText=precoAtual.toFixed(4);
-
-if(historico.length>20){
-gerarSinal(precoAtual);
+if(historico.length>20) gerarSinal(precoAtual);
+}catch{document.getElementById("preco").innerText="Par inválido";}
 }
 
-}catch{
-document.getElementById("preco").innerText="Par inválido";
-}
-}
-
-function calcularEMA(periodo){
-let k=2/(periodo+1);
-let ema=historico[0];
-for(let i=1;i<historico.length;i++){
-ema=historico[i]*k+ema*(1-k);
-}
-return ema;
-}
-
-function calcularRSI(){
-let ganhos=0, perdas=0;
-for(let i=1;i<historico.length;i++){
-let diff=historico[i]-historico[i-1];
-if(diff>0) ganhos+=diff;
-else perdas-=diff;
-}
-let rs=ganhos/(perdas||1);
-return 100-(100/(1+rs));
-}
-
-function gerarSinal(preco){
-let ema9=calcularEMA(9);
-let ema21=calcularEMA(21);
-let rsi=calcularRSI();
-
-let score=0;
-
-if(ema9>ema21) score++;
-if(rsi>55) score++;
-if(preco>ema9) score++;
-if(rsi<30) score--;
-if(ema9<ema21) score--;
-
-let sinal=document.getElementById("sinal");
-let prob=document.getElementById("prob");
-
-if(score>=2){
-sinal.innerText="ALTA";
-sinal.className="signal alta";
-prob.innerText=(60+score*10)+"%";
-}
-else if(score<=-1){
-sinal.innerText="BAIXA";
-sinal.className="signal baixa";
-prob.innerText=(55+Math.abs(score)*10)+"%";
-}
-else{
-sinal.innerText="NEUTRO";
-sinal.className="signal neutro";
-prob.innerText="50%";
-}
-}
-
-setInterval(buscarDados,10000);
-buscarDados();
-
+function calcularEMA(periodo){let k=2/(periodo+1);let ema=historico[0];for(let i=1;i<historico.length;i++){ema=historico[i]*k+ema*(1-k);}return ema;}
+function calcularRSI(){let ganhos=0, perdas=0;for(let i=1;i<historico.length;i++){let diff=historico[i]-historico[i-1];if(diff>0) ganhos+=diff; else perdas-=diff;}let rs=ganhos/(perdas||1);return 100-(100/(1+rs));}
+function gerarSinal(preco){let ema9=calcularEMA(9);let ema21=calcularEMA(21);let rsi=calcularRSI();let score=0;if(ema9>ema21) score++;if(rsi>55) score++;if(preco>ema9) score++;if(rsi<30) score--;if(ema9<ema21) score--;let sinal=document.getElementById("sinal");let prob=document.getElementById("prob");if(score>=2){sinal.innerText="ALTA";sinal.className="signal alta";prob.innerText=(60+score*10)+"%";}else if(score<=-1){sinal.innerText="BAIXA";sinal.className="signal baixa";prob.innerText=(55+Math.abs(score)*10)+"%";}else{sinal.innerText="NEUTRO";sinal.className="signal neutro";prob.innerText="50%";}}
+setInterval(buscarDados,10000);buscarDados();
 </script>
 
 </body>
