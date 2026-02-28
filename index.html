@@ -73,18 +73,23 @@ color:#00f0ff;
 border-radius:8px;
 transition:.3s;
 text-decoration:none;
+cursor:pointer;
 }
 
 .sidebar a:hover{
 background:linear-gradient(90deg,#00f0ff,#00ff88);
 color:#000;
-box-shadow:0 0 15px #00f0ff;
 }
 
-/* CONTEÚDO */
+/* SEÇÕES */
 section{
+display:none;
 padding:80px 20px;
 text-align:center;
+}
+
+section.active{
+display:block;
 }
 
 .panel{
@@ -96,7 +101,7 @@ max-width:800px;
 box-shadow:0 0 25px rgba(0,255,255,0.08);
 }
 
-select,input{
+input, textarea, select{
 padding:10px;
 margin:10px 0;
 border-radius:8px;
@@ -113,24 +118,6 @@ border-radius:20px;
 cursor:pointer;
 font-weight:bold;
 }
-
-.price{
-font-size:30px;
-color:#00ff88;
-margin:15px 0;
-}
-
-.signal{
-font-size:32px;
-margin-top:20px;
-font-weight:bold;
-}
-
-.alta{color:#00ff88;}
-.baixa{color:#ff3b3b;}
-.neutro{color:#ffd000;}
-
-small{color:#aaa;}
 </style>
 </head>
 
@@ -141,57 +128,57 @@ small{color:#aaa;}
 
 <div class="sidebar" id="sidebar">
 <div class="profile">
-<img src="1772226489900.png" alt="Minha Foto">
+<img src="foto.png" alt="Minha Foto">
 <h3>Evenilson</h3>
 </div>
 
-<a href="#">Dashboard</a>
-<a href="#">Sinais</a>
-<a href="#">Mercado</a>
-<a href="#">Configurações</a>
+<a onclick="mostrarAba('dashboard')">Dashboard</a>
+<a onclick="mostrarAba('sinais')">Sinais</a>
+<a onclick="mostrarAba('mercado')">Mercado</a>
+<a onclick="mostrarAba('config')">Configurações</a>
 </div>
 
-<section>
-<h1>NeuroQuant AI</h1>
-<p>Algoritmo automático com confluência técnica</p>
+<!-- DASHBOARD -->
+<section id="dashboard" class="active">
+<div class="panel">
+<h2>Dashboard</h2>
+<input type="text" placeholder="Digite um título">
+<textarea placeholder="Digite algo para seu dashboard"></textarea>
+<button>Salvar</button>
+</div>
 </section>
 
-<section class="panel">
-
-<h3>Selecionar Par</h3>
-
-<select id="parSelect">
-<option value="BTCUSDT">BTC/USDT</option>
-<option value="ETHUSDT">ETH/USDT</option>
-<option value="BNBUSDT">BNB/USDT</option>
-<option value="SOLUSDT">SOL/USDT</option>
-<option value="XRPUSDT">XRP/USDT</option>
-<option value="ADAUSDT">ADA/USDT</option>
-<option value="DOGEUSDT">DOGE/USDT</option>
-</select>
-
-<input type="text" id="parManual" placeholder="Ex: RIVERUSDT">
-<button onclick="usarParManual()">Usar Par</button>
-
-<div class="price">
-$ <span id="preco">Carregando...</span>
+<!-- SINAIS -->
+<section id="sinais">
+<div class="panel">
+<h2>Sinais</h2>
+<input type="text" placeholder="Digite o par (Ex: BTCUSDT)">
+<textarea placeholder="Anotações ou estratégia"></textarea>
+<button>Executar</button>
 </div>
+</section>
 
-<div id="sinal" class="signal neutro">NEUTRO</div>
-
-<div>
-Probabilidade: <span id="prob">0%</span>
+<!-- MERCADO -->
+<section id="mercado">
+<div class="panel">
+<h2>Mercado</h2>
+<input type="text" placeholder="Pesquisar ativo">
+<textarea placeholder="Observações sobre o mercado"></textarea>
+<button>Analisar</button>
 </div>
+</section>
 
-<p><small>Atualiza automaticamente</small></p>
-
+<!-- CONFIG -->
+<section id="config">
+<div class="panel">
+<h2>Configurações</h2>
+<input type="text" placeholder="Nome do usuário">
+<input type="password" placeholder="Nova senha">
+<button>Salvar Configurações</button>
+</div>
 </section>
 
 <script>
-
-let parAtual="BTCUSDT";
-let historico=[];
-let precoAnterior=null;
 
 function abrirMenu(){
 document.getElementById("sidebar").classList.add("active");
@@ -203,94 +190,16 @@ document.getElementById("sidebar").classList.remove("active");
 document.getElementById("overlay").classList.remove("active");
 }
 
-document.getElementById("parSelect").addEventListener("change",function(){
-parAtual=this.value;
-historico=[];
+function mostrarAba(id){
+
+document.querySelectorAll("section").forEach(sec=>{
+sec.classList.remove("active");
 });
 
-function usarParManual(){
-let par=document.getElementById("parManual").value.toUpperCase();
-if(par!=""){
-parAtual=par;
-historico=[];
-}
-}
+document.getElementById(id).classList.add("active");
 
-async function buscarPreco(){
-try{
-let response=await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${parAtual}`);
-let data=await response.json();
-let preco=parseFloat(data.price);
-
-document.getElementById("preco").innerText=preco.toFixed(4);
-
-historico.push(preco);
-if(historico.length>50) historico.shift();
-
-if(historico.length>20){
-gerarSinal(preco);
+fecharMenu();
 }
-
-}catch{
-document.getElementById("preco").innerText="Par inválido";
-}
-}
-
-function calcularEMA(periodo){
-let k=2/(periodo+1);
-let ema=historico[0];
-for(let i=1;i<historico.length;i++){
-ema=historico[i]*k+ema*(1-k);
-}
-return ema;
-}
-
-function calcularRSI(){
-let ganhos=0, perdas=0;
-for(let i=1;i<historico.length;i++){
-let diff=historico[i]-historico[i-1];
-if(diff>0) ganhos+=diff;
-else perdas-=diff;
-}
-let rs=ganhos/(perdas||1);
-return 100-(100/(1+rs));
-}
-
-function gerarSinal(preco){
-let ema9=calcularEMA(9);
-let ema21=calcularEMA(21);
-let rsi=calcularRSI();
-
-let score=0;
-
-if(ema9>ema21) score++;
-if(rsi>55) score++;
-if(preco>ema9) score++;
-if(rsi<30) score--;
-if(ema9<ema21) score--;
-
-let sinal=document.getElementById("sinal");
-let prob=document.getElementById("prob");
-
-if(score>=2){
-sinal.innerText="ALTA";
-sinal.className="signal alta";
-prob.innerText=(60+score*10)+"%";
-}
-else if(score<=-1){
-sinal.innerText="BAIXA";
-sinal.className="signal baixa";
-prob.innerText=(55+Math.abs(score)*10)+"%";
-}
-else{
-sinal.innerText="NEUTRO";
-sinal.className="signal neutro";
-prob.innerText="50%";
-}
-}
-
-setInterval(buscarPreco,5000);
-buscarPreco();
 
 </script>
 
