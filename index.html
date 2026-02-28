@@ -3,84 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant AI | Plataforma Profissional</title>
+<title>NeuroQuant AI | Sinal Automático</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{background:#0c111d;color:#fff;overflow-x:hidden;}
-a{text-decoration:none;}
-
-.menu-btn{
-position:fixed;
-top:20px;
-left:20px;
-font-size:28px;
-cursor:pointer;
-color:#00e5ff;
-z-index:1001;
-}
-
-.sidebar{
-position:fixed;
-top:0;
-left:-260px;
-width:260px;
-height:100%;
-background:#121826;
-padding-top:80px;
-transition:.4s;
-z-index:1000;
-box-shadow:4px 0 20px rgba(0,229,255,0.2);
-}
-.sidebar.active{left:0;}
-.sidebar a{
-display:block;
-padding:15px 25px;
-color:#00e5ff;
-font-size:14px;
-}
-.sidebar a:hover{
-background:#00e5ff;
-color:#000;
-}
-
-.hero{
-height:100vh;
-background:url("fundo.png") center/cover no-repeat;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-text-align:center;
-padding:20px;
-}
-.hero h1{font-size:42px;margin-bottom:20px;}
-.hero p{max-width:700px;color:#ccc;margin-bottom:30px;}
-
-.btn{
-padding:12px 24px;
-background:#00e5ff;
-color:#000;
-border-radius:30px;
-font-weight:bold;
-cursor:pointer;
-border:none;
-}
-.btn:hover{background:#fff;}
-
-section{padding:80px 20px;text-align:center;}
-.dashboard{background:#121826;padding:40px 20px;}
-
+body{background:#0c111d;color:#fff;text-align:center;}
+section{padding:60px 20px;}
 .panel{
 background:#1a2235;
 padding:25px;
 border-radius:15px;
 margin:20px auto;
-max-width:800px;
-text-align:left;
+max-width:700px;
 }
-
 select,input{
 padding:10px;
 margin:10px 0;
@@ -88,43 +24,24 @@ border-radius:8px;
 border:none;
 width:100%;
 }
-
-.price-box{
-font-size:28px;
-color:#00ff88;
-margin-top:10px;
-}
-
-footer{
-background:#000;
-padding:30px;
-text-align:center;
-font-size:13px;
-color:#777;
-}
-small{color:#aaa;font-size:12px;}
+.price{font-size:28px;color:#00ff88;margin:15px 0;}
+.signal{font-size:32px;margin-top:20px;font-weight:bold;}
+.alta{color:#00ff88;}
+.baixa{color:#ff3b3b;}
+.neutro{color:#ffd000;}
+small{color:#aaa;}
 </style>
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
-
-<div class="sidebar" id="sidebar">
-<a href="#">Início</a>
-<a href="#dashboard">Dashboard</a>
-</div>
-
-<div class="hero">
+<section>
 <h1>NeuroQuant AI</h1>
-<p>Análise técnica institucional com preço ao vivo da Binance.</p>
-</div>
+<p>Preço ao vivo + Geração automática de sinal</p>
+</section>
 
-<section id="dashboard" class="dashboard">
-<h2>Dashboard Profissional</h2>
-
-<div class="panel">
-<h3>Selecionar Par Binance</h3>
+<section class="panel">
+<h3>Selecionar Par</h3>
 
 <select id="parSelect">
 <option value="BTCUSDT">BTC/USDT</option>
@@ -134,59 +51,35 @@ small{color:#aaa;font-size:12px;}
 <option value="XRPUSDT">XRP/USDT</option>
 <option value="ADAUSDT">ADA/USDT</option>
 <option value="DOGEUSDT">DOGE/USDT</option>
-<option value="AVAXUSDT">AVAX/USDT</option>
-<option value="LINKUSDT">LINK/USDT</option>
-<option value="DOTUSDT">DOT/USDT</option>
 </select>
 
-<h4>Ou digite qualquer par manualmente:</h4>
-<input type="text" id="parManual" placeholder="Ex: RIVERUSDT">
-<button class="btn" onclick="usarParManual()">Usar Par Digitado</button>
+<input type="text" id="parManual" placeholder="Digite qualquer par ex: RIVERUSDT">
+<button onclick="usarParManual()">Usar Par Digitado</button>
 
-<p><strong>Par Atual:</strong> <span id="parAtual">BTCUSDT</span></p>
-
-<div class="price-box">
+<div class="price">
 Preço Atual: $ <span id="preco">Carregando...</span>
+</div>
+
+<div>
+Variação: <span id="variacao">0%</span>
+</div>
+
+<div id="sinal" class="signal neutro">
+NEUTRO
 </div>
 
 <p><small>Atualiza automaticamente a cada 5 segundos</small></p>
 
-</div>
-
-<div class="panel">
-<h3>Sinal Técnico (Modelo Base)</h3>
-<p><strong>Tendência:</strong> Alta</p>
-<p><strong>EMA 9/21:</strong> Cruzamento altista</p>
-<p><strong>EMA 200:</strong> Preço acima</p>
-<p><strong>RSI:</strong> 55-60 (força moderada)</p>
-<p><strong>MACD:</strong> Histograma positivo</p>
-<p><strong>Fibonacci:</strong> Região 0.618 respeitada</p>
-<p><strong>Estrutura:</strong> HH + HL</p>
-<p><strong>Confluência:</strong> 7 critérios alinhados</p>
-</div>
-
-<p style="margin-top:20px;">
-<small>
-Aviso: Criptomoedas envolvem alto risco. Conteúdo educacional.
-</small>
-</p>
-
 </section>
 
-<footer>
-© 2026 NeuroQuant AI
-</footer>
-
 <script>
-let parAtual = "BTCUSDT";
 
-function toggleMenu(){
-document.getElementById("sidebar").classList.toggle("active");
-}
+let parAtual = "BTCUSDT";
+let precoAnterior = null;
 
 document.getElementById("parSelect").addEventListener("change", function(){
 parAtual = this.value;
-document.getElementById("parAtual").innerText = parAtual;
+precoAnterior = null;
 buscarPreco();
 });
 
@@ -194,7 +87,7 @@ function usarParManual(){
 let par = document.getElementById("parManual").value.toUpperCase();
 if(par !== ""){
 parAtual = par;
-document.getElementById("parAtual").innerText = parAtual;
+precoAnterior = null;
 buscarPreco();
 }
 }
@@ -203,14 +96,43 @@ async function buscarPreco(){
 try{
 let response = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${parAtual}`);
 let data = await response.json();
-document.getElementById("preco").innerText = parseFloat(data.price).toFixed(4);
+
+let precoAtual = parseFloat(data.price);
+document.getElementById("preco").innerText = precoAtual.toFixed(4);
+
+if(precoAnterior !== null){
+let variacao = ((precoAtual - precoAnterior) / precoAnterior) * 100;
+document.getElementById("variacao").innerText = variacao.toFixed(3) + "%";
+gerarSinal(variacao);
+}
+
+precoAnterior = precoAtual;
+
 }catch{
 document.getElementById("preco").innerText = "Par inválido";
 }
 }
 
+function gerarSinal(variacao){
+let sinal = document.getElementById("sinal");
+
+if(variacao > 0.15){
+sinal.innerText = "ALTA";
+sinal.className = "signal alta";
+}
+else if(variacao < -0.15){
+sinal.innerText = "BAIXA";
+sinal.className = "signal baixa";
+}
+else{
+sinal.innerText = "NEUTRO";
+sinal.className = "signal neutro";
+}
+}
+
 setInterval(buscarPreco, 5000);
 buscarPreco();
+
 </script>
 
 </body>
