@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant AI | Plataforma Premium</title>
+<title>NeuroQuant AI | Plataforma Profissional</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
@@ -47,7 +47,7 @@ color:#000;
 
 .hero{
 height:100vh;
-background:url("1772226489900.png") center/cover no-repeat;
+background:url("fundo.png") center/cover no-repeat;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -59,32 +59,25 @@ padding:20px;
 .hero p{max-width:700px;color:#ccc;margin-bottom:30px;}
 
 .btn{
-padding:14px 28px;
+padding:12px 24px;
 background:#00e5ff;
 color:#000;
 border-radius:30px;
 font-weight:bold;
 cursor:pointer;
-display:inline-block;
-transition:.3s;
 border:none;
 }
 .btn:hover{background:#fff;}
 
 section{padding:80px 20px;text-align:center;}
-.section-dark{background:#121826;}
-
-.dashboard{
-background:#121826;
-padding:40px 20px;
-}
+.dashboard{background:#121826;padding:40px 20px;}
 
 .panel{
 background:#1a2235;
 padding:25px;
 border-radius:15px;
 margin:20px auto;
-max-width:700px;
+max-width:800px;
 text-align:left;
 }
 
@@ -94,6 +87,12 @@ margin:10px 0;
 border-radius:8px;
 border:none;
 width:100%;
+}
+
+.price-box{
+font-size:28px;
+color:#00ff88;
+margin-top:10px;
 }
 
 footer{
@@ -113,79 +112,105 @@ small{color:#aaa;font-size:12px;}
 
 <div class="sidebar" id="sidebar">
 <a href="#">Início</a>
-<a href="#plano">Plano PRO</a>
 <a href="#dashboard">Dashboard</a>
 </div>
 
 <div class="hero">
 <h1>NeuroQuant AI</h1>
-<p>Plataforma institucional de análise técnica avançada com foco em estrutura de mercado, liquidez e comportamento institucional.</p>
-<a href="#plano" class="btn">Acessar Plano PRO</a>
+<p>Análise técnica institucional com preço ao vivo da Binance.</p>
 </div>
 
-<section id="plano">
-<h2>Plano PRO – R$ 9,90 / mês</h2>
-<p>Acesso à sala privada de análises técnicas avançadas.</p>
-<br>
-<a href="https://mpago.la/1DYvFBL" target="_blank" class="btn">
-Pagar com Mercado Pago
-</a>
-<br><br>
-<small>Pagamento seguro via Mercado Pago.</small>
-</section>
-
 <section id="dashboard" class="dashboard">
-<h2>Dashboard de Análise Técnica</h2>
+<h2>Dashboard Profissional</h2>
 
 <div class="panel">
 <h3>Selecionar Par Binance</h3>
-<select>
-<option>BTC/USDT</option>
-<option>ETH/USDT</option>
-<option>SOL/USDT</option>
-<option>BNB/USDT</option>
-<option>XRP/USDT</option>
-<option>ADA/USDT</option>
-<option>DOGE/USDT</option>
+
+<select id="parSelect">
+<option value="BTCUSDT">BTC/USDT</option>
+<option value="ETHUSDT">ETH/USDT</option>
+<option value="BNBUSDT">BNB/USDT</option>
+<option value="SOLUSDT">SOL/USDT</option>
+<option value="XRPUSDT">XRP/USDT</option>
+<option value="ADAUSDT">ADA/USDT</option>
+<option value="DOGEUSDT">DOGE/USDT</option>
+<option value="AVAXUSDT">AVAX/USDT</option>
+<option value="LINKUSDT">LINK/USDT</option>
+<option value="DOTUSDT">DOT/USDT</option>
 </select>
+
+<h4>Ou digite qualquer par manualmente:</h4>
+<input type="text" id="parManual" placeholder="Ex: RIVERUSDT">
+<button class="btn" onclick="usarParManual()">Usar Par Digitado</button>
+
+<p><strong>Par Atual:</strong> <span id="parAtual">BTCUSDT</span></p>
+
+<div class="price-box">
+Preço Atual: $ <span id="preco">Carregando...</span>
+</div>
+
+<p><small>Atualiza automaticamente a cada 5 segundos</small></p>
+
 </div>
 
 <div class="panel">
-<h3>Análise Técnica Estrutural</h3>
-<p><strong>Tendência:</strong> Alta no 4H</p>
-<p><strong>EMA 9 x EMA 21:</strong> Cruzamento altista</p>
-<p><strong>EMA 200:</strong> Suporte dinâmico principal</p>
-<p><strong>RSI:</strong> 56 – Região de força compradora</p>
-<p><strong>Fibonacci:</strong> Retração 0.618 respeitada</p>
-<p><strong>Estrutura:</strong> HH e HL confirmados</p>
-<p><strong>Liquidez:</strong> Sweep abaixo do último fundo</p>
-<p><strong>Zona Técnica:</strong> Região institucional</p>
-</div>
-
-<div class="panel">
-<h3>Atualizar Dados Manualmente</h3>
-<input type="text" placeholder="Atualizar Tendência">
-<input type="text" placeholder="Atualizar RSI">
-<input type="text" placeholder="Atualizar Fibonacci">
-<button class="btn">Salvar Alterações</button>
+<h3>Sinal Técnico (Modelo Base)</h3>
+<p><strong>Tendência:</strong> Alta</p>
+<p><strong>EMA 9/21:</strong> Cruzamento altista</p>
+<p><strong>EMA 200:</strong> Preço acima</p>
+<p><strong>RSI:</strong> 55-60 (força moderada)</p>
+<p><strong>MACD:</strong> Histograma positivo</p>
+<p><strong>Fibonacci:</strong> Região 0.618 respeitada</p>
+<p><strong>Estrutura:</strong> HH + HL</p>
+<p><strong>Confluência:</strong> 7 critérios alinhados</p>
 </div>
 
 <p style="margin-top:20px;">
 <small>
-Aviso: Mercado de criptomoedas envolve alto risco. Conteúdo educacional. Não constitui recomendação de investimento.
+Aviso: Criptomoedas envolvem alto risco. Conteúdo educacional.
 </small>
 </p>
 
 </section>
 
 <footer>
-© 2026 NeuroQuant AI – Plataforma Institucional de Análise
+© 2026 NeuroQuant AI
 </footer>
 
 <script>
+let parAtual = "BTCUSDT";
+
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("active");
 }
+
+document.getElementById("parSelect").addEventListener("change", function(){
+parAtual = this.value;
+document.getElementById("parAtual").innerText = parAtual;
+buscarPreco();
+});
+
+function usarParManual(){
+let par = document.getElementById("parManual").value.toUpperCase();
+if(par !== ""){
+parAtual = par;
+document.getElementById("parAtual").innerText = parAtual;
+buscarPreco();
+}
+}
+
+async function buscarPreco(){
+try{
+let response = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${parAtual}`);
+let data = await response.json();
+document.getElementById("preco").innerText = parseFloat(data.price).toFixed(4);
+}catch{
+document.getElementById("preco").innerText = "Par inválido";
+}
+}
+
+setInterval(buscarPreco, 5000);
+buscarPreco();
 </script>
 
 </body>
