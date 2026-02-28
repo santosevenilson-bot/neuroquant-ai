@@ -146,7 +146,101 @@ small{color:#aaa;}
 </div>
 
 <a href="#">Dashboard</a>
-<a href="#">Sinais</a>
+<a href="#">Sinais</.menu-sinais-container{
+background:#0f172a;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(0,255,255,0.1);
+max-width:800px;
+margin:auto;
+}
+
+.menu-sinais-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.status-online{
+font-size:14px;
+color:#00ff88;
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.status-online .dot{
+width:10px;
+height:10px;
+background:#00ff88;
+border-radius:50%;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:1;}
+50%{opacity:.4;}
+100%{opacity:1;}
+}
+
+.menu-sinais-tabs{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+.tab-btn{
+flex:1;
+padding:10px;
+border:none;
+border-radius:8px;
+background:#1f2937;
+color:#00f0ff;
+cursor:pointer;
+transition:.3s;
+}
+
+.tab-btn:hover{
+background:#00f0ff;
+color:#000;
+}
+
+.tab-btn.active{
+background:linear-gradient(90deg,#00f0ff,#00ff88);
+color:#000;
+font-weight:bold;
+}
+
+.badge{
+background:#ff3b3b;
+color:#fff;
+padding:2px 6px;
+border-radius:10px;
+font-size:12px;
+margin-left:5px;
+}
+
+.menu-sinais-content{
+background:#111827;
+padding:20px;
+border-radius:10px;
+}
+
+.aba{
+display:none;
+}
+
+.aba.active{
+display:block;
+}
+
+#liveSignal{
+font-size:28px;
+color:#00ff88;
+font-weight:bold;
+}a>
 <a href="#">Mercado</a>
 <a href="#">Configurações</a>
 </div>
