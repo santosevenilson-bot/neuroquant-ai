@@ -3,44 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant AI | Sinal Automático</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+<title>NeuroQuant AI | Plataforma Algorítmica</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{background:#0c111d;color:#fff;text-align:center;}
-section{padding:60px 20px;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Rajdhani',sans-serif;}
+
+body{
+background:#0b0f1a;
+color:#fff;
+overflow-x:hidden;
+}
+
+/* MENU */
+.menu-btn{
+position:fixed;
+top:20px;
+left:20px;
+font-size:30px;
+cursor:pointer;
+z-index:1001;
+}
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(5px);
+display:none;
+z-index:999;
+}
+
+.sidebar{
+position:fixed;
+top:0;
+left:-280px;
+width:280px;
+height:100%;
+background:#111827;
+padding:30px 20px;
+transition:.4s;
+z-index:1000;
+box-shadow:5px 0 30px rgba(0,255,255,0.2);
+}
+
+.sidebar.active{left:0;}
+.overlay.active{display:block;}
+
+.profile{
+text-align:center;
+margin-bottom:30px;
+}
+
+.profile img{
+width:100px;
+height:100px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #00f0ff;
+}
+
+.sidebar a{
+display:block;
+padding:12px;
+margin:10px 0;
+color:#00f0ff;
+border-radius:8px;
+transition:.3s;
+text-decoration:none;
+}
+
+.sidebar a:hover{
+background:linear-gradient(90deg,#00f0ff,#00ff88);
+color:#000;
+box-shadow:0 0 15px #00f0ff;
+}
+
+/* CONTEÚDO */
+section{
+padding:80px 20px;
+text-align:center;
+}
+
 .panel{
-background:#1a2235;
+background:#111827;
 padding:25px;
 border-radius:15px;
 margin:20px auto;
-max-width:700px;
+max-width:800px;
+box-shadow:0 0 25px rgba(0,255,255,0.08);
 }
+
 select,input{
 padding:10px;
 margin:10px 0;
 border-radius:8px;
 border:none;
 width:100%;
+font-size:16px;
 }
-.price{font-size:28px;color:#00ff88;margin:15px 0;}
-.signal{font-size:32px;margin-top:20px;font-weight:bold;}
+
+button{
+padding:10px 20px;
+background:#00f0ff;
+border:none;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.price{
+font-size:30px;
+color:#00ff88;
+margin:15px 0;
+}
+
+.signal{
+font-size:32px;
+margin-top:20px;
+font-weight:bold;
+}
+
 .alta{color:#00ff88;}
 .baixa{color:#ff3b3b;}
 .neutro{color:#ffd000;}
+
 small{color:#aaa;}
 </style>
 </head>
 
 <body>
 
+<div class="menu-btn" onclick="abrirMenu()">☰</div>
+<div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+
+<div class="sidebar" id="sidebar">
+<div class="profile">
+<img src="1772226489900.png" alt="Minha Foto">
+<h3>Evenilson</h3>
+</div>
+
+<a href="#">Dashboard</a>
+<a href="#">Sinais</a>
+<a href="#">Mercado</a>
+<a href="#">Configurações</a>
+</div>
+
 <section>
 <h1>NeuroQuant AI</h1>
-<p>Preço ao vivo + Geração automática de sinal</p>
+<p>Algoritmo automático com confluência técnica</p>
 </section>
 
 <section class="panel">
+
 <h3>Selecionar Par</h3>
 
 <select id="parSelect">
@@ -53,84 +170,126 @@ small{color:#aaa;}
 <option value="DOGEUSDT">DOGE/USDT</option>
 </select>
 
-<input type="text" id="parManual" placeholder="Digite qualquer par ex: RIVERUSDT">
-<button onclick="usarParManual()">Usar Par Digitado</button>
+<input type="text" id="parManual" placeholder="Ex: RIVERUSDT">
+<button onclick="usarParManual()">Usar Par</button>
 
 <div class="price">
-Preço Atual: $ <span id="preco">Carregando...</span>
+$ <span id="preco">Carregando...</span>
 </div>
+
+<div id="sinal" class="signal neutro">NEUTRO</div>
 
 <div>
-Variação: <span id="variacao">0%</span>
+Probabilidade: <span id="prob">0%</span>
 </div>
 
-<div id="sinal" class="signal neutro">
-NEUTRO
-</div>
-
-<p><small>Atualiza automaticamente a cada 5 segundos</small></p>
+<p><small>Atualiza automaticamente</small></p>
 
 </section>
 
 <script>
 
-let parAtual = "BTCUSDT";
-let precoAnterior = null;
+let parAtual="BTCUSDT";
+let historico=[];
+let precoAnterior=null;
 
-document.getElementById("parSelect").addEventListener("change", function(){
-parAtual = this.value;
-precoAnterior = null;
-buscarPreco();
+function abrirMenu(){
+document.getElementById("sidebar").classList.add("active");
+document.getElementById("overlay").classList.add("active");
+}
+
+function fecharMenu(){
+document.getElementById("sidebar").classList.remove("active");
+document.getElementById("overlay").classList.remove("active");
+}
+
+document.getElementById("parSelect").addEventListener("change",function(){
+parAtual=this.value;
+historico=[];
 });
 
 function usarParManual(){
-let par = document.getElementById("parManual").value.toUpperCase();
-if(par !== ""){
-parAtual = par;
-precoAnterior = null;
-buscarPreco();
+let par=document.getElementById("parManual").value.toUpperCase();
+if(par!=""){
+parAtual=par;
+historico=[];
 }
 }
 
 async function buscarPreco(){
 try{
-let response = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${parAtual}`);
-let data = await response.json();
+let response=await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${parAtual}`);
+let data=await response.json();
+let preco=parseFloat(data.price);
 
-let precoAtual = parseFloat(data.price);
-document.getElementById("preco").innerText = precoAtual.toFixed(4);
+document.getElementById("preco").innerText=preco.toFixed(4);
 
-if(precoAnterior !== null){
-let variacao = ((precoAtual - precoAnterior) / precoAnterior) * 100;
-document.getElementById("variacao").innerText = variacao.toFixed(3) + "%";
-gerarSinal(variacao);
+historico.push(preco);
+if(historico.length>50) historico.shift();
+
+if(historico.length>20){
+gerarSinal(preco);
 }
-
-precoAnterior = precoAtual;
 
 }catch{
-document.getElementById("preco").innerText = "Par inválido";
+document.getElementById("preco").innerText="Par inválido";
 }
 }
 
-function gerarSinal(variacao){
-let sinal = document.getElementById("sinal");
-
-if(variacao > 0.15){
-sinal.innerText = "ALTA";
-sinal.className = "signal alta";
+function calcularEMA(periodo){
+let k=2/(periodo+1);
+let ema=historico[0];
+for(let i=1;i<historico.length;i++){
+ema=historico[i]*k+ema*(1-k);
 }
-else if(variacao < -0.15){
-sinal.innerText = "BAIXA";
-sinal.className = "signal baixa";
+return ema;
+}
+
+function calcularRSI(){
+let ganhos=0, perdas=0;
+for(let i=1;i<historico.length;i++){
+let diff=historico[i]-historico[i-1];
+if(diff>0) ganhos+=diff;
+else perdas-=diff;
+}
+let rs=ganhos/(perdas||1);
+return 100-(100/(1+rs));
+}
+
+function gerarSinal(preco){
+let ema9=calcularEMA(9);
+let ema21=calcularEMA(21);
+let rsi=calcularRSI();
+
+let score=0;
+
+if(ema9>ema21) score++;
+if(rsi>55) score++;
+if(preco>ema9) score++;
+if(rsi<30) score--;
+if(ema9<ema21) score--;
+
+let sinal=document.getElementById("sinal");
+let prob=document.getElementById("prob");
+
+if(score>=2){
+sinal.innerText="ALTA";
+sinal.className="signal alta";
+prob.innerText=(60+score*10)+"%";
+}
+else if(score<=-1){
+sinal.innerText="BAIXA";
+sinal.className="signal baixa";
+prob.innerText=(55+Math.abs(score)*10)+"%";
 }
 else{
-sinal.innerText = "NEUTRO";
-sinal.className = "signal neutro";
+sinal.innerText="NEUTRO";
+sinal.className="signal neutro";
+prob.innerText="50%";
 }
 }
 
-setInterval(buscarPreco, 5000);
+setInterval(buscarPreco,5000);
 buscarPreco();
 
 </script>
