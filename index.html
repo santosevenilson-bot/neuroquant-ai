@@ -70,6 +70,13 @@ button{padding:10px 20px;background:#00f0ff;border:none;border-radius:20px;curso
 .alta{color:#00ff88;}
 .baixa{color:#ff3b3b;}
 .neutro{color:#ffd000;}
+
+/* NOTÍCIAS */
+.noticias-container{margin-top:20px;text-align:left;max-height:400px;overflow-y:auto;}
+.noticia{padding:10px;margin:10px 0;border-left:4px solid #00ffae;}
+.noticia a{color:#00ffae;text-decoration:none;}
+.noticia a:hover{text-decoration:underline;}
+.noticia span{display:block;font-size:12px;color:#aaa;margin-top:2px;}
 </style>
 </head>
 <body>
@@ -84,7 +91,7 @@ button{padding:10px 20px;background:#00f0ff;border:none;border-radius:20px;curso
 <a onclick="mostrarAba('config')">Configurações</a>
 </div>
 
-<!-- DASHBOARD / PÁGINA PRINCIPAL -->
+<!-- DASHBOARD -->
 <section id="dashboard" class="active">
 <div class="hero">
     <div class="overlay-bg"></div>
@@ -117,9 +124,14 @@ button{padding:10px 20px;background:#00f0ff;border:none;border-radius:20px;curso
 </div>
 </section>
 
-<!-- MERCADO -->
+<!-- MERCADO / NOTÍCIAS -->
 <section id="mercado">
-<div class="panel"><h2>Mercado</h2><p>Área futura de análise global</p></div>
+<div class="panel">
+<h2>Notícias de Criptomoedas</h2>
+<div id="noticias" class="noticias-container">
+<p>Carregando notícias...</p>
+</div>
+</div>
 </section>
 
 <!-- CONFIGURAÇÕES -->
@@ -155,6 +167,44 @@ function calcularEMA(periodo){let k=2/(periodo+1);let ema=historico[0];for(let i
 function calcularRSI(){let ganhos=0, perdas=0;for(let i=1;i<historico.length;i++){let diff=historico[i]-historico[i-1];if(diff>0) ganhos+=diff; else perdas-=diff;}let rs=ganhos/(perdas||1);return 100-(100/(1+rs));}
 function gerarSinal(preco){let ema9=calcularEMA(9);let ema21=calcularEMA(21);let rsi=calcularRSI();let score=0;if(ema9>ema21) score++;if(rsi>55) score++;if(preco>ema9) score++;if(rsi<30) score--;if(ema9<ema21) score--;let sinal=document.getElementById("sinal");let prob=document.getElementById("prob");if(score>=2){sinal.innerText="ALTA";sinal.className="signal alta";prob.innerText=(60+score*10)+"%";}else if(score<=-1){sinal.innerText="BAIXA";sinal.className="signal baixa";prob.innerText=(55+Math.abs(score)*10)+"%";}else{sinal.innerText="NEUTRO";sinal.className="signal neutro";prob.innerText="50%";}}
 setInterval(buscarDados,10000);buscarDados();
+
+// NOTÍCIAS
+const sitesNoticias = [
+"https://www.coindesk.com/",
+"https://cryptopotato.com/"
+];
+
+async function buscarNoticias(){
+    const container = document.getElementById("noticias");
+    container.innerHTML = "<p>Carregando notícias...</p>";
+    let noticiasHTML = "";
+    for(let site of sitesNoticias){
+        try{
+            const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(site)}`);
+            const data = await response.json();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data.contents,"text/html");
+            const links = doc.querySelectorAll("a");
+            let count = 0;
+            for(let a of links){
+                const titulo = a.textContent.trim();
+                const href = a.href;
+                if(titulo && href.startsWith("http")){
+                    noticiasHTML += `<div class="noticia"><a href="${href}" target="_blank">${titulo}</a><span>${site}</span></div>`;
+                    count++;
+                }
+                if(count>=5) break;
+            }
+        }catch(e){
+            noticiasHTML += `<p>Erro ao acessar ${site}</p>`;
+        }
+    }
+    container.innerHTML = noticiasHTML || "<p>Nenhuma notícia disponível.</p>";
+}
+
+// Atualiza notícias a cada 1 hora
+buscarNoticias();
+setInterval(buscarNoticias,3600000);
 </script>
 
 </body>
