@@ -47,7 +47,7 @@ color:#000;
 
 .hero{
 height:100vh;
-background:url("17722264899900.png") center/cover no-repeat;
+background:url("1772226489900.png") center/cover no-repeat;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -74,24 +74,9 @@ border:none;
 section{padding:80px 20px;text-align:center;}
 .section-dark{background:#121826;}
 
-.cards{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
-}
-.card{
-background:#1a2235;
-padding:25px;
-width:280px;
-border-radius:15px;
-box-shadow:0 0 20px rgba(0,229,255,0.08);
-}
-
 .dashboard{
 background:#121826;
 padding:40px 20px;
-display:none;
 }
 
 .panel{
@@ -129,7 +114,6 @@ small{color:#aaa;font-size:12px;}
 <div class="sidebar" id="sidebar">
 <a href="#">Início</a>
 <a href="#plano">Plano PRO</a>
-<a href="#login">Login</a>
 <a href="#dashboard">Dashboard</a>
 </div>
 
@@ -147,15 +131,7 @@ small{color:#aaa;font-size:12px;}
 Pagar com Mercado Pago
 </a>
 <br><br>
-<small>Pagamento seguro via Mercado Pago. Liberação após confirmação.</small>
-</section>
-
-<section id="login" class="section-dark">
-<h2>Área de Membros</h2>
-<div style="max-width:400px;margin:auto;">
-<input type="password" id="senha" placeholder="Digite sua senha">
-<button class="btn" onclick="login()">Entrar</button>
-</div>
+<small>Pagamento seguro via Mercado Pago.</small>
 </section>
 
 <section id="dashboard" class="dashboard">
@@ -209,16 +185,6 @@ Aviso: Mercado de criptomoedas envolve alto risco. Conteúdo educacional. Não c
 <script>
 function toggleMenu(){
 document.getElementById("sidebar").classList.toggle("active");
-}
-
-function login(){
-let senha = document.getElementById("senha").value;
-if(senha === "neuropro"){
-document.getElementById("dashboard").style.display="block";
-alert("Acesso liberado.");
-}else{
-alert("Senha incorreta.");
-}
 }
 </script>
 
