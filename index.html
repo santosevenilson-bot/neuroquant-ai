@@ -4,245 +4,190 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NeuroQuant PRO</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Rajdhani',sans-serif;}
-body{background:#0b0f1a;color:#fff;overflow-x:hidden;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
 
-/* MENU */
-.menu-btn{position:fixed;top:20px;left:20px;font-size:30px;cursor:pointer;z-index:1001;}
-.overlay{position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;z-index:999;}
-.overlay.active{display:block;}
-.sidebar{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#111827;padding:30px 20px;transition:.4s;z-index:1000;}
-.sidebar.active{left:0;}
-.sidebar a{display:block;padding:12px;margin:10px 0;color:#00f0ff;border-radius:8px;cursor:pointer;text-decoration:none;}
-.sidebar a:hover{background:#00f0ff;color:#000;}
+body{
+background:#0b0f1a;
+color:#fff;
+overflow-x:hidden;
+}
 
-/* SEÇÕES */
-section{display:none;padding:80px 20px;text-align:center;}
-section.active{display:block;}
-.panel{background:#111827;padding:25px;border-radius:15px;margin:auto;max-width:800px;}
-input,select{padding:10px;margin:10px 0;border-radius:8px;border:none;width:100%;}
-button{padding:10px 20px;background:#00f0ff;border:none;border-radius:20px;cursor:pointer;font-weight:bold;}
-
-/* HERO FUNDO PNG */
-.hero{
-position:relative;
-height:100vh;
-background-image:url("https://raw.githubusercontent.com/SeuUsuario/SeuRepo/main/1772226489900.png");
-background-size:cover;
-background-position:center;
+/* NAVBAR */
+nav{
+position:fixed;
+width:100%;
+top:0;
 display:flex;
+justify-content:space-between;
 align-items:center;
+padding:20px 10%;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+z-index:1000;
+}
+
+nav h2{
+color:#00ffae;
+letter-spacing:2px;
+}
+
+nav ul{
+display:flex;
+gap:30px;
+list-style:none;
+}
+
+nav ul li{
+cursor:pointer;
+transition:.3s;
+}
+
+nav ul li:hover{
+color:#00ffae;
+}
+
+/* HERO */
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
 justify-content:center;
+align-items:center;
 text-align:center;
+background:linear-gradient(135deg,#0b0f1a,#0f2027,#203a43);
+padding:20px;
 }
-.hero-overlay{
-position:absolute;width:100%;height:100%;
-background:rgba(0,0,0,0.65);top:0;left:0;
+
+.hero h1{
+font-size:50px;
+margin-bottom:20px;
+color:#00ffae;
+text-shadow:0 0 20px #00ffae;
 }
-.hero-content{
-position:relative;z-index:2;
+
+.hero p{
+font-size:18px;
+max-width:600px;
+margin-bottom:30px;
+opacity:0.8;
 }
-.hero h1{font-size:42px;margin-bottom:15px;}
-.hero p{font-size:18px;margin-bottom:25px;}
-.btn-hero{
-padding:12px 30px;
-background:#00ffae;
+
+.btn{
+padding:15px 35px;
 border:none;
-border-radius:8px;
+border-radius:30px;
+background:#00ffae;
+color:#000;
 font-weight:bold;
 cursor:pointer;
+transition:.3s;
+box-shadow:0 0 20px #00ffae;
 }
 
-/* SINAIS */
-.price{font-size:28px;color:#00ff88;margin:15px 0;}
-.signal{font-size:30px;font-weight:bold;margin-top:10px;}
-.alta{color:#00ff88;}
-.baixa{color:#ff3b3b;}
-.neutro{color:#ffd000;}
-.infoExtra{margin-top:15px;font-size:14px;line-height:1.6;}
+.btn:hover{
+transform:scale(1.05);
+}
+
+/* FEATURES */
+.features{
+padding:100px 10%;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+padding:30px;
+border-radius:20px;
+backdrop-filter:blur(10px);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 0 20px #00ffae;
+}
+
+.card h3{
+margin-bottom:15px;
+color:#00ffae;
+}
+
+/* CTA */
+.cta{
+padding:100px 20px;
+text-align:center;
+background:#111827;
+}
+
+.cta h2{
+font-size:35px;
+margin-bottom:20px;
+color:#00ffae;
+}
+
+footer{
+padding:30px;
+text-align:center;
+background:#000;
+font-size:14px;
+opacity:.6;
+}
 </style>
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="abrirMenu()">☰</div>
-<div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+<nav>
+<h2>NeuroQuant</h2>
+<ul>
+<li>Início</li>
+<li>Recursos</li>
+<li>Planos</li>
+<li>Contato</li>
+</ul>
+</nav>
 
-<div class="sidebar" id="sidebar">
-<a onclick="mostrarAba('dashboard')">Dashboard</a>
-<a onclick="mostrarAba('sinais')">Sinais</a>
-<a onclick="mostrarAba('mercado')">Mercado</a>
+<section class="hero">
+<h1>Plataforma de Sinais com IA</h1>
+<p>Análises inteligentes em tempo real utilizando estrutura de mercado, indicadores e probabilidade dinâmica.</p>
+<button class="btn">Entrar na Plataforma</button>
+</section>
+
+<section class="features">
+<div class="card">
+<h3>Sinais em Tempo Real</h3>
+<p>Atualização automática direto da Binance com probabilidade de alta e baixa.</p>
 </div>
 
-<!-- DASHBOARD -->
-<section id="dashboard" class="active">
-<div class="hero">
-<div class="hero-overlay"></div>
-<div class="hero-content">
-<h1>NeuroQuant PRO</h1>
-<p>Sinais Inteligentes com IA e Estrutura de Mercado</p>
-<button class="btn-hero" onclick="mostrarAba('sinais')">Entrar na Plataforma</button>
+<div class="card">
+<h3>Identificação de Pullback</h3>
+<p>Reconhecimento automático de continuação de tendência.</p>
 </div>
+
+<div class="card">
+<h3>Probabilidade Dinâmica</h3>
+<p>Score inteligente baseado em EMA, RSI e estrutura de mercado.</p>
+</div>
+
+<div class="card">
+<h3>Estrutura Profissional</h3>
+<p>Interface moderna estilo plataforma de trading premium.</p>
 </div>
 </section>
 
-<!-- SINAIS -->
-<section id="sinais">
-<div class="panel">
-<h2>Sinais em Tempo Real</h2>
-
-<select id="parSelect">
-<option value="BTCUSDT">BTC/USDT</option>
-<option value="ETHUSDT">ETH/USDT</option>
-<option value="SOLUSDT">SOL/USDT</option>
-<option value="BNBUSDT">BNB/USDT</option>
-<option value="XRPUSDT">XRP/USDT</option>
-</select>
-
-<input type="text" id="parManual" placeholder="Ex: RIVERUSDT">
-<button onclick="usarParManual()">Usar Par</button>
-
-<div class="price">$ <span id="preco">Carregando...</span></div>
-<div id="sinal" class="signal neutro">NEUTRO</div>
-<div>Probabilidade Principal: <span id="prob">0%</span></div>
-
-<div id="infoExtra" class="infoExtra"></div>
-
-</div>
+<section class="cta">
+<h2>Comece agora e opere com vantagem estatística</h2>
+<button class="btn">Assinar Agora</button>
 </section>
 
-<!-- MERCADO -->
-<section id="mercado">
-<div class="panel">
-<h2>Mercado</h2>
-<p>Em desenvolvimento...</p>
-</div>
-</section>
-
-<script>
-// MENU
-function abrirMenu(){document.getElementById("sidebar").classList.add("active");document.getElementById("overlay").classList.add("active");}
-function fecharMenu(){document.getElementById("sidebar").classList.remove("active");document.getElementById("overlay").classList.remove("active");}
-function mostrarAba(id){document.querySelectorAll("section").forEach(sec=>sec.classList.remove("active"));document.getElementById(id).classList.add("active");fecharMenu();}
-
-// VARIÁVEIS
-let parAtual="BTCUSDT";
-let historico=[];
-
-document.getElementById("parSelect").addEventListener("change",function(){
-parAtual=this.value;
-historico=[];
-});
-
-function usarParManual(){
-let par=document.getElementById("parManual").value.toUpperCase();
-if(par!=""){parAtual=par;historico=[];}
-}
-
-// BUSCAR BINANCE
-async function buscarDados(){
-try{
-let response=await fetch(`https://api.binance.com/api/v3/klines?symbol=${parAtual}&interval=1m&limit=100`);
-let data=await response.json();
-
-historico=[];
-data.forEach(c=>historico.push(parseFloat(c[4])));
-
-let precoAtual=historico[historico.length-1];
-document.getElementById("preco").innerText=precoAtual.toFixed(4);
-
-if(historico.length>30) gerarSinal(precoAtual);
-
-}catch{
-document.getElementById("preco").innerText="Par inválido";
-}
-}
-
-// INDICADORES
-function calcularEMA(periodo){
-let k=2/(periodo+1);
-let ema=historico[0];
-for(let i=1;i<historico.length;i++){
-ema=historico[i]*k+ema*(1-k);
-}
-return ema;
-}
-
-function calcularRSI(){
-let ganhos=0, perdas=0;
-for(let i=1;i<historico.length;i++){
-let diff=historico[i]-historico[i-1];
-if(diff>0) ganhos+=diff;
-else perdas-=diff;
-}
-let rs=ganhos/(perdas||1);
-return 100-(100/(1+rs));
-}
-
-// SINAL AVANÇADO
-function gerarSinal(preco){
-
-let ema9=calcularEMA(9);
-let ema21=calcularEMA(21);
-let rsi=calcularRSI();
-
-// Tendência
-let tendencia="Lateral";
-if(ema9>ema21) tendencia="Alta";
-if(ema9<ema21) tendencia="Baixa";
-
-// Pullback
-let pullback="Não";
-if(tendencia==="Alta" && preco<ema9 && preco>ema21) pullback="Pullback de Alta";
-if(tendencia==="Baixa" && preco>ema9 && preco<ema21) pullback="Pullback de Baixa";
-
-// Probabilidades
-let scoreAlta=0, scoreBaixa=0;
-
-if(ema9>ema21) scoreAlta+=2;
-if(rsi>55) scoreAlta+=1;
-if(preco>ema9) scoreAlta+=1;
-
-if(ema9<ema21) scoreBaixa+=2;
-if(rsi<45) scoreBaixa+=1;
-if(preco<ema9) scoreBaixa+=1;
-
-let probAlta=Math.min(90,50+scoreAlta*10);
-let probBaixa=Math.min(90,50+scoreBaixa*10);
-
-let sinal=document.getElementById("sinal");
-let prob=document.getElementById("prob");
-
-if(probAlta>probBaixa){
-sinal.innerText="ALTA";
-sinal.className="signal alta";
-prob.innerText=probAlta+"%";
-}else if(probBaixa>probAlta){
-sinal.innerText="BAIXA";
-sinal.className="signal baixa";
-prob.innerText=probBaixa+"%";
-}else{
-sinal.innerText="NEUTRO";
-sinal.className="signal neutro";
-prob.innerText="50%";
-}
-
-document.getElementById("infoExtra").innerHTML=`
-Tendência: <b>${tendencia}</b><br>
-Pullback: <b>${pullback}</b><br>
-Prob Alta: <b>${probAlta}%</b><br>
-Prob Baixa: <b>${probBaixa}%</b><br>
-RSI: <b>${rsi.toFixed(1)}</b>
-`;
-
-}
-
-setInterval(buscarDados,10000);
-buscarDados();
-</script>
+<footer>
+© 2026 NeuroQuant PRO - Todos os direitos reservados
+</footer>
 
 </body>
 </html>
