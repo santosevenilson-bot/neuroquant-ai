@@ -1,193 +1,64 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant PRO</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-
-body{
-background:#0b0f1a;
-color:#fff;
-overflow-x:hidden;
-}
-
-/* NAVBAR */
-nav{
-position:fixed;
-width:100%;
-top:0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 10%;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(10px);
-z-index:1000;
-}
-
-nav h2{
-color:#00ffae;
-letter-spacing:2px;
-}
-
-nav ul{
-display:flex;
-gap:30px;
-list-style:none;
-}
-
-nav ul li{
-cursor:pointer;
-transition:.3s;
-}
-
-nav ul li:hover{
-color:#00ffae;
-}
-
-/* HERO */
-.hero{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-background:linear-gradient(135deg,#0b0f1a,#0f2027,#203a43);
-padding:20px;
-}
-
-.hero h1{
-font-size:50px;
-margin-bottom:20px;
-color:#00ffae;
-text-shadow:0 0 20px #00ffae;
-}
-
-.hero p{
-font-size:18px;
-max-width:600px;
-margin-bottom:30px;
-opacity:0.8;
-}
-
-.btn{
-padding:15px 35px;
-border:none;
-border-radius:30px;
-background:#00ffae;
-color:#000;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-box-shadow:0 0 20px #00ffae;
-}
-
-.btn:hover{
-transform:scale(1.05);
-}
-
-/* FEATURES */
-.features{
-padding:100px 10%;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
-}
-
-.card{
-background:rgba(255,255,255,0.05);
-padding:30px;
-border-radius:20px;
-backdrop-filter:blur(10px);
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-10px);
-box-shadow:0 0 20px #00ffae;
-}
-
-.card h3{
-margin-bottom:15px;
-color:#00ffae;
-}
-
-/* CTA */
-.cta{
-padding:100px 20px;
-text-align:center;
-background:#111827;
-}
-
-.cta h2{
-font-size:35px;
-margin-bottom:20px;
-color:#00ffae;
-}
-
-footer{
-padding:30px;
-text-align:center;
-background:#000;
-font-size:14px;
-opacity:.6;
-}
-</style>
+  <title>Detector de Crise BTC</title>
+  <script src="https://cdn.jsdelivr.net/npm/technicalindicators/dist/browser.js"></script>
+  <style>
+    body { background:#0f172a; color:white; font-family:Arial; text-align:center; }
+    .alert { font-size:22px; margin-top:20px; }
+  </style>
 </head>
-
 <body>
 
-<nav>
-<h2>NeuroQuant</h2>
-<ul>
-<li>Início</li>
-<li>Recursos</li>
-<li>Planos</li>
-<li>Contato</li>
-</ul>
-</nav>
+<h1>Detector de Crise - BTC/USDT</h1>
+<div id="status" class="alert">Carregando...</div>
 
-<section class="hero">
-<h1>Plataforma de Sinais com IA</h1>
-<p>Análises inteligentes em tempo real utilizando estrutura de mercado, indicadores e probabilidade dinâmica.</p>
-<button class="btn">Entrar na Plataforma</button>
-</section>
+<script>
+async function fetchData() {
+  const response = await fetch("https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=250");
+  const data = await response.json();
+  
+  const closes = data.map(c => parseFloat(c[4]));
+  const volumes = data.map(c => parseFloat(c[5]));
 
-<section class="features">
-<div class="card">
-<h3>Sinais em Tempo Real</h3>
-<p>Atualização automática direto da Binance com probabilidade de alta e baixa.</p>
-</div>
+  const ema21 = technicalindicators.EMA.calculate({ period: 21, values: closes });
+  const ema50 = technicalindicators.EMA.calculate({ period: 50, values: closes });
+  const ema200 = technicalindicators.EMA.calculate({ period: 200, values: closes });
+  const rsi = technicalindicators.RSI.calculate({ period: 14, values: closes });
 
-<div class="card">
-<h3>Identificação de Pullback</h3>
-<p>Reconhecimento automático de continuação de tendência.</p>
-</div>
+  const lastClose = closes[closes.length - 1];
+  const lastEma21 = ema21[ema21.length - 1];
+  const lastEma50 = ema50[ema50.length - 1];
+  const lastEma200 = ema200[ema200.length - 1];
+  const lastRsi = rsi[rsi.length - 1];
 
-<div class="card">
-<h3>Probabilidade Dinâmica</h3>
-<p>Score inteligente baseado em EMA, RSI e estrutura de mercado.</p>
-</div>
+  const avgVolume = volumes.slice(-20).reduce((a,b)=>a+b)/20;
+  const lastVolume = volumes[volumes.length - 1];
 
-<div class="card">
-<h3>Estrutura Profissional</h3>
-<p>Interface moderna estilo plataforma de trading premium.</p>
-</div>
-</section>
+  let crisisScore = 0;
 
-<section class="cta">
-<h2>Comece agora e opere com vantagem estatística</h2>
-<button class="btn">Assinar Agora</button>
-</section>
+  if (lastEma21 < lastEma50 && lastEma50 < lastEma200) crisisScore++;
+  if (lastRsi < 40) crisisScore++;
+  if (lastVolume > avgVolume) crisisScore++;
+  if (lastClose < lastEma200) crisisScore++;
 
-<footer>
-© 2026 NeuroQuant PRO - Todos os direitos reservados
-</footer>
+  const statusDiv = document.getElementById("status");
+
+  if (crisisScore >= 3) {
+    statusDiv.innerHTML = "⚠️ ALERTA DE CRISE ATIVO (Short Bias)";
+    statusDiv.style.color = "red";
+  } else if (lastClose > lastEma50 && lastRsi > 50 && lastVolume > avgVolume) {
+    statusDiv.innerHTML = "🚀 POSSÍVEL REVERSÃO (Long Bias)";
+    statusDiv.style.color = "lime";
+  } else {
+    statusDiv.innerHTML = "🟡 Mercado Neutro";
+    statusDiv.style.color = "yellow";
+  }
+}
+
+fetchData();
+setInterval(fetchData, 60000);
+</script>
 
 </body>
 </html>
