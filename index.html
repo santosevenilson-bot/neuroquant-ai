@@ -1,63 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-  <title>Detector de Crise BTC</title>
-  <script src="https://cdn.jsdelivr.net/npm/technicalindicators/dist/browser.js"></script>
-  <style>
-    body { background:#0f172a; color:white; font-family:Arial; text-align:center; }
-    .alert { font-size:22px; margin-top:20px; }
-  </style>
+<meta charset="UTF-8">
+<title>NeuroQuant Crisis Detector PRO</title>
+<script src="https://cdn.jsdelivr.net/npm/technicalindicators/dist/browser.js"></script>
+<style>
+body{
+  margin:0;
+  font-family: 'Segoe UI', sans-serif;
+  background:#0b1120;
+  color:white;
+}
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  width:250px;
+  height:100%;
+  background:#111827;
+  padding:20px;
+}
+.sidebar h2{
+  color:#00f5ff;
+}
+.sidebar button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  background:#1f2937;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+.main{
+  margin-left:270px;
+  padding:30px;
+}
+.card{
+  background:#111827;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+.score{
+  font-size:28px;
+  font-weight:bold;
+}
+.green{color:lime;}
+.red{color:red;}
+.yellow{color:yellow;}
+</style>
 </head>
+
 <body>
 
+<div class="sidebar">
+<h2>NeuroQuant PRO</h2>
+<button onclick="setTimeframe('1h')">1 Hora</button>
+<button onclick="setTimeframe('4h')">4 Horas</button>
+<button onclick="setTimeframe('1d')">Diário</button>
+</div>
+
+<div class="main">
 <h1>Detector de Crise - BTC/USDT</h1>
-<div id="status" class="alert">Carregando...</div>
+
+<div class="card">
+<div id="marketStatus">Carregando...</div>
+<div class="score" id="probability">0%</div>
+</div>
+
+<div class="card">
+<div id="details"></div>
+</div>
+
+</div>
 
 <script>
-async function fetchData() {
-  const response = await fetch("https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=250");
+
+let timeframe = "1h";
+
+function setTimeframe(tf){
+  timeframe = tf;
+  fetchData();
+}
+
+async function fetchData(){
+  const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${timeframe}&limit=300`);
   const data = await response.json();
-  
+
   const closes = data.map(c => parseFloat(c[4]));
   const volumes = data.map(c => parseFloat(c[5]));
 
-  const ema21 = technicalindicators.EMA.calculate({ period: 21, values: closes });
-  const ema50 = technicalindicators.EMA.calculate({ period: 50, values: closes });
-  const ema200 = technicalindicators.EMA.calculate({ period: 200, values: closes });
-  const rsi = technicalindicators.RSI.calculate({ period: 14, values: closes });
+  const ema21 = technicalindicators.EMA.calculate({period:21, values:closes});
+  const ema50 = technicalindicators.EMA.calculate({period:50, values:closes});
+  const ema200 = technicalindicators.EMA.calculate({period:200, values:closes});
+  const rsi = technicalindicators.RSI.calculate({period:14, values:closes});
 
-  const lastClose = closes[closes.length - 1];
-  const lastEma21 = ema21[ema21.length - 1];
-  const lastEma50 = ema50[ema50.length - 1];
-  const lastEma200 = ema200[ema200.length - 1];
-  const lastRsi = rsi[rsi.length - 1];
+  const lastClose = closes[closes.length-1];
+  const lastEma21 = ema21[ema21.length-1];
+  const lastEma50 = ema50[ema50.length-1];
+  const lastEma200 = ema200[ema200.length-1];
+  const lastRsi = rsi[rsi.length-1];
 
   const avgVolume = volumes.slice(-20).reduce((a,b)=>a+b)/20;
-  const lastVolume = volumes[volumes.length - 1];
+  const lastVolume = volumes[volumes.length-1];
 
-  let crisisScore = 0;
+  let score = 0;
+  let detail = "";
 
-  if (lastEma21 < lastEma50 && lastEma50 < lastEma200) crisisScore++;
-  if (lastRsi < 40) crisisScore++;
-  if (lastVolume > avgVolume) crisisScore++;
-  if (lastClose < lastEma200) crisisScore++;
-
-  const statusDiv = document.getElementById("status");
-
-  if (crisisScore >= 3) {
-    statusDiv.innerHTML = "⚠️ ALERTA DE CRISE ATIVO (Short Bias)";
-    statusDiv.style.color = "red";
-  } else if (lastClose > lastEma50 && lastRsi > 50 && lastVolume > avgVolume) {
-    statusDiv.innerHTML = "🚀 POSSÍVEL REVERSÃO (Long Bias)";
-    statusDiv.style.color = "lime";
-  } else {
-    statusDiv.innerHTML = "🟡 Mercado Neutro";
-    statusDiv.style.color = "yellow";
+  if(lastEma21 < lastEma50 && lastEma50 < lastEma200){
+    score += 20;
+    detail += "✔ EMAs alinhadas para baixa<br>";
   }
+
+  if(lastRsi < 40){
+    score += 15;
+    detail += "✔ RSI abaixo de 40<br>";
+  }
+
+  if(lastVolume > avgVolume){
+    score += 15;
+    detail += "✔ Volume acima da média<br>";
+  }
+
+  if(lastClose < lastEma200){
+    score += 20;
+    detail += "✔ Preço abaixo EMA 200<br>";
+  }
+
+  if(closes[closes.length-1] < closes[closes.length-10]){
+    score += 15;
+    detail += "✔ Estrutura descendente<br>";
+  }
+
+  if(lastClose > lastEma21 && lastClose < lastEma50){
+    score += 15;
+    detail += "✔ Pullback detectado<br>";
+  }
+
+  document.getElementById("probability").innerHTML = score + "%";
+  document.getElementById("details").innerHTML = detail;
+
+  const status = document.getElementById("marketStatus");
+
+  if(score >= 70){
+    status.innerHTML = "⚠️ CRISE FORTE (Short Bias)";
+    status.className = "red";
+  }else if(score >= 40){
+    status.innerHTML = "🟡 PRESSÃO DIRECIONAL";
+    status.className = "yellow";
+  }else{
+    status.innerHTML = "🟢 MERCADO NEUTRO";
+    status.className = "green";
+  }
+
 }
 
 fetchData();
-setInterval(fetchData, 60000);
+setInterval(fetchData,60000);
+
 </script>
 
 </body>
