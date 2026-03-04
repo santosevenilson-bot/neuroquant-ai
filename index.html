@@ -1,121 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>NeuroQuant Scanner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroQuant Signals PRO</title>
 <style>
-body{background:#0b1120;color:white;font-family:Arial;padding:20px}
-.card{background:#111827;padding:15px;margin-bottom:15px;border-radius:10px}
-.buy{color:lime;font-weight:bold}
-.sell{color:red;font-weight:bold}
-.neutral{color:yellow}
-h1{color:#00f5ff}
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Arial;
+    padding:20px;
+}
+h1{
+    text-align:center;
+    color:#00ffcc;
+}
+select{
+    padding:10px;
+    margin-bottom:20px;
+    width:100%;
+    font-size:16px;
+}
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:10px;
+    margin-top:10px;
+}
+.buy{color:#00ff88;font-weight:bold;}
+.sell{color:#ff4d4d;font-weight:bold;}
+.neutral{color:#ffaa00;font-weight:bold;}
+.prob{
+    font-size:20px;
+    margin-top:10px;
+}
 </style>
 </head>
 <body>
 
-<h1>Scanner Automático Multi-Pares</h1>
-<div id="signals">Carregando sinais...</div>
+<h1>NeuroQuant AI - Sinais Binance</h1>
+
+<select id="pairSelect"></select>
+
+<div class="card">
+    <p>Preço Atual: <span id="price">--</span></p>
+    <p>Tendência: <span id="trend">--</span></p>
+    <p>Sinal: <span id="signal">--</span></p>
+    <p class="prob">Probabilidade: <span id="prob">--</span></p>
+</div>
 
 <script>
 
-const pairs = ["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT","XRPUSDT"];
+const pairSelect = document.getElementById("pairSelect");
 
-async function getKlines(symbol){
-  const url = "https://api.allorigins.win/raw?url=" +
-    encodeURIComponent(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=200`);
-  const response = await fetch(url);
-  return await response.json();
+async function loadPairs(){
+    const res = await fetch("https://api.binance.com/api/v3/exchangeInfo");
+    const data = await res.json();
+    
+    const usdtPairs = data.symbols
+        .filter(s => s.quoteAsset === "USDT" && s.status === "TRADING")
+        .map(s => s.symbol);
+
+    usdtPairs.forEach(pair=>{
+        const option = document.createElement("option");
+        option.value = pair;
+        option.textContent = pair;
+        pairSelect.appendChild(option);
+    });
+
+    analyze();
 }
 
-function calculateEMA(values, period){
-  const k = 2 / (period + 1);
-  let ema = [values[0]];
-  for(let i=1;i<values.length;i++){
-    ema.push(values[i]*k + ema[i-1]*(1-k));
-  }
-  return ema;
-}
+async function analyze(){
+    const pair = pairSelect.value;
+    if(!pair) return;
 
-function calculateRSI(values, period){
-  let gains=[], losses=[];
-  for(let i=1;i<values.length;i++){
-    let diff = values[i]-values[i-1];
-    gains.push(diff>0?diff:0);
-    losses.push(diff<0?Math.abs(diff):0);
-  }
-  let rsi=[];
-  for(let i=period;i<gains.length;i++){
-    let avgGain=gains.slice(i-period,i).reduce((a,b)=>a+b)/period;
-    let avgLoss=losses.slice(i-period,i).reduce((a,b)=>a+b)/period;
-    let rs=avgLoss===0?0:avgGain/avgLoss;
-    rsi.push(100-(100/(1+rs)));
-  }
-  return rsi;
-}
+    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${pair}&interval=15m&limit=100`);
+    const data = await res.json();
 
-async function analyze(symbol){
+    const closes = data.map(c => parseFloat(c[4]));
 
-  try{
-    const data = await getKlines(symbol);
-    if(!Array.isArray(data)) return `<div class="card">${symbol} erro API</div>`;
+    const price = closes[closes.length-1];
+    document.getElementById("price").innerText = price.toFixed(4);
 
-    const closes = data.map(c=>parseFloat(c[4]));
-    const volumes = data.map(c=>parseFloat(c[5]));
-
-    const ema50 = calculateEMA(closes,50);
-    const ema200 = calculateEMA(closes,200);
+    const ema9 = calculateEMA(closes,9);
+    const ema21 = calculateEMA(closes,21);
     const rsi = calculateRSI(closes,14);
 
-    const lastClose = closes.at(-1);
-    const lastEma50 = ema50.at(-1);
-    const lastEma200 = ema200.at(-1);
-    const lastRsi = rsi.at(-1);
+    let trend, signal, prob;
 
-    const avgVolume = volumes.slice(-20).reduce((a,b)=>a+b)/20;
-    const lastVolume = volumes.at(-1);
+    if(ema9 > ema21 && rsi > 55){
+        trend="Alta";
+        signal="COMPRA";
+        prob="75%";
+    }
+    else if(ema9 < ema21 && rsi < 45){
+        trend="Baixa";
+        signal="VENDA";
+        prob="75%";
+    }
+    else{
+        trend="Neutro";
+        signal="AGUARDE";
+        prob="50%";
+    }
 
-    let buyScore=0;
-    let sellScore=0;
+    document.getElementById("trend").innerText = trend;
+    document.getElementById("signal").innerHTML =
+        signal==="COMPRA" ? `<span class="buy">${signal}</span>` :
+        signal==="VENDA" ? `<span class="sell">${signal}</span>` :
+        `<span class="neutral">${signal}</span>`;
 
-    if(lastClose>lastEma200) buyScore+=25; else sellScore+=25;
-    if(lastClose>lastEma50) buyScore+=15; else sellScore+=15;
-    if(lastRsi>55) buyScore+=20;
-    if(lastRsi<45) sellScore+=20;
-    if(lastVolume>avgVolume){buyScore+=10;sellScore+=10;}
-    if(lastClose>closes.at(-10)) buyScore+=20; else sellScore+=20;
-
-    let direction="NEUTRO";
-    let prob=0;
-    let cls="neutral";
-
-    if(buyScore>sellScore){direction="COMPRAR";prob=buyScore;cls="buy";}
-    else if(sellScore>buyScore){direction="VENDER";prob=sellScore;cls="sell";}
-
-    return `
-      <div class="card">
-        <h3>${symbol}</h3>
-        <p class="${cls}">${direction}</p>
-        <p>Probabilidade: ${prob}%</p>
-        <p>RSI: ${lastRsi?.toFixed(2)}</p>
-      </div>
-    `;
-
-  }catch(e){
-    return `<div class="card">${symbol} erro carregando</div>`;
-  }
+    document.getElementById("prob").innerText = prob;
 }
 
-async function run(){
-  let html="";
-  for(const p of pairs){
-    html+=await analyze(p);
-  }
-  document.getElementById("signals").innerHTML=html;
+function calculateEMA(data, period){
+    const k = 2/(period+1);
+    let ema = data[0];
+    for(let i=1;i<data.length;i++){
+        ema = data[i]*k + ema*(1-k);
+    }
+    return ema;
 }
 
-run();
-setInterval(run,60000);
+function calculateRSI(data, period){
+    let gains=0, losses=0;
+    for(let i=data.length-period;i<data.length-1;i++){
+        const diff = data[i+1]-data[i];
+        if(diff>=0) gains+=diff;
+        else losses-=diff;
+    }
+    const rs = gains/losses;
+    return 100 - (100/(1+rs));
+}
+
+pairSelect.addEventListener("change", analyze);
+setInterval(analyze,30000);
+
+loadPairs();
 
 </script>
 
