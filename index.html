@@ -1,100 +1,50 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>NeuroQuant Crisis Detector PRO</title>
+<title>NeuroQuant Multi-Pair Signal</title>
 <script src="https://cdn.jsdelivr.net/npm/technicalindicators/dist/browser.js"></script>
 <style>
-body{
-  margin:0;
-  font-family: 'Segoe UI', sans-serif;
-  background:#0b1120;
-  color:white;
-}
-.sidebar{
-  position:fixed;
-  left:0;
-  top:0;
-  width:250px;
-  height:100%;
-  background:#111827;
-  padding:20px;
-}
-.sidebar h2{
-  color:#00f5ff;
-}
-.sidebar button{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  background:#1f2937;
-  color:white;
-  border:none;
-  cursor:pointer;
-}
-.main{
-  margin-left:270px;
-  padding:30px;
-}
+body{background:#0b1120;color:white;font-family:Arial;padding:20px}
+h1{color:#00f5ff}
 .card{
   background:#111827;
-  padding:20px;
+  padding:15px;
+  margin-bottom:15px;
   border-radius:10px;
-  margin-bottom:20px;
 }
-.score{
-  font-size:28px;
-  font-weight:bold;
-}
-.green{color:lime;}
-.red{color:red;}
-.yellow{color:yellow;}
+.buy{color:lime;font-weight:bold}
+.sell{color:red;font-weight:bold}
+.neutral{color:yellow}
 </style>
 </head>
-
 <body>
 
-<div class="sidebar">
-<h2>NeuroQuant PRO</h2>
-<button onclick="setTimeframe('1h')">1 Hora</button>
-<button onclick="setTimeframe('4h')">4 Horas</button>
-<button onclick="setTimeframe('1d')">Diário</button>
-</div>
-
-<div class="main">
-<h1>Detector de Crise - BTC/USDT</h1>
-
-<div class="card">
-<div id="marketStatus">Carregando...</div>
-<div class="score" id="probability">0%</div>
-</div>
-
-<div class="card">
-<div id="details"></div>
-</div>
-
-</div>
+<h1>Scanner Automático Multi-Pares</h1>
+<div id="signals"></div>
 
 <script>
 
-let timeframe = "1h";
+const pairs = [
+"BTCUSDT",
+"ETHUSDT",
+"SOLUSDT",
+"BNBUSDT",
+"XRPUSDT"
+];
 
-function setTimeframe(tf){
-  timeframe = tf;
-  fetchData();
-}
+async function analyzePair(symbol){
 
-async function fetchData(){
-  const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${timeframe}&limit=300`);
+  const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=250`);
   const data = await response.json();
 
-  const closes = data.map(c => parseFloat(c[4]));
-  const volumes = data.map(c => parseFloat(c[5]));
+  const closes = data.map(c=>parseFloat(c[4]));
+  const volumes = data.map(c=>parseFloat(c[5]));
 
-  const ema21 = technicalindicators.EMA.calculate({period:21, values:closes});
-  const ema50 = technicalindicators.EMA.calculate({period:50, values:closes});
-  const ema200 = technicalindicators.EMA.calculate({period:200, values:closes});
-  const rsi = technicalindicators.RSI.calculate({period:14, values:closes});
+  const ema21 = technicalindicators.EMA.calculate({period:21,values:closes});
+  const ema50 = technicalindicators.EMA.calculate({period:50,values:closes});
+  const ema200 = technicalindicators.EMA.calculate({period:200,values:closes});
+  const rsi = technicalindicators.RSI.calculate({period:14,values:closes});
 
   const lastClose = closes[closes.length-1];
   const lastEma21 = ema21[ema21.length-1];
@@ -105,61 +55,64 @@ async function fetchData(){
   const avgVolume = volumes.slice(-20).reduce((a,b)=>a+b)/20;
   const lastVolume = volumes[volumes.length-1];
 
-  let score = 0;
-  let detail = "";
+  let buyScore = 0;
+  let sellScore = 0;
 
-  if(lastEma21 < lastEma50 && lastEma50 < lastEma200){
-    score += 20;
-    detail += "✔ EMAs alinhadas para baixa<br>";
-  }
+  if(lastClose > lastEma200) buyScore += 20;
+  else sellScore += 20;
 
-  if(lastRsi < 40){
-    score += 15;
-    detail += "✔ RSI abaixo de 40<br>";
-  }
+  if(lastEma21 > lastEma50) buyScore += 15;
+  else sellScore += 15;
+
+  if(lastRsi > 55) buyScore += 15;
+  if(lastRsi < 45) sellScore += 15;
 
   if(lastVolume > avgVolume){
-    score += 15;
-    detail += "✔ Volume acima da média<br>";
+    buyScore += 15;
+    sellScore += 15;
   }
 
-  if(lastClose < lastEma200){
-    score += 20;
-    detail += "✔ Preço abaixo EMA 200<br>";
-  }
+  if(lastClose > closes[closes.length-10]) buyScore += 20;
+  else sellScore += 20;
 
-  if(closes[closes.length-1] < closes[closes.length-10]){
-    score += 15;
-    detail += "✔ Estrutura descendente<br>";
-  }
+  let direction = "";
+  let probability = 0;
+  let className = "";
 
-  if(lastClose > lastEma21 && lastClose < lastEma50){
-    score += 15;
-    detail += "✔ Pullback detectado<br>";
-  }
-
-  document.getElementById("probability").innerHTML = score + "%";
-  document.getElementById("details").innerHTML = detail;
-
-  const status = document.getElementById("marketStatus");
-
-  if(score >= 70){
-    status.innerHTML = "⚠️ CRISE FORTE (Short Bias)";
-    status.className = "red";
-  }else if(score >= 40){
-    status.innerHTML = "🟡 PRESSÃO DIRECIONAL";
-    status.className = "yellow";
+  if(buyScore > sellScore){
+    probability = buyScore;
+    direction = "COMPRAR";
+    className = "buy";
+  }else if(sellScore > buyScore){
+    probability = sellScore;
+    direction = "VENDER";
+    className = "sell";
   }else{
-    status.innerHTML = "🟢 MERCADO NEUTRO";
-    status.className = "green";
+    direction = "NEUTRO";
+    className = "neutral";
   }
 
+  return `
+    <div class="card">
+      <h3>${symbol}</h3>
+      <p class="${className}">${direction}</p>
+      <p>Probabilidade: ${probability}%</p>
+      <p>RSI: ${lastRsi.toFixed(2)}</p>
+    </div>
+  `;
 }
 
-fetchData();
-setInterval(fetchData,60000);
+async function runScanner(){
+  let html = "";
+  for(const pair of pairs){
+    html += await analyzePair(pair);
+  }
+  document.getElementById("signals").innerHTML = html;
+}
+
+runScanner();
+setInterval(runScanner,60000);
 
 </script>
-
 </body>
 </html>
