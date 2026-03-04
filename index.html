@@ -241,3 +241,108 @@ analyze();
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroQuant - Macro Crisis Detector</title>
+
+<style>
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Arial;
+    padding:20px;
+}
+h1{
+    text-align:center;
+    color:#00ffcc;
+}
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    margin-top:20px;
+}
+.low{color:#00ff88;font-weight:bold;}
+.medium{color:#ffaa00;font-weight:bold;}
+.high{color:#ff4d4d;font-weight:bold;}
+.critical{color:#ff0000;font-weight:bold;font-size:20px;}
+.score{
+    font-size:22px;
+    margin-top:10px;
+}
+</style>
+</head>
+<body>
+
+<h1>NeuroQuant - Detector de Crise Macro</h1>
+
+<div class="card">
+    <p>BTC 4h: <span id="btc">--</span></p>
+    <p>Ouro 4h: <span id="gold">--</span></p>
+    <p>Prata 4h: <span id="silver">--</span></p>
+    <hr>
+    <p class="score">Score Macro: <span id="score">--</span></p>
+    <p>Nível de Risco: <span id="risk">--</span></p>
+</div>
+
+<script>
+
+async function getVariation(symbol){
+    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=4h&limit=2`);
+    const data = await res.json();
+    const prev = parseFloat(data[0][4]);
+    const last = parseFloat(data[1][4]);
+    return ((last-prev)/prev)*100;
+}
+
+async function analyze(){
+
+    const btc = await getVariation("BTCUSDT");
+    const gold = await getVariation("XAUUSDT");
+    const silver = await getVariation("XAGUSDT");
+
+    document.getElementById("btc").innerText = btc.toFixed(2)+"%";
+    document.getElementById("gold").innerText = gold.toFixed(2)+"%";
+    document.getElementById("silver").innerText = silver.toFixed(2)+"%";
+
+    let score = 0;
+
+    // Condições de risco
+
+    if(btc < -1.5) score += 25;
+    if(gold > 1) score += 25;
+    if(silver > 0.8) score += 20;
+    if(btc < 0 && gold > 0) score += 15;
+    if(btc < -2 && gold > 1.5) score += 15;
+
+    let riskLevel = "Baixo";
+
+    if(score >= 70){
+        riskLevel = "CRISE MACRO IMINENTE";
+    }
+    else if(score >= 50){
+        riskLevel = "Risco Alto";
+    }
+    else if(score >= 30){
+        riskLevel = "Risco Médio";
+    }
+
+    document.getElementById("score").innerText = score+"/100";
+
+    document.getElementById("risk").innerHTML =
+        score >= 70 ? `<span class="critical">${riskLevel}</span>` :
+        score >= 50 ? `<span class="high">${riskLevel}</span>` :
+        score >= 30 ? `<span class="medium">${riskLevel}</span>` :
+        `<span class="low">${riskLevel}</span>`;
+}
+
+setInterval(analyze,60000);
+analyze();
+
+</script>
+
+</body>
+</html>
