@@ -1,142 +1,123 @@
-import { useEffect, useState } from "react";
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>NeuroQuant Scanner</title>
+<style>
+body{background:#0b1120;color:white;font-family:Arial;padding:20px}
+.card{background:#111827;padding:15px;margin-bottom:15px;border-radius:10px}
+.buy{color:lime;font-weight:bold}
+.sell{color:red;font-weight:bold}
+.neutral{color:yellow}
+h1{color:#00f5ff}
+</style>
+</head>
+<body>
 
-const pairs = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"];
+<h1>Scanner Automático Multi-Pares</h1>
+<div id="signals">Carregando sinais...</div>
 
-export default function Home() {
-  const [signals, setSignals] = useState([]);
+<script>
 
-  useEffect(() => {
-    runScanner();
-    const interval = setInterval(runScanner, 60000);
-    return () => clearInterval(interval);
-  }, []);
+const pairs = ["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT","XRPUSDT"];
 
-  async function runScanner() {
-    let results = [];
-
-    for (const symbol of pairs) {
-      const response = await fetch(`/api/klines?symbol=${symbol}&interval=1h&limit=200`);
-      const data = await response.json();
-
-      if (!Array.isArray(data)) continue;
-
-      const closes = data.map(c => parseFloat(c[4]));
-      const volumes = data.map(c => parseFloat(c[5]));
-
-      const ema50 = calculateEMA(closes, 50);
-      const ema200 = calculateEMA(closes, 200);
-      const rsi = calculateRSI(closes, 14);
-
-      const lastClose = closes.at(-1);
-      const lastEma50 = ema50.at(-1);
-      const lastEma200 = ema200.at(-1);
-      const lastRsi = rsi.at(-1);
-
-      const avgVolume = volumes.slice(-20).reduce((a,b)=>a+b)/20;
-      const lastVolume = volumes.at(-1);
-
-      let buyScore = 0;
-      let sellScore = 0;
-
-      if (lastClose > lastEma200) buyScore += 25;
-      else sellScore += 25;
-
-      if (lastClose > lastEma50) buyScore += 15;
-      else sellScore += 15;
-
-      if (lastRsi > 55) buyScore += 20;
-      if (lastRsi < 45) sellScore += 20;
-
-      if (lastVolume > avgVolume) {
-        buyScore += 10;
-        sellScore += 10;
-      }
-
-      if (lastClose > closes.at(-10)) buyScore += 20;
-      else sellScore += 20;
-
-      let direction = "NEUTRO";
-      let probability = 0;
-
-      if (buyScore > sellScore) {
-        direction = "COMPRAR";
-        probability = buyScore;
-      } else if (sellScore > buyScore) {
-        direction = "VENDER";
-        probability = sellScore;
-      }
-
-      results.push({
-        symbol,
-        direction,
-        probability,
-        rsi: lastRsi?.toFixed(2)
-      });
-    }
-
-    setSignals(results);
-  }
-
-  return (
-    <div style={{background:"#0b1120",color:"white",minHeight:"100vh",padding:"30px"}}>
-      <h1 style={{color:"#00f5ff"}}>Scanner Automático Multi-Pares</h1>
-
-      {signals.map((s, i) => (
-        <div key={i} style={{
-          background:"#111827",
-          padding:"20px",
-          borderRadius:"12px",
-          marginBottom:"15px"
-        }}>
-          <h2>{s.symbol}</h2>
-          <p style={{
-            color: s.direction === "COMPRAR" ? "lime" :
-                   s.direction === "VENDER" ? "red" : "yellow",
-            fontWeight:"bold",
-            fontSize:"18px"
-          }}>
-            {s.direction}
-          </p>
-          <p>Probabilidade: {s.probability}%</p>
-          <p>RSI: {s.rsi}</p>
-        </div>
-      ))}
-    </div>
-  );
+async function getKlines(symbol){
+  const url = "https://api.allorigins.win/raw?url=" +
+    encodeURIComponent(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=200`);
+  const response = await fetch(url);
+  return await response.json();
 }
 
-/* ===== FUNÇÕES TÉCNICAS ===== */
-
-function calculateEMA(values, period) {
+function calculateEMA(values, period){
   const k = 2 / (period + 1);
   let ema = [values[0]];
-
-  for (let i = 1; i < values.length; i++) {
-    ema.push(values[i] * k + ema[i - 1] * (1 - k));
+  for(let i=1;i<values.length;i++){
+    ema.push(values[i]*k + ema[i-1]*(1-k));
   }
-
   return ema;
 }
 
-function calculateRSI(values, period) {
-  let gains = [];
-  let losses = [];
-
-  for (let i = 1; i < values.length; i++) {
-    let diff = values[i] - values[i - 1];
-    gains.push(diff > 0 ? diff : 0);
-    losses.push(diff < 0 ? Math.abs(diff) : 0);
+function calculateRSI(values, period){
+  let gains=[], losses=[];
+  for(let i=1;i<values.length;i++){
+    let diff = values[i]-values[i-1];
+    gains.push(diff>0?diff:0);
+    losses.push(diff<0?Math.abs(diff):0);
   }
-
-  let rsi = [];
-
-  for (let i = period; i < gains.length; i++) {
-    let avgGain = gains.slice(i - period, i).reduce((a,b)=>a+b)/period;
-    let avgLoss = losses.slice(i - period, i).reduce((a,b)=>a+b)/period;
-
-    let rs = avgGain / avgLoss;
-    rsi.push(100 - (100 / (1 + rs)));
+  let rsi=[];
+  for(let i=period;i<gains.length;i++){
+    let avgGain=gains.slice(i-period,i).reduce((a,b)=>a+b)/period;
+    let avgLoss=losses.slice(i-period,i).reduce((a,b)=>a+b)/period;
+    let rs=avgLoss===0?0:avgGain/avgLoss;
+    rsi.push(100-(100/(1+rs)));
   }
-
   return rsi;
 }
+
+async function analyze(symbol){
+
+  try{
+    const data = await getKlines(symbol);
+    if(!Array.isArray(data)) return `<div class="card">${symbol} erro API</div>`;
+
+    const closes = data.map(c=>parseFloat(c[4]));
+    const volumes = data.map(c=>parseFloat(c[5]));
+
+    const ema50 = calculateEMA(closes,50);
+    const ema200 = calculateEMA(closes,200);
+    const rsi = calculateRSI(closes,14);
+
+    const lastClose = closes.at(-1);
+    const lastEma50 = ema50.at(-1);
+    const lastEma200 = ema200.at(-1);
+    const lastRsi = rsi.at(-1);
+
+    const avgVolume = volumes.slice(-20).reduce((a,b)=>a+b)/20;
+    const lastVolume = volumes.at(-1);
+
+    let buyScore=0;
+    let sellScore=0;
+
+    if(lastClose>lastEma200) buyScore+=25; else sellScore+=25;
+    if(lastClose>lastEma50) buyScore+=15; else sellScore+=15;
+    if(lastRsi>55) buyScore+=20;
+    if(lastRsi<45) sellScore+=20;
+    if(lastVolume>avgVolume){buyScore+=10;sellScore+=10;}
+    if(lastClose>closes.at(-10)) buyScore+=20; else sellScore+=20;
+
+    let direction="NEUTRO";
+    let prob=0;
+    let cls="neutral";
+
+    if(buyScore>sellScore){direction="COMPRAR";prob=buyScore;cls="buy";}
+    else if(sellScore>buyScore){direction="VENDER";prob=sellScore;cls="sell";}
+
+    return `
+      <div class="card">
+        <h3>${symbol}</h3>
+        <p class="${cls}">${direction}</p>
+        <p>Probabilidade: ${prob}%</p>
+        <p>RSI: ${lastRsi?.toFixed(2)}</p>
+      </div>
+    `;
+
+  }catch(e){
+    return `<div class="card">${symbol} erro carregando</div>`;
+  }
+}
+
+async function run(){
+  let html="";
+  for(const p of pairs){
+    html+=await analyze(p);
+  }
+  document.getElementById("signals").innerHTML=html;
+}
+
+run();
+setInterval(run,60000);
+
+</script>
+
+</body>
+</html>
