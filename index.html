@@ -143,3 +143,101 @@ loadPairs();
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroQuant Crisis Detector</title>
+
+<style>
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Arial;
+    padding:20px;
+}
+h1{
+    text-align:center;
+    color:#00ffcc;
+}
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    margin-top:20px;
+}
+.high{color:#ff4d4d;font-weight:bold;}
+.medium{color:#ffaa00;font-weight:bold;}
+.low{color:#00ff88;font-weight:bold;}
+</style>
+</head>
+<body>
+
+<h1>NeuroQuant - Detector de Crise</h1>
+
+<div class="card">
+    <p>BTC Variação: <span id="btcVar">--</span></p>
+    <p>Ouro Variação: <span id="goldVar">--</span></p>
+    <p>Prata Variação: <span id="silverVar">--</span></p>
+    <hr>
+    <p>Possível Falso Rompimento: <span id="fakeBreak">--</span></p>
+    <p>Nível de Risco de Crise: <span id="risk">--</span></p>
+</div>
+
+<script>
+
+async function getVariation(symbol){
+    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=2`);
+    const data = await res.json();
+    const prev = parseFloat(data[0][4]);
+    const last = parseFloat(data[1][4]);
+    return ((last-prev)/prev)*100;
+}
+
+async function analyze(){
+
+    const btc = await getVariation("BTCUSDT");
+    const gold = await getVariation("XAUUSDT");
+    const silver = await getVariation("XAGUSDT");
+
+    document.getElementById("btcVar").innerText = btc.toFixed(2)+"%";
+    document.getElementById("goldVar").innerText = gold.toFixed(2)+"%";
+    document.getElementById("silverVar").innerText = silver.toFixed(2)+"%";
+
+    let fakeBreak = "Não";
+    let riskLevel = "Baixo";
+
+    // LÓGICA DE DIVERGÊNCIA
+
+    if(btc > 0 && gold > btc && silver > btc){
+        fakeBreak = "Alta Probabilidade";
+        riskLevel = "Médio";
+    }
+
+    if(gold > 1.5 && silver > 1 && btc < 0){
+        riskLevel = "ALTO";
+    }
+
+    // Exibição visual
+
+    document.getElementById("fakeBreak").innerHTML =
+        fakeBreak === "Alta Probabilidade"
+        ? `<span class="medium">${fakeBreak}</span>`
+        : `<span class="low">${fakeBreak}</span>`;
+
+    document.getElementById("risk").innerHTML =
+        riskLevel === "ALTO"
+        ? `<span class="high">${riskLevel}</span>`
+        : riskLevel === "Médio"
+        ? `<span class="medium">${riskLevel}</span>`
+        : `<span class="low">${riskLevel}</span>`;
+}
+
+setInterval(analyze,30000);
+analyze();
+
+</script>
+
+</body>
+</html>
