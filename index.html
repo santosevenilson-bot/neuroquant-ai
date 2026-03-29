@@ -3,193 +3,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant PRO</title>
+<title>Crypto Educação</title>
 
 <style>
 body{
+    margin:0;
+    font-family:Arial;
     background:#0f172a;
     color:white;
-    font-family:Arial;
-    padding:20px;
 }
-h1{
-    text-align:center;
-    color:#00ffcc;
-}
-select{
+
+/* MENU */
+.menu-btn{
+    position:fixed;
+    top:15px;
+    left:15px;
+    background:#00ffcc;
+    color:#000;
     padding:10px;
-    margin-bottom:20px;
-    width:100%;
+    border-radius:8px;
+    cursor:pointer;
 }
+
+.sidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    width:260px;
+    height:100%;
+    background:#020617;
+    padding:20px;
+    transition:0.3s;
+}
+
+.sidebar.active{ left:0; }
+
+.menu-item{
+    background:#1e293b;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.menu-item:hover{ background:#334155; }
+
+.main{ padding:20px; }
+
 .card{
     background:#1e293b;
     padding:20px;
     border-radius:10px;
-    margin-top:20px;
+    margin-bottom:20px;
 }
-.buy{color:#00ff88;font-weight:bold;}
-.sell{color:#ff4d4d;font-weight:bold;}
-.neutral{color:#ffaa00;font-weight:bold;}
-.low{color:#00ff88;}
-.medium{color:#ffaa00;}
-.high{color:#ff4d4d;}
+
+.hidden{ display:none; }
+
+h1{
+    text-align:center;
+    color:#00ffcc;
+}
+
+ul{ line-height:1.6; }
+
 </style>
 </head>
 
 <body>
 
-<h1>NeuroQuant AI</h1>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<select id="pairSelect"></select>
-
-<div class="card">
-    <h3>Sinais</h3>
-    <p>Preço: <span id="price">--</span></p>
-    <p>Tendência: <span id="trend">--</span></p>
-    <p>Sinal: <span id="signal">--</span></p>
+<div class="sidebar" id="sidebar">
+    <div class="menu-item" onclick="showTab('intro')">📘 O que é</div>
+    <div class="menu-item" onclick="showTab('how')">⚙️ Como funciona</div>
+    <div class="menu-item" onclick="showTab('analysis')">📊 Análise</div>
+    <div class="menu-item" onclick="showTab('market')">📈 Mercado</div>
+    <div class="menu-item" onclick="showTab('importance')">🚀 Futuro</div>
+    <div class="menu-item" onclick="showTab('tips')">💡 Dicas</div>
 </div>
 
+<div class="main">
+
+<h1>Guia Completo de Criptomoedas</h1>
+
+<!-- INTRO -->
+<div id="intro" class="tab">
 <div class="card">
-    <h3>Detector de Crise</h3>
-    <p>BTC: <span id="btcVar">--</span></p>
-    <p>Ouro (PAXG): <span id="goldVar">--</span></p>
-    <p>Risco: <span id="risk">--</span></p>
+<h2>📘 O que são criptomoedas?</h2>
+
+<p>
+Criptomoedas são moedas digitais descentralizadas, ou seja, não dependem de bancos.
+</p>
+
+<p>
+A principal é o <b>Bitcoin</b>, mas existem milhares como Ethereum, Solana e outras.
+</p>
+
+<p>
+Elas usam uma tecnologia chamada <b>blockchain</b>, que registra tudo com segurança.
+</p>
+
+</div>
+</div>
+
+<!-- COMO FUNCIONA -->
+<div id="how" class="tab hidden">
+<div class="card">
+<h2>⚙️ Como funciona?</h2>
+
+<ul>
+<li>Transações são registradas em blocos</li>
+<li>Esses blocos formam uma cadeia (blockchain)</li>
+<li>Não há controle central</li>
+<li>Tudo é transparente</li>
+</ul>
+
+<p>
+Isso torna o sistema seguro e difícil de ser fraudado.
+</p>
+
+</div>
+</div>
+
+<!-- ANALISE -->
+<div id="analysis" class="tab hidden">
+<div class="card">
+<h2>📊 Como analisar o mercado</h2>
+
+<p><b>Tendência:</b> veja se está subindo ou caindo</p>
+
+<p><b>Suporte:</b> onde o preço para de cair</p>
+
+<p><b>Resistência:</b> onde o preço para de subir</p>
+
+<p><b>Indicadores:</b></p>
+<ul>
+<li>RSI → força do mercado</li>
+<li>EMA → direção da tendência</li>
+<li>Volume → confirmação</li>
+</ul>
+
+</div>
+</div>
+
+<!-- MERCADO -->
+<div id="market" class="tab hidden">
+<div class="card">
+<h2>📈 Como o mercado funciona</h2>
+
+<ul>
+<li>Alta → mercado otimista</li>
+<li>Baixa → mercado pessimista</li>
+<li>Lateral → indecisão</li>
+</ul>
+
+<p>
+O mercado é influenciado por notícias, economia global e comportamento das pessoas.
+</p>
+
+</div>
+</div>
+
+<!-- FUTURO -->
+<div id="importance" class="tab hidden">
+<div class="card">
+<h2>🚀 O futuro das criptomoedas</h2>
+
+<ul>
+<li>Maior adoção mundial</li>
+<li>Possível substituição de sistemas antigos</li>
+<li>Integração com bancos</li>
+<li>Uso no dia a dia</li>
+</ul>
+
+</div>
+</div>
+
+<!-- DICAS -->
+<div id="tips" class="tab hidden">
+<div class="card">
+<h2>💡 Dicas importantes</h2>
+
+<ul>
+<li>Estude antes de investir</li>
+<li>Não invista tudo</li>
+<li>Controle emocional é essencial</li>
+<li>Evite promessas de lucro fácil</li>
+</ul>
+
+</div>
+</div>
+
 </div>
 
 <script>
 
-const pairSelect = document.getElementById("pairSelect");
-
-document.addEventListener("DOMContentLoaded", () => {
-    loadPairs();
-    analyzeAll();
-    setInterval(analyzeAll, 30000);
-});
-
-async function loadPairs(){
-    try{
-        const res = await fetch("https://api.binance.com/api/v3/exchangeInfo");
-        const data = await res.json();
-
-        const pairs = data.symbols
-            .filter(s => s.quoteAsset === "USDT" && s.status === "TRADING")
-            .map(s => s.symbol);
-
-        pairs.forEach(pair=>{
-            const opt = document.createElement("option");
-            opt.value = pair;
-            opt.textContent = pair;
-            pairSelect.appendChild(opt);
-        });
-
-    }catch(e){
-        console.log("Erro ao carregar pares", e);
-    }
+function toggleMenu(){
+    document.getElementById("sidebar").classList.toggle("active");
 }
 
-async function analyzeAll(){
-    analyzeSignal();
-    analyzeCrisis();
+function showTab(tabId){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));
+    document.getElementById(tabId).classList.remove('hidden');
+    toggleMenu();
 }
-
-async function analyzeSignal(){
-    const pair = pairSelect.value;
-    if(!pair) return;
-
-    try{
-        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${pair}&interval=15m&limit=100`);
-        const data = await res.json();
-
-        const closes = data.map(c => parseFloat(c[4]));
-        const price = closes.at(-1);
-
-        document.getElementById("price").innerText = price.toFixed(4);
-
-        const ema9 = EMA(closes,9);
-        const ema21 = EMA(closes,21);
-        const rsi = RSI(closes,14);
-
-        let trend, signal;
-
-        if(ema9 > ema21 && rsi > 55){
-            trend="Alta";
-            signal=`<span class="buy">COMPRA</span>`;
-        } else if(ema9 < ema21 && rsi < 45){
-            trend="Baixa";
-            signal=`<span class="sell">VENDA</span>`;
-        } else {
-            trend="Neutro";
-            signal=`<span class="neutral">AGUARDE</span>`;
-        }
-
-        document.getElementById("trend").innerText = trend;
-        document.getElementById("signal").innerHTML = signal;
-
-    }catch(e){
-        console.log("Erro análise", e);
-    }
-}
-
-function EMA(data, period){
-    const k = 2/(period+1);
-    let ema = data[0];
-    for(let i=1;i<data.length;i++){
-        ema = data[i]*k + ema*(1-k);
-    }
-    return ema;
-}
-
-function RSI(data, period){
-    let gains=0, losses=0;
-
-    for(let i=data.length-period;i<data.length-1;i++){
-        const diff = data[i+1]-data[i];
-        if(diff>0) gains+=diff;
-        else losses+=Math.abs(diff);
-    }
-
-    if(losses === 0) return 100;
-    const rs = gains/losses;
-    return 100 - (100/(1+rs));
-}
-
-async function getVariation(symbol){
-    try{
-        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=2`);
-        const data = await res.json();
-
-        const prev = parseFloat(data[0][4]);
-        const last = parseFloat(data[1][4]);
-
-        return ((last-prev)/prev)*100;
-
-    }catch{
-        return 0;
-    }
-}
-
-async function analyzeCrisis(){
-
-    // PAXG = ouro tokenizado (substitui XAU)
-    const btc = await getVariation("BTCUSDT");
-    const gold = await getVariation("PAXGUSDT");
-
-    document.getElementById("btcVar").innerText = btc.toFixed(2)+"%";
-    document.getElementById("goldVar").innerText = gold.toFixed(2)+"%";
-
-    let risk = "Baixo";
-
-    if(btc < -1 && gold > 0.5){
-        risk = `<span class="medium">Médio</span>`;
-    }
-    if(btc < -2 && gold > 1){
-        risk = `<span class="high">ALTO</span>`;
-    }
-
-    document.getElementById("risk").innerHTML = risk;
-}
-
-pairSelect.addEventListener("change", analyzeSignal);
 
 </script>
 
