@@ -3,251 +3,193 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroQuant PRO Advanced</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>NeuroQuant PRO</title>
 
 <style>
 body{
-    margin:0;
     background:#0f172a;
     color:white;
     font-family:Arial;
-}
-
-/* BOTÃO MENU */
-.menu-btn{
-    position:fixed;
-    top:15px;
-    left:15px;
-    background:#00ffcc;
-    color:#000;
-    padding:10px 15px;
-    border-radius:8px;
-    cursor:pointer;
-    z-index:1000;
-    font-weight:bold;
-}
-
-/* SIDEBAR OCULTO */
-.sidebar{
-    position:fixed;
-    top:0;
-    left:-250px;
-    width:250px;
-    height:100%;
-    background:#020617;
     padding:20px;
-    transition:0.3s;
-    z-index:999;
 }
-
-.sidebar.active{
-    left:0;
-}
-
-.menu-item{
-    padding:12px;
-    margin:10px 0;
-    background:#1e293b;
-    border-radius:8px;
-    cursor:pointer;
+h1{
     text-align:center;
+    color:#00ffcc;
 }
-.menu-item:hover{background:#334155;}
-
-.main{
-    padding:20px;
+select{
+    padding:10px;
+    margin-bottom:20px;
+    width:100%;
 }
-
 .card{
     background:#1e293b;
     padding:20px;
-    border-radius:12px;
-    margin-bottom:20px;
+    border-radius:10px;
+    margin-top:20px;
 }
-
-.hidden{display:none;}
-
 .buy{color:#00ff88;font-weight:bold;}
 .sell{color:#ff4d4d;font-weight:bold;}
 .neutral{color:#ffaa00;font-weight:bold;}
-.score{font-size:22px;margin-top:10px;}
+.low{color:#00ff88;}
+.medium{color:#ffaa00;}
+.high{color:#ff4d4d;}
 </style>
 </head>
 
 <body>
 
-<div class="menu-btn" onclick="toggleMenu()">☰ Menu</div>
+<h1>NeuroQuant AI</h1>
 
-<div class="sidebar" id="sidebar">
-    <div class="menu-item" onclick="showTab('signals')">📊 Sinais</div>
-    <div class="menu-item" onclick="showTab('chart')">📈 Gráfico</div>
-    <div class="menu-item" onclick="showTab('macro')">🌍 Macro</div>
+<select id="pairSelect"></select>
+
+<div class="card">
+    <h3>Sinais</h3>
+    <p>Preço: <span id="price">--</span></p>
+    <p>Tendência: <span id="trend">--</span></p>
+    <p>Sinal: <span id="signal">--</span></p>
 </div>
 
-<div class="main">
-
-<!-- SINAIS -->
-<div id="signals" class="tab">
-    <div class="card">
-        <h3>Sinal Inteligente</h3>
-        <select id="pair"></select>
-        <p>Preço: <span id="price">--</span></p>
-        <p>Sinal: <span id="signal">--</span></p>
-        <p class="score">Score IA: <span id="score">--</span></p>
-    </div>
-</div>
-
-<!-- GRAFICO -->
-<div id="chart" class="tab hidden">
-    <div class="card">
-        <h3>Gráfico</h3>
-        <canvas id="chartCanvas"></canvas>
-    </div>
-</div>
-
-<!-- MACRO -->
-<div id="macro" class="tab hidden">
-    <div class="card">
-        <h3>Detector Macro</h3>
-        <p>BTC: <span id="btc">--</span></p>
-        <p>Ouro: <span id="gold">--</span></p>
-        <p class="score">Risco: <span id="risk">--</span></p>
-    </div>
-</div>
-
+<div class="card">
+    <h3>Detector de Crise</h3>
+    <p>BTC: <span id="btcVar">--</span></p>
+    <p>Ouro (PAXG): <span id="goldVar">--</span></p>
+    <p>Risco: <span id="risk">--</span></p>
 </div>
 
 <script>
 
-const pairSelect = document.getElementById("pair");
-let chart;
+const pairSelect = document.getElementById("pairSelect");
 
-function toggleMenu(){
-    document.getElementById("sidebar").classList.toggle("active");
-}
-
-function showTab(tabId){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));
-    document.getElementById(tabId).classList.remove('hidden');
-    toggleMenu();
-}
+document.addEventListener("DOMContentLoaded", () => {
+    loadPairs();
+    analyzeAll();
+    setInterval(analyzeAll, 30000);
+});
 
 async function loadPairs(){
-    const res = await fetch("https://api.binance.com/api/v3/exchangeInfo");
-    const data = await res.json();
+    try{
+        const res = await fetch("https://api.binance.com/api/v3/exchangeInfo");
+        const data = await res.json();
 
-    data.symbols
-    .filter(s=>s.quoteAsset==="USDT" && s.status==="TRADING")
-    .forEach(s=>{
-        const opt=document.createElement("option");
-        opt.value=s.symbol;
-        opt.textContent=s.symbol;
-        pairSelect.appendChild(opt);
-    });
+        const pairs = data.symbols
+            .filter(s => s.quoteAsset === "USDT" && s.status === "TRADING")
+            .map(s => s.symbol);
+
+        pairs.forEach(pair=>{
+            const opt = document.createElement("option");
+            opt.value = pair;
+            opt.textContent = pair;
+            pairSelect.appendChild(opt);
+        });
+
+    }catch(e){
+        console.log("Erro ao carregar pares", e);
+    }
 }
 
-async function getData(pair){
-    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${pair}&interval=15m&limit=100`);
-    return await res.json();
+async function analyzeAll(){
+    analyzeSignal();
+    analyzeCrisis();
 }
 
-function EMA(data,p){
-    const k=2/(p+1);
-    let ema=data[0];
-    for(let i=1;i<data.length;i++) ema=data[i]*k+ema*(1-k);
+async function analyzeSignal(){
+    const pair = pairSelect.value;
+    if(!pair) return;
+
+    try{
+        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${pair}&interval=15m&limit=100`);
+        const data = await res.json();
+
+        const closes = data.map(c => parseFloat(c[4]));
+        const price = closes.at(-1);
+
+        document.getElementById("price").innerText = price.toFixed(4);
+
+        const ema9 = EMA(closes,9);
+        const ema21 = EMA(closes,21);
+        const rsi = RSI(closes,14);
+
+        let trend, signal;
+
+        if(ema9 > ema21 && rsi > 55){
+            trend="Alta";
+            signal=`<span class="buy">COMPRA</span>`;
+        } else if(ema9 < ema21 && rsi < 45){
+            trend="Baixa";
+            signal=`<span class="sell">VENDA</span>`;
+        } else {
+            trend="Neutro";
+            signal=`<span class="neutral">AGUARDE</span>`;
+        }
+
+        document.getElementById("trend").innerText = trend;
+        document.getElementById("signal").innerHTML = signal;
+
+    }catch(e){
+        console.log("Erro análise", e);
+    }
+}
+
+function EMA(data, period){
+    const k = 2/(period+1);
+    let ema = data[0];
+    for(let i=1;i<data.length;i++){
+        ema = data[i]*k + ema*(1-k);
+    }
     return ema;
 }
 
-function RSI(data,p){
-    let g=0,l=0;
-    for(let i=data.length-p;i<data.length-1;i++){
-        let d=data[i+1]-data[i];
-        d>0?g+=d:l+=Math.abs(d);
+function RSI(data, period){
+    let gains=0, losses=0;
+
+    for(let i=data.length-period;i<data.length-1;i++){
+        const diff = data[i+1]-data[i];
+        if(diff>0) gains+=diff;
+        else losses+=Math.abs(diff);
     }
-    if(l===0) return 100;
-    return 100-(100/(1+(g/l)));
+
+    if(losses === 0) return 100;
+    const rs = gains/losses;
+    return 100 - (100/(1+rs));
 }
 
-async function analyze(){
-    const pair=pairSelect.value;
-    if(!pair) return;
+async function getVariation(symbol){
+    try{
+        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=2`);
+        const data = await res.json();
 
-    const raw=await getData(pair);
-    const closes=raw.map(c=>parseFloat(c[4]));
-    const price=closes.at(-1);
+        const prev = parseFloat(data[0][4]);
+        const last = parseFloat(data[1][4]);
 
-    document.getElementById("price").innerText=price.toFixed(4);
+        return ((last-prev)/prev)*100;
 
-    const ema9=EMA(closes,9);
-    const ema21=EMA(closes,21);
-    const rsi=RSI(closes,14);
-
-    let score=0;
-    if(ema9>ema21) score+=40;
-    if(rsi>60) score+=30;
-    if(price>ema9) score+=30;
-
-    let signal;
-    if(score>70) signal='<span class="buy">COMPRA</span>';
-    else if(score<40) signal='<span class="sell">VENDA</span>';
-    else signal='<span class="neutral">AGUARDE</span>';
-
-    document.getElementById("signal").innerHTML=signal;
-    document.getElementById("score").innerText=score+"/100";
-
-    renderChart(closes);
+    }catch{
+        return 0;
+    }
 }
 
-function renderChart(data){
-    const ctx=document.getElementById("chartCanvas");
+async function analyzeCrisis(){
 
-    if(chart) chart.destroy();
+    // PAXG = ouro tokenizado (substitui XAU)
+    const btc = await getVariation("BTCUSDT");
+    const gold = await getVariation("PAXGUSDT");
 
-    chart=new Chart(ctx,{
-        type:'line',
-        data:{
-            labels:data.map((_,i)=>i),
-            datasets:[{data:data}]
-        }
-    });
+    document.getElementById("btcVar").innerText = btc.toFixed(2)+"%";
+    document.getElementById("goldVar").innerText = gold.toFixed(2)+"%";
+
+    let risk = "Baixo";
+
+    if(btc < -1 && gold > 0.5){
+        risk = `<span class="medium">Médio</span>`;
+    }
+    if(btc < -2 && gold > 1){
+        risk = `<span class="high">ALTO</span>`;
+    }
+
+    document.getElementById("risk").innerHTML = risk;
 }
 
-async function macro(){
-    const btc=await variation("BTCUSDT");
-    const gold=await variation("PAXGUSDT");
-
-    document.getElementById("btc").innerText=btc.toFixed(2)+"%";
-    document.getElementById("gold").innerText=gold.toFixed(2)+"%";
-
-    let risk="BAIXO";
-    if(btc<-1 && gold>0.5) risk="MÉDIO";
-    if(btc<-2 && gold>1) risk="ALTO";
-
-    document.getElementById("risk").innerText=risk;
-}
-
-async function variation(symbol){
-    const res=await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=2`);
-    const d=await res.json();
-
-    const prev=parseFloat(d[0][4]);
-    const last=parseFloat(d[1][4]);
-
-    return ((last-prev)/prev)*100;
-}
-
-pairSelect.addEventListener("change", analyze);
-
-setInterval(()=>{
-    analyze();
-    macro();
-},30000);
-
-loadPairs();
-analyze();
-macro();
+pairSelect.addEventListener("change", analyzeSignal);
 
 </script>
 
