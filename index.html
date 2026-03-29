@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Educação</title>
+<title>Crypto Master Guide</title>
 
 <style>
 body{
@@ -13,7 +13,6 @@ body{
     color:white;
 }
 
-/* MENU */
 .menu-btn{
     position:fixed;
     top:15px;
@@ -27,13 +26,14 @@ body{
 
 .sidebar{
     position:fixed;
-    left:-260px;
+    left:-270px;
     top:0;
-    width:260px;
+    width:270px;
     height:100%;
     background:#020617;
     padding:20px;
     transition:0.3s;
+    overflow:auto;
 }
 
 .sidebar.active{ left:0; }
@@ -41,9 +41,10 @@ body{
 .menu-item{
     background:#1e293b;
     padding:12px;
-    margin:10px 0;
+    margin:8px 0;
     border-radius:8px;
     cursor:pointer;
+    font-size:14px;
 }
 
 .menu-item:hover{ background:#334155; }
@@ -55,16 +56,13 @@ body{
     padding:20px;
     border-radius:10px;
     margin-bottom:20px;
+    line-height:1.6;
 }
 
 .hidden{ display:none; }
 
-h1{
-    text-align:center;
-    color:#00ffcc;
-}
-
-ul{ line-height:1.6; }
+h1{ text-align:center; color:#00ffcc; }
+h2{ color:#00ffcc; }
 
 </style>
 </head>
@@ -74,17 +72,23 @@ ul{ line-height:1.6; }
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
 <div class="sidebar" id="sidebar">
-    <div class="menu-item" onclick="showTab('intro')">📘 O que é</div>
-    <div class="menu-item" onclick="showTab('how')">⚙️ Como funciona</div>
-    <div class="menu-item" onclick="showTab('analysis')">📊 Análise</div>
-    <div class="menu-item" onclick="showTab('market')">📈 Mercado</div>
-    <div class="menu-item" onclick="showTab('importance')">🚀 Futuro</div>
-    <div class="menu-item" onclick="showTab('tips')">💡 Dicas</div>
+
+<div class="menu-item" onclick="showTab('intro')">📘 O que são</div>
+<div class="menu-item" onclick="showTab('blockchain')">🔗 Blockchain</div>
+<div class="menu-item" onclick="showTab('market')">📈 Mercado</div>
+<div class="menu-item" onclick="showTab('analysis')">📊 Análise Técnica</div>
+<div class="menu-item" onclick="showTab('fundamental')">🏢 Análise Fundamentalista</div>
+<div class="menu-item" onclick="showTab('cycles')">🔄 Ciclos do Mercado</div>
+<div class="menu-item" onclick="showTab('psychology')">🧠 Psicologia</div>
+<div class="menu-item" onclick="showTab('risk')">⚠️ Riscos</div>
+<div class="menu-item" onclick="showTab('security')">🔐 Segurança</div>
+<div class="menu-item" onclick="showTab('strategies')">💡 Estratégias</div>
+
 </div>
 
 <div class="main">
 
-<h1>Guia Completo de Criptomoedas</h1>
+<h1>Guia Profundo de Criptomoedas</h1>
 
 <!-- INTRO -->
 <div id="intro" class="tab">
@@ -92,56 +96,39 @@ ul{ line-height:1.6; }
 <h2>📘 O que são criptomoedas?</h2>
 
 <p>
-Criptomoedas são moedas digitais descentralizadas, ou seja, não dependem de bancos.
+Criptomoedas são ativos digitais descentralizados que utilizam criptografia para garantir segurança nas transações.
 </p>
 
 <p>
-A principal é o <b>Bitcoin</b>, mas existem milhares como Ethereum, Solana e outras.
+Elas eliminam intermediários como bancos e permitem transferências diretas entre pessoas.
 </p>
 
 <p>
-Elas usam uma tecnologia chamada <b>blockchain</b>, que registra tudo com segurança.
+O Bitcoin foi o primeiro, criado em 2009, abrindo caminho para uma nova economia digital.
 </p>
 
 </div>
 </div>
 
-<!-- COMO FUNCIONA -->
-<div id="how" class="tab hidden">
+<!-- BLOCKCHAIN -->
+<div id="blockchain" class="tab hidden">
 <div class="card">
-<h2>⚙️ Como funciona?</h2>
+<h2>🔗 Blockchain</h2>
+
+<p>
+Blockchain é um registro público e imutável de transações.
+</p>
 
 <ul>
-<li>Transações são registradas em blocos</li>
-<li>Esses blocos formam uma cadeia (blockchain)</li>
-<li>Não há controle central</li>
-<li>Tudo é transparente</li>
+<li>Descentralizado (não depende de uma entidade)</li>
+<li>Seguro (criptografia)</li>
+<li>Transparente</li>
+<li>Imutável</li>
 </ul>
 
 <p>
-Isso torna o sistema seguro e difícil de ser fraudado.
+Cada bloco contém informações e está ligado ao anterior, formando uma cadeia.
 </p>
-
-</div>
-</div>
-
-<!-- ANALISE -->
-<div id="analysis" class="tab hidden">
-<div class="card">
-<h2>📊 Como analisar o mercado</h2>
-
-<p><b>Tendência:</b> veja se está subindo ou caindo</p>
-
-<p><b>Suporte:</b> onde o preço para de cair</p>
-
-<p><b>Resistência:</b> onde o preço para de subir</p>
-
-<p><b>Indicadores:</b></p>
-<ul>
-<li>RSI → força do mercado</li>
-<li>EMA → direção da tendência</li>
-<li>Volume → confirmação</li>
-</ul>
 
 </div>
 </div>
@@ -152,44 +139,150 @@ Isso torna o sistema seguro e difícil de ser fraudado.
 <h2>📈 Como o mercado funciona</h2>
 
 <ul>
-<li>Alta → mercado otimista</li>
-<li>Baixa → mercado pessimista</li>
-<li>Lateral → indecisão</li>
+<li>Oferta e demanda</li>
+<li>Influência de notícias</li>
+<li>Liquidez</li>
+<li>Manipulação institucional</li>
 </ul>
 
 <p>
-O mercado é influenciado por notícias, economia global e comportamento das pessoas.
+O mercado cripto é altamente volátil e reage rapidamente a eventos globais.
 </p>
 
 </div>
 </div>
 
-<!-- FUTURO -->
-<div id="importance" class="tab hidden">
+<!-- ANALISE -->
+<div id="analysis" class="tab hidden">
 <div class="card">
-<h2>🚀 O futuro das criptomoedas</h2>
+<h2>📊 Análise Técnica</h2>
+
+<p><b>Principais conceitos:</b></p>
 
 <ul>
-<li>Maior adoção mundial</li>
-<li>Possível substituição de sistemas antigos</li>
-<li>Integração com bancos</li>
-<li>Uso no dia a dia</li>
+<li>Tendência (alta, baixa, lateral)</li>
+<li>Suporte e resistência</li>
+<li>Pullback</li>
+<li>Rompimento</li>
+</ul>
+
+<p><b>Indicadores:</b></p>
+
+<ul>
+<li>RSI → força do mercado</li>
+<li>Médias móveis → tendência</li>
+<li>Volume → confirmação</li>
 </ul>
 
 </div>
 </div>
 
-<!-- DICAS -->
-<div id="tips" class="tab hidden">
+<!-- FUNDAMENTAL -->
+<div id="fundamental" class="tab hidden">
 <div class="card">
-<h2>💡 Dicas importantes</h2>
+<h2>🏢 Análise Fundamentalista</h2>
 
 <ul>
-<li>Estude antes de investir</li>
-<li>Não invista tudo</li>
-<li>Controle emocional é essencial</li>
-<li>Evite promessas de lucro fácil</li>
+<li>Projeto da moeda</li>
+<li>Equipe</li>
+<li>Utilidade real</li>
+<li>Parcerias</li>
+<li>Tokenomics</li>
 </ul>
+
+<p>
+Moedas fortes têm utilidade e adoção real.
+</p>
+
+</div>
+</div>
+
+<!-- CICLOS -->
+<div id="cycles" class="tab hidden">
+<div class="card">
+<h2>🔄 Ciclos do mercado</h2>
+
+<ul>
+<li>Acumulação</li>
+<li>Alta (bull market)</li>
+<li>Distribuição</li>
+<li>Baixa (bear market)</li>
+</ul>
+
+<p>
+Entender ciclos evita comprar no topo e vender no fundo.
+</p>
+
+</div>
+</div>
+
+<!-- PSICOLOGIA -->
+<div id="psychology" class="tab hidden">
+<div class="card">
+<h2>🧠 Psicologia do trader</h2>
+
+<ul>
+<li>Medo → vende errado</li>
+<li>Ganância → compra topo</li>
+<li>Ansiedade → overtrade</li>
+</ul>
+
+<p>
+Disciplina é mais importante que estratégia.
+</p>
+
+</div>
+</div>
+
+<!-- RISCOS -->
+<div id="risk" class="tab hidden">
+<div class="card">
+<h2>⚠️ Riscos</h2>
+
+<ul>
+<li>Alta volatilidade</li>
+<li>Golpes</li>
+<li>Projetos falsos</li>
+<li>Perda de capital</li>
+</ul>
+
+<p>
+Nunca invista dinheiro que você não pode perder.
+</p>
+
+</div>
+</div>
+
+<!-- SEGURANÇA -->
+<div id="security" class="tab hidden">
+<div class="card">
+<h2>🔐 Segurança</h2>
+
+<ul>
+<li>Use autenticação 2FA</li>
+<li>Não compartilhe chaves privadas</li>
+<li>Evite links suspeitos</li>
+<li>Use carteiras seguras</li>
+</ul>
+
+</div>
+</div>
+
+<!-- ESTRATEGIAS -->
+<div id="strategies" class="tab hidden">
+<div class="card">
+<h2>💡 Estratégias</h2>
+
+<ul>
+<li>Compra gradual (DCA)</li>
+<li>Seguir tendência</li>
+<li>Gerenciamento de risco</li>
+<li>Evitar alavancagem no início</li>
+</ul>
+
+<p>
+Consistência é mais importante que ganhos rápidos.
+</p>
 
 </div>
 </div>
