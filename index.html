@@ -9,49 +9,99 @@
 
 <style>
 body{
+    margin:0;
     background:#0f172a;
     color:white;
     font-family:Arial;
+    display:flex;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:220px;
+    background:#020617;
+    height:100vh;
+    padding:20px;
+    box-sizing:border-box;
+}
+.sidebar h2{
+    color:#00ffcc;
+    text-align:center;
+}
+.menu-item{
+    padding:12px;
+    margin:10px 0;
+    background:#1e293b;
+    border-radius:8px;
+    cursor:pointer;
+    text-align:center;
+}
+.menu-item:hover{
+    background:#334155;
+}
+
+/* CONTENT */
+.main{
+    flex:1;
     padding:20px;
 }
-h1{text-align:center;color:#00ffcc;}
-.container{display:grid;grid-template-columns:1fr;gap:20px;}
+
 .card{
     background:#1e293b;
     padding:20px;
     border-radius:12px;
+    margin-bottom:20px;
 }
+
+.hidden{display:none;}
+
 .buy{color:#00ff88;font-weight:bold;}
 .sell{color:#ff4d4d;font-weight:bold;}
 .neutral{color:#ffaa00;font-weight:bold;}
 .score{font-size:22px;margin-top:10px;}
+
 </style>
 </head>
 
 <body>
 
-<h1>NeuroQuant PRO AI</h1>
+<div class="sidebar">
+    <h2>NeuroQuant</h2>
 
-<div class="container">
-
-<div class="card">
-<h3>Sinal Inteligente</h3>
-<select id="pair"></select>
-<p>Preço: <span id="price">--</span></p>
-<p>Sinal: <span id="signal">--</span></p>
-<p class="score">Score IA: <span id="score">--</span></p>
+    <div class="menu-item" onclick="showTab('signals')">📊 Sinais</div>
+    <div class="menu-item" onclick="showTab('chart')">📈 Gráfico</div>
+    <div class="menu-item" onclick="showTab('macro')">🌍 Macro</div>
 </div>
 
-<div class="card">
-<h3>Gráfico</h3>
-<canvas id="chart"></canvas>
+<div class="main">
+
+<!-- SINAIS -->
+<div id="signals" class="tab">
+    <div class="card">
+        <h3>Sinal Inteligente</h3>
+        <select id="pair"></select>
+        <p>Preço: <span id="price">--</span></p>
+        <p>Sinal: <span id="signal">--</span></p>
+        <p class="score">Score IA: <span id="score">--</span></p>
+    </div>
 </div>
 
-<div class="card">
-<h3>Detector Macro</h3>
-<p>BTC: <span id="btc">--</span></p>
-<p>Ouro: <span id="gold">--</span></p>
-<p class="score">Risco: <span id="risk">--</span></p>
+<!-- GRAFICO -->
+<div id="chart" class="tab hidden">
+    <div class="card">
+        <h3>Gráfico</h3>
+        <canvas id="chartCanvas"></canvas>
+    </div>
+</div>
+
+<!-- MACRO -->
+<div id="macro" class="tab hidden">
+    <div class="card">
+        <h3>Detector Macro</h3>
+        <p>BTC: <span id="btc">--</span></p>
+        <p>Ouro: <span id="gold">--</span></p>
+        <p class="score">Risco: <span id="risk">--</span></p>
+    </div>
 </div>
 
 </div>
@@ -60,6 +110,11 @@ h1{text-align:center;color:#00ffcc;}
 
 const pairSelect = document.getElementById("pair");
 let chart;
+
+function showTab(tabId){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));
+    document.getElementById(tabId).classList.remove('hidden');
+}
 
 async function loadPairs(){
     const res = await fetch("https://api.binance.com/api/v3/exchangeInfo");
@@ -128,7 +183,7 @@ async function analyze(){
 }
 
 function renderChart(data){
-    const ctx=document.getElementById("chart");
+    const ctx=document.getElementById("chartCanvas");
 
     if(chart) chart.destroy();
 
